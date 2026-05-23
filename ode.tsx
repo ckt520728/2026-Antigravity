@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Network, Presentation, Mic, Code, Activity, ChevronRight, ChevronLeft, Play, Info } from 'lucide-react';
 
 // --- Pure JavaScript React Component (No TypeScript types, Emojis & Custom SVGs to guarantee absolute compatibility in Preview) ---
@@ -300,50 +300,46 @@ function SimulatorTab() {
     return () => clearInterval(interval);
   }, [gScale, isTraining, targetWaveType, f1, f2, resetSignal, forceScenario, netSizeN, regularizationAlpha, numTrainCycles]);
 
-  // Coordinate mapping projects
-  const mapX = (x) => (x / 100) * 600;
-  const mapY = (y) => 300 - ((y + 80) / 110) * 300;
+  // Coordinate mapping projects. Memoized path strings avoid rebuilding long SVG commands on unrelated state changes.
+  const mapX = useCallback((x) => (x / 100) * 600, []);
+  const mapY = useCallback((y) => 300 - ((y + 80) / 110) * 300, []);
 
   // Projection for 2D STN-GPe Phase plane
-  const mapPhaseX = (v_stn) => {
-    return 50 + ((v_stn - (-75)) / 45) * 500;
-  };
-  const mapPhaseY = (v_gpe) => {
-    return 250 - ((v_gpe - (-75)) / 45) * 200;
-  };
+  const mapPhaseX = useCallback((v_stn) => 50 + ((v_stn - (-75)) / 45) * 500, []);
+  const mapPhaseY = useCallback((v_gpe) => 250 - ((v_gpe - (-75)) / 45) * 200, []);
 
-  const pathD = points.length > 0 
+  const pathD = useMemo(() => points.length > 0
     ? `M ${mapX(points[0].x)} ${mapY(points[0].y)} ` + points.slice(1).map(p => `L ${mapX(p.x)} ${mapY(p.y)}`).join(' ')
-    : '';
+    : '', [points, mapX, mapY]);
 
-  const stnPath = stnPoints.length > 0 
+  const stnPath = useMemo(() => stnPoints.length > 0
     ? `M ${mapX(stnPoints[0].x)} ${mapY(stnPoints[0].y)} ` + stnPoints.slice(1).map(p => `L ${mapX(p.x)} ${mapY(p.y)}`).join(' ')
-    : '';
+    : '', [stnPoints, mapX, mapY]);
 
-  const gpePath = gpePoints.length > 0 
+  const gpePath = useMemo(() => gpePoints.length > 0
     ? `M ${mapX(gpePoints[0].x)} ${mapY(gpePoints[0].y)} ` + gpePoints.slice(1).map(p => `L ${mapX(p.x)} ${mapY(p.y)}`).join(' ')
-    : '';
+    : '', [gpePoints, mapX, mapY]);
 
   // Generate 2D Phase Space Path string with corrected index mapping (i+1)
-  const phasePathD = stnPoints.length > 0 
-    ? `M ${mapPhaseX(stnPoints[0].y)} ${mapPhaseY(gpePoints[0].y)} ` + stnPoints.slice(1).map((p, i) => `L ${mapPhaseX(p.y)} ${mapPhaseY(gpePoints[i + 1].y)}`).join(' ')
-    : '';
+  const phasePathD = useMemo(() => stnPoints.length > 0 && gpePoints.length > 0
+    ? `M ${mapPhaseX(stnPoints[0].y)} ${mapPhaseY(gpePoints[0].y)} ` + stnPoints.slice(1).map((p, i) => `L ${mapPhaseX(p.y)} ${mapPhaseY(gpePoints[i + 1]?.y ?? gpePoints[gpePoints.length - 1].y)}`).join(' ')
+    : '', [stnPoints, gpePoints, mapPhaseX, mapPhaseY]);
 
-  // Generate FORCE plot paths
-  const mapForceX = (x) => {
-    if (targetPoints.length === 0) return 0;
+  const mapForceY = useCallback((y) => 150 - (y / 2.5) * 120, []);
+
+  const forcePathTarget = useMemo(() => {
+    if (targetPoints.length === 0) return '';
     const firstX = targetPoints[0].x;
-    return ((x - firstX) / 150) * 600;
-  };
-  const mapForceY = (y) => 150 - (y / 2.5) * 120;
+    const mapForceX = (x) => ((x - firstX) / 150) * 600;
+    return `M ${mapForceX(targetPoints[0].x)} ${mapForceY(targetPoints[0].y)} ` + targetPoints.slice(1).map(p => `L ${mapForceX(p.x)} ${mapForceY(p.y)}`).join(' ');
+  }, [targetPoints, mapForceY]);
 
-  const forcePathTarget = targetPoints.length > 0
-    ? `M ${mapForceX(targetPoints[0].x)} ${mapForceY(targetPoints[0].y)} ` + targetPoints.slice(1).map(p => `L ${mapForceX(p.x)} ${mapForceY(p.y)}`).join(' ')
-    : '';
-
-  const forcePathOutput = forcePoints.length > 0
-    ? `M ${mapForceX(forcePoints[0].x)} ${mapForceY(forcePoints[0].y)} ` + forcePoints.slice(1).map(p => `L ${mapForceX(p.x)} ${mapForceY(p.y)}`).join(' ')
-    : '';
+  const forcePathOutput = useMemo(() => {
+    if (forcePoints.length === 0 || targetPoints.length === 0) return '';
+    const firstX = targetPoints[0].x;
+    const mapForceX = (x) => ((x - firstX) / 150) * 600;
+    return `M ${mapForceX(forcePoints[0].x)} ${mapForceY(forcePoints[0].y)} ` + forcePoints.slice(1).map(p => `L ${mapForceX(p.x)} ${mapForceY(p.y)}`).join(' ');
+  }, [forcePoints, targetPoints, mapForceY]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -1273,11 +1269,12 @@ function SlideDeckTabComponent() {
   // Attractor type switcher (5 types)
   const [attractorType, setAttractorType] = useState('saddle'); // 'point', 'line', 'limit', 'saddle', 'chaos'
 
-  // Smoothly increment 3D rotation angle for dynamical motifs visualization
+  // Smoothly increment 3D rotation angle with a lighter cadence to reduce whole-panel re-renders.
   useEffect(() => {
+    if (rotSpeed <= 0) return;
     const timer = setInterval(() => {
       setAngle(a => (a + rotSpeed) % 360);
-    }, 30);
+    }, 60);
     return () => clearInterval(timer);
   }, [rotSpeed]);
 
@@ -1643,7 +1640,7 @@ function SlideDeckTabComponent() {
                 <g>
                   <path d={lorenzPath} fill="none" stroke="#d946ef" strokeWidth="1.5" opacity="0.8" />
                   {(() => {
-                    const pulseIdx = runTime % lorenzPoints.length;
+                    const pulseIdx = lorenzPoints.length > 0 ? Math.floor((angle * 0.8) % lorenzPoints.length) : 0;
                     const pulseDot = lorenzPoints[pulseIdx] || project3D(0,0,0,angle);
                     return (
                       <g>
@@ -1660,44 +1657,6 @@ function SlideDeckTabComponent() {
             <div className="bg-slate-900/60 p-2.5 rounded-lg border border-slate-900 text-[9px] text-slate-500 leading-normal font-mono flex items-start space-x-1.5">
               <span>✨</span>
               <span>Sussillo 證實大腦以正交子空間進行多任務計算而不串擾！</span>
-            </div>
-
-            {/* Attractor Dynamic Explanation Cabin */}
-            <div className="mt-3 p-3 bg-slate-900/60 rounded-xl border border-slate-850 space-y-2 text-[10px] animate-in slide-in-from-top-2 duration-300">
-              <div className="flex justify-between items-center border-b border-slate-800 pb-1">
-                <span className="font-extrabold text-cyan-400 font-mono tracking-wider uppercase">🧠 吸引子計算幾何解析艙</span>
-                <span className="text-[8px] bg-cyan-950 text-cyan-400 border border-cyan-800/40 px-1.5 py-0.5 rounded font-bold">STABLE MANIFOLD</span>
-              </div>
-              {attractorType === 'point' && (
-                <div className="space-y-1">
-                  <p className="text-slate-200 font-semibold">● 穩定點吸引子 (Stable Point Attractor)</p>
-                  <p className="text-slate-400 leading-normal">特徵值實部皆小於零 (Re(λ) &lt; 0)。在大腦中，點吸引子代表靜態儲存的決定、歸位狀態，如眼球注視回到正前方。狀態在微小噪聲擾動後會快速拉回原點。</p>
-                </div>
-              )}
-              {attractorType === 'line' && (
-                <div className="space-y-1">
-                  <p className="text-slate-200 font-semibold">● 連續線吸引子 (Continuous Line Attractor)</p>
-                  <p className="text-slate-400 leading-normal">沿特定軸向的特徵值為 0，其餘方向為負。這使得系統能在該軸的任意位置維持穩態，在大腦中被用來連續存儲工作記憶（如保存任意角度的眼球位置，或者頭部定向）。</p>
-                </div>
-              )}
-              {attractorType === 'limit' && (
-                <div className="space-y-1">
-                  <p className="text-slate-200 font-semibold">● 極限環吸引子 (Limit Cycle Attractor)</p>
-                  <p className="text-slate-400 leading-normal">高維相平面中的閉合振盪流形。代表週期性的節律運算，如大腦控制行走步調、呼吸以及巴金森氏症中的病理性大震顫。系統會從軌道內外收縮鎖定到此環路中。</p>
-                </div>
-              )}
-              {attractorType === 'saddle' && (
-                <div className="space-y-1">
-                  <p className="text-slate-200 font-semibold">● 鞍點與決策分岔 (Saddle Point & Bifurcation)</p>
-                  <p className="text-slate-400 leading-normal">特徵值兼具正實部與負實部。是控制流速場的決策分水嶺。高維螺旋 pointsC 在噪聲拉大時逼近鞍點會產生極高敏感的偏流，從而展現大腦在隨機雜訊下進行非線性決策分岔的真實物理過程！</p>
-                </div>
-              )}
-              {attractorType === 'chaos' && (
-                <div className="space-y-1">
-                  <p className="text-slate-200 font-semibold">● 奇異吸引子 (Lorenz Chaos Attractor)</p>
-                  <p className="text-slate-400 leading-normal">非線性高度敏感的無窮自相似分形吸引子。健康大腦皮質內部包含天然的微觀混沌增益 (g &gt; 1.5)，能為前運動皮質和小腦提供極其豐富的動力學頻率基底，供 FORCE 演算法線上合成運動。</p>
-                </div>
-              )}
             </div>
 
             {/* Attractor Dynamic Explanation Cabin */}
@@ -1835,6 +1794,7 @@ function PodcastTabComponent() {
   const [progress, setProgress] = useState(0);
   const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
   const [eqHeights, setEqHeights] = useState([12, 8, 20, 16, 5, 24, 12, 18, 10, 15, 7, 22]);
+  const [speechStatus, setSpeechStatus] = useState('Speech TTS standby');
 
   // NotebookLM AI generation panel state variables
   const [podcastSource, setPodcastSource] = useState('default'); // 'default', 'neuron2009', 'slowmanifold2013', 'bmi_clinical', 'custom'
@@ -1845,26 +1805,65 @@ function PodcastTabComponent() {
 
   const synthRef = useRef(null);
   const utteranceRef = useRef(null);
+  const isPlayingRef = useRef(false);
 
   // Initialize Speech Synthesis safely with try-catch to bypass Sandboxed Iframe SecurityError
   useEffect(() => {
     try {
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         synthRef.current = window.speechSynthesis;
+        setSpeechStatus('Speech TTS ready');
+        const refreshVoices = () => {
+          const voices = synthRef.current?.getVoices?.() || [];
+          if (voices.length > 0) setSpeechStatus('Speech TTS voices loaded');
+        };
+        refreshVoices();
+        window.speechSynthesis.onvoiceschanged = refreshVoices;
+      } else {
+        setSpeechStatus('Speech TTS unsupported');
       }
     } catch (e) {
+      setSpeechStatus('Speech TTS blocked');
       console.warn("Speech synthesis is restricted or unavailable in this sandboxed context:", e);
     }
     return () => {
       try {
         if (synthRef.current) {
           synthRef.current.cancel();
+          if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = null;
+          }
         }
       } catch (e) {
         // fail silent
       }
     };
   }, []);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  const unlockSpeechEngine = () => {
+    try {
+      if (!synthRef.current && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        synthRef.current = window.speechSynthesis;
+      }
+      if (!synthRef.current) {
+        setSpeechStatus('Speech TTS unsupported');
+        return false;
+      }
+      synthRef.current.cancel();
+      synthRef.current.resume();
+      synthRef.current.getVoices();
+      setSpeechStatus('Speech TTS unlocked');
+      return true;
+    } catch (e) {
+      setSpeechStatus('Speech TTS ready');
+      console.warn('Speech unlock failed:', e);
+      return false;
+    }
+  };
 
   const defaultDialogues = [
     {
@@ -1983,11 +1982,14 @@ function PodcastTabComponent() {
   // Speech Synthesizer engine speak line with full try-catch guard
   const speakLine = (index, activePlay) => {
     try {
-      if (!synthRef.current || !activePlay) return;
-
-      synthRef.current.cancel(); 
+      if (!activePlay) return;
+      if (!unlockSpeechEngine()) {
+        simulateProgressFallback(index);
+        return;
+      }
 
       const currentLine = currentDialogues[index];
+      if (!currentLine) return;
       const utterance = new SpeechSynthesisUtterance(currentLine.text);
 
       // 強制設定繁體中文 (zh-TW) 語系與極大化音量 (1.0)，防止瀏覽器因語言錯亂或未設定而發出蚊子聲或靜音
@@ -2008,17 +2010,24 @@ function PodcastTabComponent() {
       utterance.rate = playbackSpeed * (isHost ? 1.05 : 0.95);
 
       utterance.onstart = () => {
+        setSpeechStatus(`Speaking ${index + 1}/${currentDialogues.length}`);
         setActiveDialogueIndex(index);
         setProgress((index * 100) / currentDialogues.length);
       };
 
+      utterance.onerror = () => {
+        setSpeechStatus('Speech TTS ready');
+        simulateProgressFallback(index);
+      };
+
       utterance.onend = () => {
         const nextIndex = index + 1;
-        if (nextIndex < currentDialogues.length && isPlaying) {
+        if (nextIndex < currentDialogues.length && isPlayingRef.current) {
           speakLine(nextIndex, true);
         } else if (nextIndex >= currentDialogues.length) {
           setIsPlaying(false);
           setProgress(100);
+          setSpeechStatus('Podcast playback complete');
         }
       };
 
@@ -2055,6 +2064,8 @@ function PodcastTabComponent() {
 
   // NotebookLM Podcast generation simulator
   const handleGeneratePodcast = () => {
+    unlockSpeechEngine();
+    setSpeechStatus('Generating podcast audio queue');
     setIsGeneratingPodcast(true);
     setGenerationProgress(0);
     setGenerationLogs([]);
@@ -2117,8 +2128,10 @@ function PodcastTabComponent() {
         setCurrentDialogues(newDialogues);
         setActiveDialogueIndex(0);
         setProgress(0);
-        setIsPlaying(false);
         setIsGeneratingPodcast(false);
+        isPlayingRef.current = false;
+        setIsPlaying(false);
+        setSpeechStatus('Podcast generated. Press Play to start audio.');
       }
     }, 450);
   };
@@ -2137,18 +2150,14 @@ function PodcastTabComponent() {
     return () => clearInterval(eqInterval);
   }, [isPlaying]);
 
-  // Watch isPlaying to control Speech engine safely
+  // Keep pause/stop deterministic without starting speech from a React effect.
   useEffect(() => {
-    try {
-      if (isPlaying) {
-        speakLine(activeDialogueIndex, true);
-      } else {
-        if (synthRef.current) {
-          synthRef.current.pause();
-        }
+    if (!isPlaying && synthRef.current) {
+      try {
+        synthRef.current.cancel();
+      } catch (e) {
+        // silent
       }
-    } catch (e) {
-      // silent
     }
   }, [isPlaying]);
 
@@ -2165,17 +2174,28 @@ function PodcastTabComponent() {
 
   const togglePlay = () => {
     if (isPlaying) {
+      isPlayingRef.current = false;
       setIsPlaying(false);
+      if (synthRef.current) {
+        try {
+          synthRef.current.cancel();
+        } catch (e) {
+          // silent
+        }
+      }
+      setSpeechStatus('Podcast paused');
     } else {
       try {
-        if (synthRef.current && synthRef.current.paused) {
-          synthRef.current.resume();
-          setIsPlaying(true);
-        } else {
-          setIsPlaying(true);
-        }
+        unlockSpeechEngine();
+        isPlayingRef.current = true;
+        setIsPlaying(true);
+        setSpeechStatus('Preparing podcast playback');
+        speakLine(activeDialogueIndex, true);
       } catch (e) {
-        setIsPlaying(true); 
+        isPlayingRef.current = true;
+        setIsPlaying(true);
+        setSpeechStatus('Speech TTS ready');
+        simulateProgressFallback(activeDialogueIndex);
       }
     }
   };
@@ -2309,7 +2329,7 @@ function PodcastTabComponent() {
                 }}
               />
             ))}
-            <span className="text-xs text-slate-500 ml-4 font-mono">Speech TTS Active</span>
+            <span className="text-xs text-slate-500 ml-4 font-mono">{speechStatus}</span>
           </div>
         </div>
 
@@ -2347,6 +2367,7 @@ function PodcastTabComponent() {
             </button>
 
             <button 
+              aria-label={isPlaying ? "Pause podcast audio" : "Play podcast audio"}
               onClick={togglePlay}
               className="bg-indigo-600 hover:bg-indigo-500 text-white w-12 h-12 rounded-full flex items-center justify-center hover:scale-105 transition shadow-lg shadow-indigo-600/30"
             >
