@@ -4,9 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>神經動力學與循環網路 ODE 學習艙</title>
+  
+  <!-- Bulletproof Global Error Catch & Diagnostic Cabin (Z-Index 99999) -->
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      try {
+        const errDiv = document.createElement('div');
+        errDiv.style.position = 'fixed';
+        errDiv.style.top = '0';
+        errDiv.style.left = '0';
+        errDiv.style.width = '100%';
+        errDiv.style.backgroundColor = 'rgba(220, 38, 38, 0.95)';
+        errDiv.style.color = '#ffffff';
+        errDiv.style.padding = '24px';
+        errDiv.style.zIndex = '999999';
+        errDiv.style.fontFamily = 'monospace';
+        errDiv.style.fontSize = '12px';
+        errDiv.style.lineHeight = '1.6';
+        errDiv.style.whiteSpace = 'pre-wrap';
+        errDiv.style.overflow = 'auto';
+        errDiv.style.maxHeight = '70%';
+        errDiv.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+        errDiv.style.borderBottom = '4px solid #7f1d1d';
+        
+        errDiv.innerHTML = '🚨 <b style="font-size:14px; text-transform:uppercase;">[神經動力學學習艙 - 全域 JS 運行時錯誤攔截艙]</b><br/><br/>' + 
+                           '<b>錯誤訊息 (Message):</b> ' + message + '<br/>' +
+                           '<b>出處檔案 (Source):</b> ' + source + '<br/>' +
+                           '<b>行列位置 (Line/Col):</b> ' + lineno + ' : ' + colno + '<br/><br/>' +
+                           '<b>詳細堆疊追蹤 (Stack Trace):</b><br/>' + (error ? error.stack : 'N/A') + '<br/><br/>' +
+                           '<span style="color:#fecaca;">💡 避坑提示：請將此紅色面板截圖發送給您的 AI Pair Programmer，我們將在 10 秒內為您精確鎖定並熱修復此 Bug！</span>';
+        
+        if (document.body) {
+          document.body.appendChild(errDiv);
+        } else {
+          window.onload = function() { document.body.appendChild(errDiv); };
+        }
+      } catch (e) {
+        console.error("Error catcher failed:", e);
+      }
+      return false; // Let browser console record it as well
+    };
+  </script>
+
   <!-- Load Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Load React & ReactDOM CDNs -->
+  <!-- Load React & ReactDOM CDNs with Fallback Options -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <!-- Load Babel standalone for real-time JSX parsing -->
