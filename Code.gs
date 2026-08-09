@@ -333,13 +333,13 @@ function createGoogleDocReport(record, examId, timestamp) {
   body.setMarginTop(40).setMarginBottom(40).setMarginLeft(48).setMarginRight(48);
 
   body.appendParagraph('2026 Google Spark 臨床醫學中心')
-    .setFontSize(10).setFontColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+    .setFontSize(10).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
 
   body.appendParagraph('臨床檢查報告書\nMedical Examination Report')
-    .setFontSize(18).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setFontColor('#1e293b');
+    .setFontSize(18).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setForegroundColor('#1e293b');
 
   body.appendParagraph('【 ' + (record.examType || '') + ' 】')
-    .setFontSize(13).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setFontColor('#4f46e5');
+    .setFontSize(13).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setForegroundColor('#4f46e5');
 
   body.appendHorizontalRule();
 
@@ -352,32 +352,32 @@ function createGoogleDocReport(record, examId, timestamp) {
   metaTable.setBorderColor('#cbd5e1');
 
   body.appendParagraph('\n一、臨床適應症與病史 (Clinical Indication & History)')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph('• 臨床適應症：' + (record.indication || record.symptoms || '無特定適應症描述')).setFontSize(10.5);
   body.appendParagraph('• 臨床症狀與主訴：' + (record.symptoms || '無')).setFontSize(10.5);
   body.appendParagraph('• 初步診斷：' + (record.diagnosis || '無')).setFontSize(10.5);
 
   body.appendParagraph('\n二、檢查技術與比較影像 (Technique & Comparison)')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph('• 檢查技術：' + (record.technique || '依標準作業流程執行')).setFontSize(10.5);
   body.appendParagraph('• 比較影像：' + (record.comparison || 'No prior study available for comparison.')).setFontSize(10.5);
 
   body.appendParagraph('\n三、詳細所見 (Findings)')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph(record.findings || '無特別註明影像所見')
     .setFontSize(10).setFontFamily('Consolas');
 
   body.appendParagraph('\n四、檢查結論與處置建議 (Impression & Recommendations)')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph('【檢查結論】' + (record.impression || '無特別異常'))
-    .setFontSize(11).setBold(true).setFontColor('#0f172a');
+    .setFontSize(11).setBold(true).setForegroundColor('#0f172a');
   body.appendParagraph('【處置與建議】' + (record.recommendation || '定期臨床追蹤')).setFontSize(10.5);
 
   body.appendHorizontalRule();
 
   body.appendParagraph('\n報告操作醫師簽章： ______________________ (' + (record.doctorName || '') + ')\n' +
     '(本報告由系統自動歸檔至 Google 雲端硬碟與資料庫流水帳)')
-    .setFontSize(9.5).setFontColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+    .setFontSize(9.5).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
 
   doc.saveAndClose();
   DriveApp.getFileById(doc.getId()).moveTo(reportsFolder);
@@ -589,10 +589,10 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
   body.setMarginTop(40).setMarginBottom(40).setMarginLeft(48).setMarginRight(48);
 
   body.appendParagraph('2026 Google Spark Medical Center — Admission Record')
-    .setFontSize(9.5).setFontColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+    .setFontSize(9.5).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
 
   body.appendParagraph('ADMISSION NOTE\n住院病歷紀錄書')
-    .setFontSize(18).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setFontColor('#0f172a');
+    .setFontSize(18).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setForegroundColor('#0f172a');
 
   body.appendHorizontalRule();
 
@@ -609,14 +609,14 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
   appendDocSection_(body, '2. HISTORY OF PRESENT ILLNESS (HPI)', record.presentIllness || 'No detailed history of present illness.');
 
   body.appendParagraph('\n3. PAST HISTORY, MEDICATIONS & ALLERGIES')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph('• Past Medical History: ' + (record.pastHistory || 'Non-contributory.')).setFontSize(10.5);
   body.appendParagraph('• Past Surgical History: ' + (record.surgicalHistory || 'Denied.')).setFontSize(10.5);
   body.appendParagraph('• Current Medications: ' + (record.medications || 'None reported on admission.')).setFontSize(10.5);
   body.appendParagraph('• Allergies: ' + (record.allergies || 'No Known Drug Allergy (NKDA)')).setFontSize(10.5);
 
   body.appendParagraph('\n4. FAMILY & SOCIAL HISTORY')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph('• Family History: ' + (record.familyHistory || 'Non-contributory.')).setFontSize(10.5);
   body.appendParagraph('• Social History: ' + (record.socialHistory || 'Non-contributory.')).setFontSize(10.5);
 
@@ -624,7 +624,7 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
     record.reviewOfSystems || 'A complete 10-system review was performed and is negative except as noted in the HPI.');
 
   body.appendParagraph('\n6. VITAL SIGNS & PHYSICAL EXAMINATION')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph('• Vital Signs: ' + (record.vitalSigns || 'Not recorded.')).setFontSize(10.5);
   body.appendParagraph(record.physicalExam || 'Physical examination unremarkable.').setFontSize(10.5);
 
@@ -632,19 +632,19 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
     record.labsImaging || 'Pending at the time of admission.');
 
   body.appendParagraph('\n8. IMPRESSION & ADMISSION PLAN (Problem-based)')
-    .setFontSize(12).setBold(true).setFontColor('#1e293b');
+    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
 
   var problems = record.problemList || [];
   if (problems.length) {
     for (var i = 0; i < problems.length; i++) {
       var p = problems[i] || {};
       body.appendParagraph('# ' + (i + 1) + '. ' + (p.problem || 'Unnamed problem'))
-        .setFontSize(11).setBold(true).setFontColor('#0f172a');
+        .setFontSize(11).setBold(true).setForegroundColor('#0f172a');
       body.appendParagraph('    Plan: ' + (p.plan || 'To be determined.')).setFontSize(10.5).setBold(false);
     }
   } else {
     body.appendParagraph('【Impression / Tentative Diagnosis】\n' + (record.impression || 'Pending initial diagnostic evaluations.'))
-      .setFontSize(11).setBold(true).setFontColor('#0f172a');
+      .setFontSize(11).setBold(true).setForegroundColor('#0f172a');
     body.appendParagraph('【Therapeutic & Workup Plan】\n' + (record.plan || 'Routine admission care.'))
       .setFontSize(10.5).setBold(false);
   }
@@ -654,7 +654,7 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
   body.appendParagraph('\nAttending / Admitting Physician: ______________________ (' + (record.doctorName || 'Dr. Kwo-Ta Chu') + ')\n' +
     'Electronically recorded in the 2026 Google Spark Cloud Registry at ' +
     Utilities.formatDate(timestamp, TZ, 'yyyy-MM-dd HH:mm'))
-    .setFontSize(9).setFontColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+    .setFontSize(9).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
 
   doc.saveAndClose();
   DriveApp.getFileById(doc.getId()).moveTo(reportsFolder);
@@ -662,7 +662,7 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
 }
 
 function appendDocSection_(body, heading, text) {
-  body.appendParagraph('\n' + heading).setFontSize(12).setBold(true).setFontColor('#1e293b');
+  body.appendParagraph('\n' + heading).setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph(text).setFontSize(10.5).setBold(false);
 }
 
@@ -748,4 +748,105 @@ function searchAdmissionNotes(token, query) {
   } catch (err) {
     return { status: 'error', message: err.toString() };
   }
+}
+
+/* ==========================================================================
+ * SELF TEST
+ *
+ * The web app cannot be exercised from the command line, so DocumentApp method
+ * errors (e.g. `setFontColor` does not exist on a Paragraph — it is
+ * `setForegroundColor`) only surface when a physician presses Save.
+ *
+ * Run `runSelfTest` from the Apps Script editor after any change to the report
+ * generators. It drives the real production code paths with dummy data, then
+ * trashes whatever it created. Read the result in the execution log.
+ * ========================================================================== */
+
+function runSelfTest() {
+  var log = [];
+  var created = [];
+
+  function step(name, fn) {
+    try {
+      var r = fn();
+      log.push('PASS  ' + name);
+      return r;
+    } catch (e) {
+      log.push('FAIL  ' + name + '  ->  ' + (e && e.message ? e.message : e));
+      return null;
+    }
+  }
+
+  var now = new Date();
+
+  step('getSpreadsheet()', function () { return getSpreadsheet().getName(); });
+
+  step('token sign/verify round-trip', function () {
+    var t = issueToken_();
+    if (!isValidToken_(t)) throw new Error('freshly issued token failed validation');
+    if (isValidToken_('0.deadbeef')) throw new Error('expired/forged token was accepted');
+    return 'ok';
+  });
+
+  var examDoc = step('createGoogleDocReport() — every paragraph/table style call', function () {
+    return createGoogleDocReport({
+      examType: 'Echocardiogram', doctorName: 'Self Test', examDate: '2026-01-01',
+      patientId: 'SELFTEST', patientName: 'Self Test', indication: 'self test',
+      technique: 'self test', comparison: 'none', symptoms: 'self test',
+      diagnosis: 'self test', findings: 'line1\nline2', impression: 'self test',
+      recommendation: 'self test'
+    }, 'SELFTEST-EXAM', now);
+  });
+  if (examDoc && examDoc.docId) created.push(examDoc.docId);
+
+  var admDoc = step('createAdmissionNoteDocReport() — incl. problem-list branch', function () {
+    return createAdmissionNoteDocReport({
+      patientId: 'SELFTEST', patientName: 'Self Test', ageGender: '60yo Male',
+      examDate: '2026-01-01', wardBed: 'A-1', doctorName: 'Self Test',
+      department: 'Nephrology', informant: 'Patient', reliability: 'Reliable',
+      chiefComplaint: 'self test', presentIllness: 'self test', pastHistory: 'self test',
+      surgicalHistory: 'self test', medications: 'self test', allergies: 'NKDA',
+      familyHistory: 'self test', socialHistory: 'self test', reviewOfSystems: 'self test',
+      vitalSigns: 'self test', physicalExam: 'self test', labsImaging: 'self test',
+      problemList: [{ problem: 'Problem 1', plan: '1. step one\n2. step two' }]
+    }, 'SELFTEST-ADM', now);
+  });
+  if (admDoc && admDoc.docId) created.push(admDoc.docId);
+
+  step('createAdmissionNoteDocReport() — empty problem-list fallback branch', function () {
+    var d = createAdmissionNoteDocReport({
+      patientId: 'SELFTEST', patientName: 'Self Test', examDate: '2026-01-01',
+      impression: 'self test', plan: 'self test', problemList: []
+    }, 'SELFTEST-ADM2', now);
+    if (d && d.docId) created.push(d.docId);
+    return 'ok';
+  });
+
+  step('export URL shape', function () {
+    if (!examDoc) throw new Error('skipped — exam doc was not created');
+    ['docUrl', 'pdfUrl', 'docxUrl'].forEach(function (k) {
+      if (!examDoc[k] || examDoc[k].indexOf('docs.google.com/document/d/') === -1) {
+        throw new Error('bad ' + k + ': ' + examDoc[k]);
+      }
+    });
+    return 'ok';
+  });
+
+  step('LanguageApp.translate()', function () {
+    return LanguageApp.translate('發燒三天', 'zh-TW', 'en');
+  });
+
+  var trashed = 0;
+  created.forEach(function (id) {
+    try { DriveApp.getFileById(id).setTrashed(true); trashed++; } catch (e) {}
+  });
+  log.push('CLEAN ' + trashed + '/' + created.length + ' test document(s) moved to trash');
+
+  var failures = log.filter(function (l) { return l.indexOf('FAIL') === 0; }).length;
+  log.push('');
+  log.push(failures ? ('RESULT: ' + failures + ' FAILURE(S)') : 'RESULT: ALL PASSED');
+
+  var out = log.join('\n');
+  Logger.log(out);
+  return out;
 }
