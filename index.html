@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臨床檢查紀錄與報告系統 | Clinical Examination System</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --card-hover-border: rgba(99, 102, 241, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent-echo: #ec4899;
+      --accent-sono: #10b981;
+      --accent-ugi: #f59e0b;
+      --accent-lgi: #06b6d4;
+      --input-bg: rgba(15, 23, 42, 0.7);
+      --input-border: rgba(148, 163, 184, 0.25);
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 30px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--card-border);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-title h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-title p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      gap: 6px;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Exam Selector Cards */
+    .exam-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .exam-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exam-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--card-hover-border);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    .exam-card.selected { border-width: 2px; }
+    .exam-card.echo.selected { border-color: var(--accent-echo); background: rgba(236, 72, 153, 0.15); }
+    .exam-card.sono.selected { border-color: var(--accent-sono); background: rgba(16, 185, 129, 0.15); }
+    .exam-card.ugi.selected { border-color: var(--accent-ugi); background: rgba(245, 158, 11, 0.15); }
+    .exam-card.lgi.selected { border-color: var(--accent-lgi); background: rgba(6, 182, 212, 0.15); }
+
+    .exam-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .echo .exam-icon-badge { background: rgba(236, 72, 153, 0.2); color: var(--accent-echo); }
+    .sono .exam-icon-badge { background: rgba(16, 185, 129, 0.2); color: var(--accent-sono); }
+    .ugi .exam-icon-badge { background: rgba(245, 158, 11, 0.2); color: var(--accent-ugi); }
+    .lgi .exam-icon-badge { background: rgba(6, 182, 212, 0.2); color: var(--accent-lgi); }
+
+    .exam-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .exam-card p { font-size: 12px; color: var(--text-muted); }
+
+    /* Panels */
+    .panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-premium);
+      margin-bottom: 24px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full-width { grid-column: span 3; }
+    .form-group.span-2 { grid-column: span 2; }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    label i { font-size: 12px; color: var(--primary); }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Option Matrix Styles */
+    .section-subtitle {
+      font-size: 14px;
+      font-weight: 700;
+      color: #818cf8;
+      margin: 16px 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .select-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .unit-input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .unit-input-group input { flex: 1; }
+    .unit-label { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+
+    /* Tag Quick Buttons */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .tag-chip {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .tag-chip:hover {
+      background: rgba(99, 102, 241, 0.25);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Template Bar */
+    .template-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-md);
+    }
+
+    .template-btn {
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .template-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Special Modules */
+    .special-module {
+      display: none;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .special-module.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Action Buttons */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
+
+    .btn-doc { background: #2563eb; color: white; }
+    .btn-pdf { background: #dc2626; color: white; }
+    .btn-word { background: #0284c7; color: white; }
+
+    .btn-doc:hover, .btn-pdf:hover, .btn-word:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* Dashboard & Table View */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+      color: var(--primary);
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    table.data-table th {
+      background: rgba(15, 23, 42, 0.85);
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    table.data-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .badge-echo { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+    .badge-sono { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-ugi { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .badge-lgi { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: #1e293b;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 30px;
+      box-shadow: var(--shadow-premium);
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      background: #10b981;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      display: none;
+      z-index: 2000;
+    }
+
+    @media (max-width: 960px) {
+      .exam-selector-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row, .select-grid { grid-template-columns: 1fr; }
+      .form-group.full-width, .form-group.span-2 { grid-column: 1; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header Bar -->
+    <div class="header-bar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-notes-medical"></i>
+        </div>
+        <div class="brand-title">
+          <h1>臨床檢查紀錄與報告系統</h1>
+          <p>Interactive Web App x Google Sheets Log x Google Docs / PDF / Word Export</p>
+        </div>
+      </div>
+      <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchView('entry')">
+          <i class="fa-solid fa-pen-to-square"></i> 新建檢查報告
+        </button>
+        <button class="tab-btn" onclick="switchView('dashboard')">
+          <i class="fa-solid fa-chart-line"></i> 歷史紀錄與匯出
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: ENTRY FORM -->
+    <div id="entryView">
+      <!-- Exam Type Selector Cards -->
+      <div class="exam-selector-grid">
+        <div class="exam-card echo selected" onclick="selectExamType('Echocardiogram')">
+          <div class="exam-icon-badge"><i class="fa-solid fa-heart-pulse"></i></div>
+          <h3>心臟超音波</h3>
+          <p>Echocardiogram</p>
+        </div>
+        <div class="exam-card sono" onclick="selectExamType('Abdominal Sonography')">
+          <div class="exam-icon-badge"><i class="fa-solid fa-wave-square"></i></div>
+          <h3>腹部超音波</h3>
+          <p>Abdominal Sonography</p>
+        </div>
+        <div class="exam-card ugi" onclick="selectExamType('UGI Endoscopy')">
+          <div class="exam-icon-badge"><i class="fa-solid fa-stethoscope"></i></div>
+          <h3>上消化道內視鏡</h3>
+          <p>UGI Endoscopy (胃鏡)</p>
+        </div>
+        <div class="exam-card lgi" onclick="selectExamType('LGI Endoscopy')">
+          <div class="exam-icon-badge"><i class="fa-solid fa-microscope"></i></div>
+          <h3>下消化道內視鏡</h3>
+          <p>LGI Endoscopy (大腸鏡)</p>
+        </div>
+      </div>
+
+      <!-- Basic Info Panel -->
+      <div class="panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-clipboard-user"></i>
+          <span>基本資訊 (Basic Information)</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="doctorName"><i class="fa-solid fa-user-md"></i> 操作醫師 (Operator Doctor)</label>
+            <select id="doctorName">
+              <option value="朱國大醫師 (Dr. Kwo-Ta Chu)">朱國大醫師 (Dr. Kwo-Ta Chu)</option>
+              <option value="主治醫師 (Attending Physician)">主治醫師 (Attending Physician)</option>
+              <option value="研究醫師 (Fellow Doctor)">研究醫師 (Fellow Doctor)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="examDate"><i class="fa-solid fa-calendar-days"></i> 檢查日期 (Exam Date)</label>
+            <input type="date" id="examDate">
+          </div>
+          <div class="form-group">
+            <label for="patientId"><i class="fa-solid fa-id-card"></i> 病歷代碼/流水號 (Patient Code)</label>
+            <input type="text" id="patientId" placeholder="例如：P-20260801">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="symptoms"><i class="fa-solid fa-kit-medical"></i> 臨床症狀與初步診斷 (Clinical Symptoms & Diagnosis)</label>
+            <textarea id="symptoms" rows="2" placeholder="請輸入主訴、症狀或初步診斷..."></textarea>
+            <div class="tag-container">
+              <span class="tag-chip" onclick="addTag('symptoms', '胸痛 Chest pain')">+ 胸痛</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '呼吸困難 Dyspnea')">+ 呼吸困難</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '心悸 Palpitation')">+ 心悸</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '上腹痛 Epigastralgia')">+ 上腹痛</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '腹脹 Abdominal distension')">+ 腹脹</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '黃疸 Jaundice')">+ 黃疸</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '黑便 Melena')">+ 黑便</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '吐血 Hematemesis')">+ 吐血</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '排便習慣改變 Change in bowel habits')">+ 排便習慣改變</span>
+              <span class="tag-chip" onclick="addTag('symptoms', '健康檢查 Routine Health Check')">+ 健康檢查</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPECIALized MEDICAL REPORT BUILDERS -->
+
+      <!-- 1. ECHOCARDIOGRAM BUILDER -->
+      <div id="moduleEcho" class="special-module active">
+        <div class="template-bar">
+          <span style="font-weight:600; font-size:13px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速標準範本：</span>
+          <button class="template-btn" onclick="applyEchoTemplate('normal')">正常心臟超音波 (Normal Echo)</button>
+          <button class="template-btn" onclick="applyEchoTemplate('htn')">高血壓心臟病 (Hypertensive HD)</button>
+          <button class="template-btn" onclick="applyEchoTemplate('ischemic')">缺血性心臟病/壁運動異常 (IHD / RWMA)</button>
+          <button class="template-btn" onclick="applyEchoTemplate('hfref')">收縮功能下降 (HFrEF, EF<40%)</button>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-heart-pulse"></i> 1. 左心室功能與尺寸 (LV Measurements & Function)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>EF (LVEF 射血分數)</label>
+            <div class="unit-input-group">
+              <input type="number" id="echoEF" placeholder="填入數字 (例如: 65)" min="10" max="90" oninput="buildReportText()">
+              <span class="unit-label">%</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>LVEDD / LVESD (舒張/收縮末期內徑)</label>
+            <div class="unit-input-group">
+              <input type="text" id="echoLVSize" placeholder="例如: 48 / 30" oninput="buildReportText()">
+              <span class="unit-label">mm</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>IVS / LVPW (中隔與後壁厚度)</label>
+            <div class="unit-input-group">
+              <input type="text" id="echoWallThickness" placeholder="例如: 10 / 10" oninput="buildReportText()">
+              <span class="unit-label">mm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="select-grid">
+          <div class="form-group">
+            <label>LV 室壁運動 (LV Wall Motion)</label>
+            <select id="echoWallMotion" onchange="buildReportText()">
+              <option value="Normal global LV wall motion">Normal global wall motion (全壁運動正常)</option>
+              <option value="Global hypokinesia of LV">Global hypokinesia (普遍性壁運動減弱)</option>
+              <option value="Regional wall motion abnormality (Anteroseptal hypokinesia)">Hypokinesia: Anteroseptal (前中隔減弱)</option>
+              <option value="Regional wall motion abnormality (Inferior hypokinesia)">Hypokinesia: Inferior (下壁減弱)</option>
+              <option value="Regional wall motion abnormality (Apical hypokinesia/akinesia)">Hypokinesia: Apical (心尖部減弱)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>左心房尺寸 (LA Diameter)</label>
+            <div class="unit-input-group">
+              <input type="text" id="echoLADiameter" placeholder="例如: 36" oninput="buildReportText()">
+              <span class="unit-label">mm</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>舒張功能 (Diastolic Function)</label>
+            <select id="echoDiastolic" onchange="buildReportText()">
+              <option value="Normal LV diastolic filling pattern">Normal (正常)</option>
+              <option value="Impaired LV relaxation (Grade I diastolic dysfunction)">Grade I (鬆弛功能減退)</option>
+              <option value="Pseudonormal filling pattern (Grade II diastolic dysfunction)">Grade II (偽正常化)</option>
+              <option value="Restrictive filling pattern (Grade III diastolic dysfunction)">Grade III (限制性填補)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-arrows-to-dot"></i> 2. 瓣膜與其他結構 (Valves & Pericardium)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>主動脈瓣 (Aortic Valve)</label>
+            <select id="echoAV" onchange="buildReportText()">
+              <option value="Normal AV morphology, no AS or AR">Normal (無狹窄或逆流)</option>
+              <option value="Aortic valve sclerosis, mild AR">Aortic Sclerosis with Mild AR</option>
+              <option value="Moderate Aortic Regurgitation (AR)">Moderate AR</option>
+              <option value="Severe Aortic Stenosis (AS)">Severe AS</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>二尖瓣 (Mitral Valve)</label>
+            <select id="echoMV" onchange="buildReportText()">
+              <option value="Normal MV leaflets, no MS or MR">Normal (無狹窄或逆流)</option>
+              <option value="Mild Mitral Regurgitation (MR)">Mild MR (輕度逆流)</option>
+              <option value="Moderate Mitral Regurgitation (MR)">Moderate MR (中度逆流)</option>
+              <option value="Severe Mitral Regurgitation (MR)">Severe MR (重度逆流)</option>
+              <option value="Mitral valve prolapse with mild MR">Mitral Valve Prolapse (MVP)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>三尖瓣與 PASP (Tricuspid & PASP)</label>
+            <select id="echoTV" onchange="buildReportText()">
+              <option value="Trivial TR, normal PASP">Trivial TR, PASP normal</option>
+              <option value="Mild TR, estimated PASP ~ [ ___ ] mmHg">Mild TR</option>
+              <option value="Moderate TR with pulmonary hypertension (PASP ~ [ ___ ] mmHg)">Moderate TR + Pulmonary HTN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="select-grid">
+          <div class="form-group">
+            <label>心包膜積液 (Pericardial Effusion)</label>
+            <select id="echoPE" onchange="buildReportText()">
+              <option value="No pericardial effusion">None (無積液)</option>
+              <option value="Trivial pericardial effusion">Trivial (微量)</option>
+              <option value="Mild pericardial effusion over posterior wall">Mild (少量積液)</option>
+              <option value="Moderate pericardial effusion">Moderate (中量積液)</option>
+            </select>
+          </div>
+          <div class="form-group span-2">
+            <label>升主動脈與右心 (Ascending Aorta & RV)</label>
+            <input type="text" id="echoAortaRV" placeholder="例如: Ascending aorta 34 mm, RV size normal" oninput="buildReportText()">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ABDOMINAL SONOGRAPHY BUILDER -->
+      <div id="moduleSono" class="special-module">
+        <div class="template-bar">
+          <span style="font-weight:600; font-size:13px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速標準範本：</span>
+          <button class="template-btn" onclick="applySonoTemplate('normal')">正常腹部超音波 (Normal Sono)</button>
+          <button class="template-btn" onclick="applySonoTemplate('fatty')">輕/中度脂肪肝 (Fatty Liver)</button>
+          <button class="template-btn" onclick="applySonoTemplate('stone_cysts')">膽結石與雙腎囊腫 (GB Stone & Renal Cysts)</button>
+          <button class="template-btn" onclick="applySonoTemplate('cirrhosis')">肝硬化脾腫大 (Cirrhosis & Splenomegaly)</button>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-cubes"></i> 1. 肝臟與實質 (Liver Parenchyma & Lesions)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>肝臟大小與迴音 (Liver Echogenicity)</label>
+            <select id="sonoLiverEcho" onchange="buildReportText()">
+              <option value="Normal liver size and parenchymal echogenicity">Normal (正常大小與迴音)</option>
+              <option value="Mild increased parenchymal echogenicity (Mild Fatty Liver)">Mild Fatty Liver (輕度脂肪肝)</option>
+              <option value="Moderate increased parenchymal echogenicity with vessel blurring (Moderate Fatty Liver)">Moderate Fatty Liver (中度脂肪肝)</option>
+              <option value="Severe bright liver with deep attenuation (Severe Fatty Liver)">Severe Fatty Liver (重度脂肪肝)</option>
+              <option value="Coarse liver parenchyma with surface nodularity (Cirrhotic pattern)">Cirrhotic pattern (肝硬化樣微結節)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>肝臟局部病灶 (Liver Focal Lesions)</label>
+            <select id="sonoLiverLesion" onchange="buildReportText()">
+              <option value="No focal liver lesion detected">None (無局部病灶)</option>
+              <option value="Anechoic cyst(s) noted at S[ ___ ], size ~ [ ___ ] cm">Liver Cyst(s) (肝囊腫)</option>
+              <option value="Hyperechoic lesion at S[ ___ ], size ~ [ ___ ] cm, S/O Hemangioma">Hemangioma (血管腫)</option>
+              <option value="Hypoechoic nodule at S[ ___ ], size ~ [ ___ ] cm">Hypoechoic nodule (低迴音結節)</option>
+              <option value="Intrahepatic calcification noted">Intrahepatic Calcification (肝內鈣化點)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>肝內膽管 (Intrahepatic Duct)</label>
+            <select id="sonoIHD" onchange="buildReportText()">
+              <option value="No intrahepatic duct (IHD) dilation">No IHD dilation (無肝內膽管擴張)</option>
+              <option value="Mild IHD dilation over left/right lobe">Mild IHD dilation (輕度肝內膽管擴張)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-circle-dot"></i> 2. 膽囊、膽管、胰臟與脾臟 (GB, CBD, Pancreas, Spleen)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>膽囊 (Gallbladder)</label>
+            <select id="sonoGB" onchange="buildReportText()">
+              <option value="Gallbladder well-filled, normal wall thickness, no stone or sludge">Normal (正常無結石)</option>
+              <option value="Hyperechoic stone(s) with acoustic shadowing, size ~ [ ___ ] cm">GB Stone(s) (膽囊結石)</option>
+              <option value="Gallbladder polyp(s) noted, size ~ [ ___ ] mm">GB Polyp(s) (膽囊息肉)</option>
+              <option value="GB wall thickening (~ [ ___ ] mm) with sludge">GB Wall Thickening / Sludge</option>
+              <option value="Post-cholecystectomy status">Post-cholecystectomy (膽囊已切除)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>總膽管 (CBD Diameter)</label>
+            <div class="unit-input-group">
+              <input type="text" id="sonoCBD" placeholder="例如: 4 (Normal < 6)" oninput="buildReportText()">
+              <span class="unit-label">mm</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>胰臟與脾臟 (Pancreas & Spleen)</label>
+            <select id="sonoPancreasSpleen" onchange="buildReportText()">
+              <option value="Pancreas visually normal. Spleen normal size">Pancreas & Spleen Normal</option>
+              <option value="Pancreas obscured by bowel gas. Spleen normal size">Pancreas Obscured by Gas</option>
+              <option value="Splenomegaly noted (Splenic index ~ [ ___ ] cm)">Splenomegaly (脾臟腫大)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-fill-drip"></i> 3. 雙腎與腹水 (Kidneys & Ascites)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>右腎 (Right Kidney)</label>
+            <select id="sonoRK" onchange="buildReportText()">
+              <option value="Right kidney normal size (~ [ ___ ] cm) and cortical thickness, no stone or hydronephrosis">Normal (正常)</option>
+              <option value="Right renal cyst(s), size ~ [ ___ ] cm">Renal Cyst(s) (右腎囊腫)</option>
+              <option value="Right renal hyperechoic stone (~ [ ___ ] mm) with shadowing">Renal Stone (右腎結石)</option>
+              <option value="Right hydronephrosis (Grade [ ___ ])">Hydronephrosis (右水腎)</option>
+              <option value="Increased cortical echogenicity of right kidney">Increased Cortical Echo (右腎迴音增強)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>左腎 (Left Kidney)</label>
+            <select id="sonoLK" onchange="buildReportText()">
+              <option value="Left kidney normal size (~ [ ___ ] cm) and cortical thickness, no stone or hydronephrosis">Normal (正常)</option>
+              <option value="Left renal cyst(s), size ~ [ ___ ] cm">Renal Cyst(s) (左腎囊腫)</option>
+              <option value="Left renal hyperechoic stone (~ [ ___ ] mm) with shadowing">Renal Stone (左腎結石)</option>
+              <option value="Left hydronephrosis (Grade [ ___ ])">Hydronephrosis (左水腎)</option>
+              <option value="Increased cortical echogenicity of left kidney">Increased Cortical Echo (左腎迴音增強)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>腹水 (Ascites)</label>
+            <select id="sonoAscites" onchange="buildReportText()">
+              <option value="No ascites detected in Morrison's pouch or pelvic cavity">None (無腹水)</option>
+              <option value="Minimal ascites over Morrison's pouch">Minimal ascites (微量腹水)</option>
+              <option value="Moderate ascites over perihepatic and pelvic space">Moderate ascites (中量腹水)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. UGI ENDOSCOPY BUILDER -->
+      <div id="moduleUGI" class="special-module">
+        <div class="template-bar">
+          <span style="font-weight:600; font-size:13px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速標準範本：</span>
+          <button class="template-btn" onclick="applyUGITemplate('normal')">正常胃鏡 (Normal EGD)</button>
+          <button class="template-btn" onclick="applyUGITemplate('gerd')">胃食道逆流 A 級 (GERD LA Class A)</button>
+          <button class="template-btn" onclick="applyUGITemplate('gastritis')">糜爛性胃炎 (Erosive Gastritis)</button>
+          <button class="template-btn" onclick="applyUGITemplate('ulcer')">胃潰瘍 A2 期 (Gastric Ulcer A2)</button>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-pipe-valve"></i> 1. 食道與胃食道交界 (Esophagus & GEJ)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>食道粘膜 (Esophagus Mucosa)</label>
+            <select id="ugiEsophagus" onchange="buildReportText()">
+              <option value="Esophagus normal lumen and smooth mucosa, Z-line at [ ___ ] cm from incisors">Normal (食道粘膜正常)</option>
+              <option value="Mucosal breaks < 5mm confined to mucosal folds (GERD LA Grade A)">GERD (Los Angeles Grade A)</option>
+              <option value="Mucosal breaks > 5mm not extending between tops of two mucosal folds (GERD LA Grade B)">GERD (Los Angeles Grade B)</option>
+              <option value="Continuous mucosal breaks between tops of mucosal folds (GERD LA Grade C)">GERD (Los Angeles Grade C)</option>
+              <option value="Esophageal candidiasis with white plaques">Esophageal Candidiasis (白色念珠菌感染)</option>
+              <option value="Esophageal varices (Form 1/2/3)">Esophageal Varices (食道靜脈曲張)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>胃食道交界與疝氣 (GE Junction / Hiatus)</label>
+            <select id="ugiGEJ" onchange="buildReportText()">
+              <option value="GE junction well-coapted, no hiatal hernia">Normal (無鬆弛或疝氣)</option>
+              <option value="Laxity of GE junction noted">Laxity of GEJ (胃食道交界鬆弛)</option>
+              <option value="Sliding hiatal hernia noted">Sliding Hiatal Hernia (滑動性食道裂孔疝氣)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>胃底與胃體 (Fundus & Body)</label>
+            <select id="ugiFundusBody" onchange="buildReportText()">
+              <option value="Fundus and Body mucosa pink and smooth, fold normal">Normal (胃底與胃體正常)</option>
+              <option value="Superficial gastritis over Body">Superficial Gastritis over Body</option>
+              <option value="Multiple hemorrhagic erosions over Body and Fundus">Hemorrhagic Erosions (出血性糜爛)</option>
+              <option value="Subepithelial lesion (~ [ ___ ] cm) over Body">Subepithelial Lesion ( submucosal tumor)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-disease"></i> 2. 胃竇、潰瘍與十二指腸 (Antrum, Ulcer & Duodenum)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>胃竇粘膜 (Antrum Mucosa)</label>
+            <select id="ugiAntrum" onchange="buildReportText()">
+              <option value="Antrum mucosa smooth and pink">Normal (胃竇正常)</option>
+              <option value="Erosive gastritis with multiple raised erosions over Antrum">Erosive Gastritis (糜爛性胃炎)</option>
+              <option value="Atrophic gastritis with prominent submucosal vascularity">Atrophic Gastritis (萎縮性胃炎)</option>
+              <option value="Hyperemic and nodular gastritis over Antrum">Nodular / Hyperemic Gastritis</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>胃潰瘍 (Gastric Ulcer, GU)</label>
+            <select id="ugiGU" onchange="buildReportText()">
+              <option value="No active ulceration over Stomach">No Gastric Ulcer (無胃潰瘍)</option>
+              <option value="Gastric ulcer at Antrum/Angle, size ~ [ ___ ] cm, Active phase A1/A2, clean base">GU Active Phase (A1/A2 潰瘍)</option>
+              <option value="Gastric ulcer at Antrum/Angle, size ~ [ ___ ] cm, Healing phase H1/H2, white exudate">GU Healing Phase (H1/H2 潰瘍)</option>
+              <option value="Gastric ulcer scar (S1/S2 phase)">GU Scar (S1/S2 潰瘍疤痕)</option>
+              <option value="Ulcerated mass lesion at Antrum/Body, biopsy taken">Ulcerated Mass (潰瘍性腫塊)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>十二指腸 (Duodenum)</label>
+            <select id="ugiDuodenum" onchange="buildReportText()">
+              <option value="Duodenal bulb and 2nd portion normal mucosa">Normal (正常)</option>
+              <option value="Duodenitis with hyperemic mucosa over Bulb">Duodenitis (十二指腸炎)</option>
+              <option value="Duodenal ulcer at Bulb, size ~ [ ___ ] cm, Active phase A2">Duodenal Ulcer (A2 潰瘍)</option>
+              <option value="Duodenal ulcer scar with deformity over Bulb">DU Scar with Deformity (潰瘍疤痕變形)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="select-grid">
+          <div class="form-group">
+            <label>CLO Test (幽門桿菌測試)</label>
+            <select id="ugiCLO" onchange="buildReportText()">
+              <option value="CLO test: Not performed">Not Performed (未執行)</option>
+              <option value="Rapid Urease Test (CLO test) performed at Antrum: Positive (+)">CLO Test: Positive (+)</option>
+              <option value="Rapid Urease Test (CLO test) performed at Antrum: Negative (-)">CLO Test: Negative (-)</option>
+            </select>
+          </div>
+          <div class="form-group span-2">
+            <label>切片與處置 (Biopsy & Endoscopic Therapy)</label>
+            <input type="text" id="ugiBiopsy" placeholder="例如: Endoscopic biopsy taken x 2 pieces at Antrum for pathology / Hemoclip applied x 2" oninput="buildReportText()">
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. LGI ENDOSCOPY BUILDER -->
+      <div id="moduleLGI" class="special-module">
+        <div class="template-bar">
+          <span style="font-weight:600; font-size:13px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速標準範本：</span>
+          <button class="template-btn" onclick="applyLGITemplate('normal')">正常大腸鏡 (Normal Colonoscopy)</button>
+          <button class="template-btn" onclick="applyLGITemplate('polyp')">大腸息肉冷剪切除 (Polypectomy S/P)</button>
+          <button class="template-btn" onclick="applyLGITemplate('diverticulum')">憩室與內痔 (Diverticulosis & Hemorrhoids)</button>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-route"></i> 1. 進鏡範圍與清腸品質 (Extent & Bowel Prep)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>進鏡最遠範圍 (Extent Reached)</label>
+            <select id="lgiExtent" onchange="buildReportText()">
+              <option value="Total colonoscopy up to Cecum and Terminal Ileum (TI)">Cecum & Terminal Ileum (達盲腸與末端回腸)</option>
+              <option value="Total colonoscopy up to Cecum, appendiceal orifice identified">Cecum (達盲腸孔)</option>
+              <option value="Examined up to Splenic Flexure due to poor bowel prep">Splenic Flexure (脾彎曲，清腸不佳)</option>
+              <option value="Examined up to Sigmoid colon due to severe pain/looping">Sigmoid Colon (乙狀結腸)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>清腸品質 (Boston Bowel Prep Score)</label>
+            <select id="lgiBBPS" onchange="buildReportText()">
+              <option value="Bowel preparation excellent (BBPS: 9/9, Right 3 + Trans 3 + Left 3)">BBPS 9/9 (極佳)</option>
+              <option value="Bowel preparation good (BBPS: 7-8/9)">BBPS 7-8/9 (良好)</option>
+              <option value="Bowel preparation fair (BBPS: 6/9)">BBPS 6/9 (尚可)</option>
+              <option value="Bowel preparation poor (BBPS: < 6/9, residual stool)">BBPS < 6 (不佳)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>退鏡時間 (Withdrawal Time)</label>
+            <div class="unit-input-group">
+              <input type="text" id="lgiTime" placeholder="例如: 7 (Normal >= 6 min)" oninput="buildReportText()">
+              <span class="unit-label">mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-subtitle"><i class="fa-solid fa-vial-virus"></i> 2. 息肉、憩室與病灶 (Polyps & Pathologies)</div>
+        <div class="select-grid">
+          <div class="form-group">
+            <label>大腸息肉數量與部位 (Colonic Polyps)</label>
+            <select id="lgiPolypLocation" onchange="buildReportText()">
+              <option value="No colonic polyp found throughout the colon">No Polyp (無息肉)</option>
+              <option value="Single polyp (~ [ ___ ] mm, Yamada Type [ ___ ]) found at Sigmoid colon">Sigmoid Colon Polyp</option>
+              <option value="Single polyp (~ [ ___ ] mm, Yamada Type [ ___ ]) found at Rectum">Rectum Polyp</option>
+              <option value="Single polyp (~ [ ___ ] mm, Yamada Type [ ___ ]) found at Ascending colon">Ascending Colon Polyp</option>
+              <option value="Multiple polyps (~ [ ___ ] mm) found at Transverse and Descending colon">Multiple Polyps</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>息肉切除處置 (Polypectomy / EMR)</label>
+            <select id="lgiPolypectomy" onchange="buildReportText()">
+              <option value="N/A">N/A (未執行切除)</option>
+              <option value="Successful Cold Snare Polypectomy (CSP) performed, tissue retrieved for pathology">Cold Snare Polypectomy (CSP 剪除)</option>
+              <option value="Endoscopic Mucosal Resection (EMR) performed after submucosal injection, specimen retrieved">EMR (黏膜下注射切除)</option>
+              <option value="Biopsy taken x [ ___ ] pieces for pathology">Biopsy Only (純採樣切片)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>憩室與大腸炎 (Diverticula & Inflammation)</label>
+            <select id="lgiDiverticulum" onchange="buildReportText()">
+              <option value="No colonic diverticulum or inflammation">Normal (無憩室或發炎)</option>
+              <option value="Multiple diverticula noted over Sigmoid and Descending colon, no active diverticulitis">Diverticulosis over Sigmoid/Descending</option>
+              <option value="Multiple diverticula noted over Ascending colon">Diverticulosis over Right Colon</option>
+              <option value="Diffuse hyperemic and friable mucosa over Rectum and Sigmoid colon, S/O IBD/Proctitis">Proctitis / IBD Pattern</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="select-grid">
+          <div class="form-group span-2">
+            <label>肛門與痔瘡 (Anus & Hemorrhoids)</label>
+            <select id="lgiHemorrhoid" onchange="buildReportText()">
+              <option value="Anus normal mucosa, no hemorrhoid">Normal Anus</option>
+              <option value="Internal hemorrhoids (Grade I/II) noted upon inversion">Internal Hemorrhoids Grade I/II (內痔)</option>
+              <option value="Mixed hemorrhoids with anal papillae">Mixed Hemorrhoids (混合痔)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINDINGS & SUMMARY SECTION -->
+      <div class="panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-file-waveform"></i>
+          <span>影像所見與報告結論 (Findings & Impression)</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="findings"><i class="fa-solid fa-eye"></i> 影像詳細所見內容 (Detailed Image Findings - 自動組合生成與可編輯)</label>
+            <textarea id="findings" rows="6" placeholder="選取上方選項或填入數字時自動組合生成，亦可手動加註修飾..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="diagnosis"><i class="fa-solid fa-stethoscope"></i> 初步診斷 (Tentative Diagnosis)</label>
+            <input type="text" id="diagnosis" placeholder="主要診斷名稱">
+          </div>
+          <div class="form-group">
+            <label for="impression"><i class="fa-solid fa-flag"></i> 檢查結論 (Impression Summary)</label>
+            <input type="text" id="impression" placeholder="總結結論...">
+          </div>
+          <div class="form-group">
+            <label for="recommendation"><i class="fa-solid fa-user-nurse"></i> 處置與建議 (Recommendations)</label>
+            <input type="text" id="recommendation" placeholder="追蹤時間、衛教或進一步處置...">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-secondary" onclick="resetForm()">
+            <i class="fa-solid fa-rotate-left"></i> 重設欄位
+          </button>
+          <button class="btn btn-primary" onclick="submitExamRecord()">
+            <i class="fa-solid fa-file-circle-check"></i> 送出並生成 Google Doc 正式報告
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: DASHBOARD VIEW -->
+    <div id="dashboardView" style="display:none;">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-title"><i class="fa-solid fa-folder-closed"></i> 總檢查數</div>
+          <div class="stat-number" id="statTotal">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title" style="color:var(--accent-echo);"><i class="fa-solid fa-heart-pulse"></i> 心臟超音波</div>
+          <div class="stat-number" id="statEcho">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title" style="color:var(--accent-sono);"><i class="fa-solid fa-wave-square"></i> 腹部超音波</div>
+          <div class="stat-number" id="statSono">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title" style="color:var(--accent-ugi);"><i class="fa-solid fa-stethoscope"></i> 胃鏡 (UGI)</div>
+          <div class="stat-number" id="statUGI">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title" style="color:var(--accent-lgi);"><i class="fa-solid fa-microscope"></i> 大腸鏡 (LGI)</div>
+          <div class="stat-number" id="statLGI">0</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-list-check"></i>
+          <span>檢查紀錄總表 (Master Records)</span>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="搜尋病歷號代碼、醫師、診斷關鍵字..." onkeyup="handleSearchKey(event)">
+          <button class="btn btn-primary" onclick="doSearch()">
+            <i class="fa-solid fa-magnifying-glass"></i> 搜尋
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>檢查編號</th>
+                <th>檢查日期</th>
+                <th>檢查項目</th>
+                <th>操作醫師</th>
+                <th>病歷代碼</th>
+                <th>診斷 / 結論</th>
+                <th>下載與檢視</th>
+              </tr>
+            </thead>
+            <tbody id="recordsTbody">
+              <tr>
+                <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin"></i> 正在載入歷史資料...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 id="modalTitle" style="font-size:20px;">檢查報告詳情</h2>
+        <button onclick="closeModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalBody" style="font-size:14px; line-height:1.6; color:#e2e8f0;"></div>
+      <div id="modalActions" style="margin-top:20px; display:flex; gap:12px; justify-content:flex-end;"></div>
+    </div>
+  </div>
+
+  <div id="toast">儲存成功！</div>
+
+  <script>
+    let currentExamType = 'Echocardiogram';
+    let loadedRecords = [];
+
+    // Initialize Date to Today
+    document.getElementById('examDate').valueAsDate = new Date();
+
+    function selectExamType(type) {
+      currentExamType = type;
+      document.querySelectorAll('.exam-card').forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('.special-module').forEach(m => m.classList.remove('active'));
+
+      if (type === 'Echocardiogram') {
+        document.querySelector('.exam-card.echo').classList.add('selected');
+        document.getElementById('moduleEcho').classList.add('active');
+      } else if (type === 'Abdominal Sonography') {
+        document.querySelector('.exam-card.sono').classList.add('selected');
+        document.getElementById('moduleSono').classList.add('active');
+      } else if (type === 'UGI Endoscopy') {
+        document.querySelector('.exam-card.ugi').classList.add('selected');
+        document.getElementById('moduleUGI').classList.add('active');
+      } else if (type === 'LGI Endoscopy') {
+        document.querySelector('.exam-card.lgi').classList.add('selected');
+        document.getElementById('moduleLGI').classList.add('active');
+      }
+
+      buildReportText();
+    }
+
+    function addTag(inputId, text) {
+      const input = document.getElementById(inputId);
+      if (input.value) {
+        input.value += '; ' + text;
+      } else {
+        input.value = text;
+      }
+    }
+
+    // Dynamic Medical Report Generator
+    function buildReportText() {
+      let findingsText = '';
+      let diagText = '';
+      let impText = '';
+
+      if (currentExamType === 'Echocardiogram') {
+        const ef = document.getElementById('echoEF').value;
+        const lvSize = document.getElementById('echoLVSize').value;
+        const wallThk = document.getElementById('echoWallThickness').value;
+        const wallMotion = document.getElementById('echoWallMotion').value;
+        const laDiam = document.getElementById('echoLADiameter').value;
+        const diastolic = document.getElementById('echoDiastolic').value;
+        const av = document.getElementById('echoAV').value;
+        const mv = document.getElementById('echoMV').value;
+        const tv = document.getElementById('echoTV').value;
+        const pe = document.getElementById('echoPE').value;
+        const aortaRV = document.getElementById('echoAortaRV').value;
+
+        findingsText = `[ECHOCARDIOGRAPHY REPORT]\n`;
+        findingsText += `1. Left Ventricle & Left Atrium:\n`;
+        if (ef) findingsText += `   - LVEF: ${ef}%\n`;
+        if (lvSize) findingsText += `   - LVEDD/LVESD: ${lvSize} mm\n`;
+        if (wallThk) findingsText += `   - IVS/LVPW thickness: ${wallThk} mm\n`;
+        findingsText += `   - Wall Motion: ${wallMotion}\n`;
+        if (laDiam) findingsText += `   - LA Diameter: ${laDiam} mm\n`;
+        findingsText += `   - Diastolic Function: ${diastolic}\n`;
+
+        findingsText += `2. Valves & Structures:\n`;
+        findingsText += `   - Aortic Valve: ${av}\n`;
+        findingsText += `   - Mitral Valve: ${mv}\n`;
+        findingsText += `   - Tricuspid Valve: ${tv}\n`;
+        findingsText += `   - Pericardium: ${pe}\n`;
+        if (aortaRV) findingsText += `   - Aorta & RV: ${aortaRV}\n`;
+
+        // Auto Impressions
+        if (ef && parseInt(ef) < 50) {
+          diagText = 'Left Ventricular Systolic Dysfunction (EF ' + ef + '%)';
+          impText = 'Depressed LV systolic function (LVEF ' + ef + '%)';
+        } else {
+          diagText = 'Adequate LV Systolic Function';
+          impText = 'Preserved LV systolic function';
+        }
+
+      } else if (currentExamType === 'Abdominal Sonography') {
+        const liverEcho = document.getElementById('sonoLiverEcho').value;
+        const liverLesion = document.getElementById('sonoLiverLesion').value;
+        const ihd = document.getElementById('sonoIHD').value;
+        const gb = document.getElementById('sonoGB').value;
+        const cbd = document.getElementById('sonoCBD').value;
+        const pancSpleen = document.getElementById('sonoPancreasSpleen').value;
+        const rk = document.getElementById('sonoRK').value;
+        const lk = document.getElementById('sonoLK').value;
+        const ascites = document.getElementById('sonoAscites').value;
+
+        findingsText = `[ABDOMINAL ULTRASOUND REPORT]\n`;
+        findingsText += `1. Liver & Biliary System:\n`;
+        findingsText += `   - Liver Parenchyma: ${liverEcho}\n`;
+        findingsText += `   - Focal Lesions: ${liverLesion}\n`;
+        findingsText += `   - IHD: ${ihd}\n`;
+        findingsText += `   - Gallbladder: ${gb}\n`;
+        if (cbd) findingsText += `   - CBD Diameter: ${cbd} mm\n`;
+
+        findingsText += `2. Pancreas, Spleen & Kidneys:\n`;
+        findingsText += `   - Pancreas & Spleen: ${pancSpleen}\n`;
+        findingsText += `   - Right Kidney: ${rk}\n`;
+        findingsText += `   - Left Kidney: ${lk}\n`;
+        findingsText += `   - Ascites: ${ascites}`;
+
+        if (liverEcho.includes('Fatty Liver')) {
+          diagText = 'Fatty Liver Disease';
+          impText = liverEcho.split('(')[1]?.replace(')', '') || 'Fatty Liver';
+        } else if (liverEcho.includes('Cirrhotic')) {
+          diagText = 'Liver Cirrhosis Pattern';
+          impText = 'Cirrhotic liver pattern';
+        } else {
+          diagText = 'Normal Abdominal Sonogram';
+          impText = 'Unremarkable abdominal ultrasound';
+        }
+
+      } else if (currentExamType === 'UGI Endoscopy') {
+        const eso = document.getElementById('ugiEsophagus').value;
+        const gej = document.getElementById('ugiGEJ').value;
+        const fundusBody = document.getElementById('ugiFundusBody').value;
+        const antrum = document.getElementById('ugiAntrum').value;
+        const gu = document.getElementById('ugiGU').value;
+        const duo = document.getElementById('ugiDuodenum').value;
+        const clo = document.getElementById('ugiCLO').value;
+        const biopsy = document.getElementById('ugiBiopsy').value;
+
+        findingsText = `[UGI ENDOSCOPY REPORT]\n`;
+        findingsText += `1. Esophagus & GEJ: ${eso}. GEJ: ${gej}.\n`;
+        findingsText += `2. Stomach:\n`;
+        findingsText += `   - Fundus & Body: ${fundusBody}\n`;
+        findingsText += `   - Antrum: ${antrum}\n`;
+        findingsText += `   - Ulceration: ${gu}\n`;
+        findingsText += `3. Duodenum: ${duo}\n`;
+        findingsText += `4. Rapid Urease Test: ${clo}\n`;
+        if (biopsy) findingsText += `5. Biopsy / Intervention: ${biopsy}`;
+
+        if (gu.includes('Gastric ulcer')) {
+          diagText = 'Gastric Ulcer (GU)';
+          impText = 'Gastric Ulcer noted';
+        } else if (eso.includes('GERD')) {
+          diagText = 'Gastroesophageal Reflux Disease (GERD)';
+          impText = eso.split('(')[1]?.replace(')', '') || 'GERD';
+        } else {
+          diagText = 'Superficial Gastritis';
+          impText = 'Superficial gastritis';
+        }
+
+      } else if (currentExamType === 'LGI Endoscopy') {
+        const extent = document.getElementById('lgiExtent').value;
+        const bbps = document.getElementById('lgiBBPS').value;
+        const withdrawal = document.getElementById('lgiTime').value;
+        const polyp = document.getElementById('lgiPolypLocation').value;
+        const polypectomy = document.getElementById('lgiPolypectomy').value;
+        const divert = document.getElementById('lgiDiverticulum').value;
+        const hemorrhoids = document.getElementById('lgiHemorrhoid').value;
+
+        findingsText = `[COLONOSCOPY REPORT]\n`;
+        findingsText += `1. Extent & Quality:\n`;
+        findingsText += `   - Extent Reached: ${extent}\n`;
+        findingsText += `   - Bowel Preparation: ${bbps}\n`;
+        if (withdrawal) findingsText += `   - Withdrawal Time: ${withdrawal} mins\n`;
+
+        findingsText += `2. Endoscopic Findings:\n`;
+        findingsText += `   - Polyps: ${polyp}\n`;
+        if (polypectomy !== 'N/A') findingsText += `   - Procedure: ${polypectomy}\n`;
+        findingsText += `   - Diverticula & Inflammation: ${divert}\n`;
+        findingsText += `   - Anus & Rectum: ${hemorrhoids}`;
+
+        if (polyp.includes('Polyp')) {
+          diagText = 'Colonic Polyp(s)';
+          impText = 'Colonic polyp(s) s/p intervention';
+        } else {
+          diagText = 'Normal Colonoscopy';
+          impText = 'Normal Colonoscopy to ' + extent.split(' ')[0];
+        }
+      }
+
+      document.getElementById('findings').value = findingsText;
+      if (!document.getElementById('diagnosis').value) document.getElementById('diagnosis').value = diagText;
+      if (!document.getElementById('impression').value) document.getElementById('impression').value = impText;
+    }
+
+    // PRESET TEMPLATE APPLIERS
+    function applyEchoTemplate(type) {
+      if (type === 'normal') {
+        document.getElementById('echoEF').value = 65;
+        document.getElementById('echoLVSize').value = '46 / 28';
+        document.getElementById('echoWallThickness').value = '9 / 9';
+        document.getElementById('echoWallMotion').value = 'Normal global LV wall motion';
+        document.getElementById('echoLADiameter').value = 35;
+        document.getElementById('echoDiastolic').value = 'Normal LV diastolic filling pattern';
+        document.getElementById('echoAV').value = 'Normal AV morphology, no AS or AR';
+        document.getElementById('echoMV').value = 'Normal MV leaflets, no MS or MR';
+        document.getElementById('echoTV').value = 'Trivial TR, normal PASP';
+        document.getElementById('echoPE').value = 'No pericardial effusion';
+        document.getElementById('echoAortaRV').value = 'Ascending aorta 33 mm, RV size normal';
+        document.getElementById('diagnosis').value = 'Normal Echocardiogram';
+        document.getElementById('impression').value = 'Preserved LVEF 65%, Normal cardiac valves and chambers';
+        document.getElementById('recommendation').value = 'Routine follow-up in 1 year';
+      } else if (type === 'htn') {
+        document.getElementById('echoEF').value = 60;
+        document.getElementById('echoLVSize').value = '48 / 31';
+        document.getElementById('echoWallThickness').value = '12 / 12';
+        document.getElementById('echoWallMotion').value = 'Normal global LV wall motion';
+        document.getElementById('echoLADiameter').value = 39;
+        document.getElementById('echoDiastolic').value = 'Impaired LV relaxation (Grade I diastolic dysfunction)';
+        document.getElementById('echoAV').value = 'Aortic valve sclerosis, mild AR';
+        document.getElementById('echoMV').value = 'Mild Mitral Regurgitation (MR)';
+        document.getElementById('echoPE').value = 'No pericardial effusion';
+        document.getElementById('diagnosis').value = 'Hypertensive Heart Disease (HHD)';
+        document.getElementById('impression').value = 'Concentric LV hypertrophy, Grade I diastolic dysfunction, Mild AR & MR';
+        document.getElementById('recommendation').value = 'Blood pressure control & Echo follow-up in 1 year';
+      } else if (type === 'ischemic') {
+        document.getElementById('echoEF').value = 45;
+        document.getElementById('echoLVSize').value = '54 / 38';
+        document.getElementById('echoWallMotion').value = 'Regional wall motion abnormality (Anteroseptal hypokinesia)';
+        document.getElementById('echoDiastolic').value = 'Impaired LV relaxation (Grade I diastolic dysfunction)';
+        document.getElementById('diagnosis').value = 'Ischemic Heart Disease (IHD)';
+        document.getElementById('impression').value = 'Regional wall motion abnormality (Anteroseptal hypokinesia), LVEF 45%';
+        document.getElementById('recommendation').value = 'Coronary artery disease evaluation & Cardiology clinic';
+      } else if (type === 'hfref') {
+        document.getElementById('echoEF').value = 32;
+        document.getElementById('echoLVSize').value = '62 / 48';
+        document.getElementById('echoWallThickness').value = '9 / 9';
+        document.getElementById('echoWallMotion').value = 'Global hypokinesia of LV';
+        document.getElementById('echoDiastolic').value = 'Restrictive filling pattern (Grade III diastolic dysfunction)';
+        document.getElementById('echoMV').value = 'Moderate Mitral Regurgitation (MR)';
+        document.getElementById('echoPE').value = 'Trivial pericardial effusion';
+        document.getElementById('diagnosis').value = 'Dilated Cardiomyopathy / HFrEF';
+        document.getElementById('impression').value = 'Severe LV systolic dysfunction (LVEF 32%), LV dilation & Moderate MR';
+        document.getElementById('recommendation').value = 'Optimize GDMT heart failure medications';
+      }
+      buildReportText();
+    }
+
+    function applySonoTemplate(type) {
+      if (type === 'normal') {
+        document.getElementById('sonoLiverEcho').value = 'Normal liver size and parenchymal echogenicity';
+        document.getElementById('sonoLiverLesion').value = 'No focal liver lesion detected';
+        document.getElementById('sonoIHD').value = 'No intrahepatic duct (IHD) dilation';
+        document.getElementById('sonoGB').value = 'Gallbladder well-filled, normal wall thickness, no stone or sludge';
+        document.getElementById('sonoCBD').value = 4;
+        document.getElementById('sonoPancreasSpleen').value = 'Pancreas visually normal. Spleen normal size';
+        document.getElementById('sonoRK').value = 'Right kidney normal size (~ 10.5 cm) and cortical thickness, no stone or hydronephrosis';
+        document.getElementById('sonoLK').value = 'Left kidney normal size (~ 10.8 cm) and cortical thickness, no stone or hydronephrosis';
+        document.getElementById('sonoAscites').value = 'No ascites detected in Morrison\'s pouch or pelvic cavity';
+        document.getElementById('diagnosis').value = 'Normal Abdominal Ultrasound';
+        document.getElementById('impression').value = 'Unremarkable abdominal sonogram';
+        document.getElementById('recommendation').value = 'Annual health checkup';
+      } else if (type === 'fatty') {
+        document.getElementById('sonoLiverEcho').value = 'Moderate increased parenchymal echogenicity with vessel blurring (Moderate Fatty Liver)';
+        document.getElementById('sonoGB').value = 'Gallbladder well-filled, normal wall thickness, no stone or sludge';
+        document.getElementById('diagnosis').value = 'Moderate Fatty Liver Disease';
+        document.getElementById('impression').value = 'Moderate fatty liver change';
+        document.getElementById('recommendation').value = 'Dietary modification, exercise & Follow-up in 6 months';
+      } else if (type === 'stone_cysts') {
+        document.getElementById('sonoGB').value = 'Hyperechoic stone(s) with acoustic shadowing, size ~ 1.2 cm';
+        document.getElementById('sonoRK').value = 'Right renal cyst(s), size ~ 2.4 cm';
+        document.getElementById('sonoLK').value = 'Left renal cyst(s), size ~ 1.8 cm';
+        document.getElementById('diagnosis').value = 'Gallstone & Bilateral Simple Renal Cysts';
+        document.getElementById('impression').value = 'Gallbladder stone (1.2cm) without cholecystitis; Bilateral simple renal cysts';
+        document.getElementById('recommendation').value = 'Low fat diet; Ultrasound follow-up in 1 year';
+      } else if (type === 'cirrhosis') {
+        document.getElementById('sonoLiverEcho').value = 'Coarse liver parenchyma with surface nodularity (Cirrhotic pattern)';
+        document.getElementById('sonoPancreasSpleen').value = 'Splenomegaly noted (Splenic index ~ 13.5 cm)';
+        document.getElementById('sonoAscites').value = 'Minimal ascites over Morrison\'s pouch';
+        document.getElementById('diagnosis').value = 'Liver Cirrhosis with Splenomegaly & Minimal Ascites';
+        document.getElementById('impression').value = 'Cirrhosis pattern, splenomegaly & minimal ascites';
+        document.getElementById('recommendation').value = 'Hepatology clinic follow-up, Alpha-fetoprotein & Endoscopy evaluation';
+      }
+      buildReportText();
+    }
+
+    function applyUGITemplate(type) {
+      if (type === 'normal') {
+        document.getElementById('ugiEsophagus').value = 'Esophagus normal lumen and smooth mucosa, Z-line at 38 cm from incisors';
+        document.getElementById('ugiGEJ').value = 'GE junction well-coapted, no hiatal hernia';
+        document.getElementById('ugiFundusBody').value = 'Fundus and Body mucosa pink and smooth, fold normal';
+        document.getElementById('ugiAntrum').value = 'Antrum mucosa smooth and pink';
+        document.getElementById('ugiGU').value = 'No active ulceration over Stomach';
+        document.getElementById('ugiDuodenum').value = 'Duodenal bulb and 2nd portion normal mucosa';
+        document.getElementById('ugiCLO').value = 'CLO test: Not performed';
+        document.getElementById('diagnosis').value = 'Normal Panendoscopy';
+        document.getElementById('impression').value = 'Normal upper GI endoscopy';
+        document.getElementById('recommendation').value = 'As clinically indicated';
+      } else if (type === 'gerd') {
+        document.getElementById('ugiEsophagus').value = 'Mucosal breaks < 5mm confined to mucosal folds (GERD LA Grade A)';
+        document.getElementById('ugiAntrum').value = 'Superficial gastritis over Antrum';
+        document.getElementById('diagnosis').value = 'Reflux Esophagitis (LA Grade A) & Superficial Gastritis';
+        document.getElementById('impression').value = 'GERD LA Grade A, Superficial gastritis';
+        document.getElementById('recommendation').value = 'PPI treatment 8 weeks & Avoid lying down immediately after meals';
+      } else if (type === 'gastritis') {
+        document.getElementById('ugiAntrum').value = 'Erosive gastritis with multiple raised erosions over Antrum';
+        document.getElementById('ugiCLO').value = 'Rapid Urease Test (CLO test) performed at Antrum: Positive (+)';
+        document.getElementById('diagnosis').value = 'Erosive Gastritis & H. pylori infection (+)';
+        document.getElementById('impression').value = 'Erosive gastritis with H. pylori CLO test (+)';
+        document.getElementById('recommendation').value = 'H. pylori eradication triple/quadruple therapy for 14 days';
+      } else if (type === 'ulcer') {
+        document.getElementById('ugiGU').value = 'Gastric ulcer at Antrum/Angle, size ~ 1.5 cm, Active phase A2, clean base';
+        document.getElementById('ugiBiopsy').value = 'Biopsy taken x 4 pieces at ulcer margin for histopathology';
+        document.getElementById('diagnosis').value = 'Gastric Ulcer (A2 Phase)';
+        document.getElementById('impression').value = 'Gastric Ulcer (Active A2 stage) at gastric angle, biopsy S/P';
+        document.getElementById('recommendation').value = 'High dose PPI 8 weeks, pathology report tracking & Repeat EGD in 8 weeks';
+      }
+      buildReportText();
+    }
+
+    function applyLGITemplate(type) {
+      if (type === 'normal') {
+        document.getElementById('lgiExtent').value = 'Total colonoscopy up to Cecum and Terminal Ileum (TI)';
+        document.getElementById('lgiBBPS').value = 'Bowel preparation excellent (BBPS: 9/9, Right 3 + Trans 3 + Left 3)';
+        document.getElementById('lgiTime').value = 7;
+        document.getElementById('lgiPolypLocation').value = 'No colonic polyp found throughout the colon';
+        document.getElementById('lgiPolypectomy').value = 'N/A';
+        document.getElementById('lgiDiverticulum').value = 'No colonic diverticulum or inflammation';
+        document.getElementById('lgiHemorrhoid').value = 'Anus normal mucosa, no hemorrhoid';
+        document.getElementById('diagnosis').value = 'Normal Colonoscopy to Terminal Ileum';
+        document.getElementById('impression').value = 'Normal total colonoscopy (to TI)';
+        document.getElementById('recommendation').value = 'Screening colonoscopy in 5-10 years';
+      } else if (type === 'polyp') {
+        document.getElementById('lgiExtent').value = 'Total colonoscopy up to Cecum and Terminal Ileum (TI)';
+        document.getElementById('lgiBBPS').value = 'Bowel preparation good (BBPS: 7-8/9)';
+        document.getElementById('lgiPolypLocation').value = 'Single polyp (~ 8 mm, Yamada Type II) found at Sigmoid colon';
+        document.getElementById('lgiPolypectomy').value = 'Successful Cold Snare Polypectomy (CSP) performed, tissue retrieved for pathology';
+        document.getElementById('diagnosis').value = 'Sigmoid Colon Polyp S/P Cold Snare Polypectomy';
+        document.getElementById('impression').value = 'Sigmoid colon polyp (8mm) s/p Cold Snare Polypectomy';
+        document.getElementById('recommendation').value = 'Track pathology report & Surveillance colonoscopy in 3 years';
+      } else if (type === 'diverticulum') {
+        document.getElementById('lgiDiverticulum').value = 'Multiple diverticula noted over Sigmoid and Descending colon, no active diverticulitis';
+        document.getElementById('lgiHemorrhoid').value = 'Internal hemorrhoids (Grade I/II) noted upon inversion';
+        document.getElementById('diagnosis').value = 'Colonic Diverticulosis & Internal Hemorrhoids';
+        document.getElementById('impression').value = 'Sigmoid diverticulosis & Internal hemorrhoids Grade II';
+        document.getElementById('recommendation').value = 'High-fiber diet, adequate fluid intake & avoid constipation';
+      }
+      buildReportText();
+    }
+
+    function switchView(view) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (view === 'entry') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('entryView').style.display = 'block';
+        document.getElementById('dashboardView').style.display = 'none';
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('entryView').style.display = 'none';
+        document.getElementById('dashboardView').style.display = 'block';
+        loadDashboardData();
+      }
+    }
+
+    function submitExamRecord() {
+      const record = {
+        examType: currentExamType,
+        doctorName: document.getElementById('doctorName').value,
+        examDate: document.getElementById('examDate').value,
+        patientId: document.getElementById('patientId').value || ('ANON-' + Math.floor(1000 + Math.random()*9000)),
+        symptoms: document.getElementById('symptoms').value,
+        diagnosis: document.getElementById('diagnosis').value,
+        findings: document.getElementById('findings').value,
+        impression: document.getElementById('impression').value,
+        recommendation: document.getElementById('recommendation').value,
+        structuredDetails: {
+          echoEF: document.getElementById('echoEF').value,
+          echoLVSize: document.getElementById('echoLVSize').value,
+          sonoLiverEcho: document.getElementById('sonoLiverEcho').value,
+          ugiGU: document.getElementById('ugiGU').value,
+          lgiPolyp: document.getElementById('lgiPolypLocation').value
+        }
+      };
+
+      showToast('正在寫入試算表流水帳並生成 Google Doc / PDF / Word 報告...', '#3b82f6');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.status === 'success') {
+            showToast('✅ ' + res.message, '#10b981');
+            
+            // Pop up modal with direct links to Google Doc, PDF, and Word!
+            document.getElementById('modalTitle').innerText = '🎉 檢查報告產出成功 (' + res.examId + ')';
+            document.getElementById('modalBody').innerHTML = `
+              <p style="margin-bottom:12px;">報告已同時寫入 Google Sheets 流水帳資料庫，並已生成正式 Google Doc / PDF / Word 文件：</p>
+              <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+                <a href="${res.docUrl}" target="_blank" class="btn btn-doc"><i class="fa-solid fa-file-word"></i> 開啟 Google Doc 線上編輯報告</a>
+                <a href="${res.pdfUrl}" target="_blank" class="btn btn-pdf"><i class="fa-solid fa-file-pdf"></i> 下載 PDF 格式報告檔</a>
+                <a href="${res.docxUrl}" target="_blank" class="btn btn-word"><i class="fa-solid fa-file-word"></i> 下載 Word (.docx) 格式報告檔</a>
+              </div>
+            `;
+            document.getElementById('modalActions').innerHTML = `<button class="btn btn-secondary" onclick="closeModal()">關閉視窗</button>`;
+            document.getElementById('detailModal').classList.add('active');
+
+            resetForm();
+          } else {
+            showToast('❌ 錯誤：' + res.message, '#ef4444');
+          }
+        })
+        .withFailureHandler(function(err) {
+          showToast('❌ 上傳失敗：' + err.message, '#ef4444');
+        })
+        .saveExamRecord(record);
+    }
+
+    function resetForm() {
+      document.getElementById('patientId').value = '';
+      document.getElementById('symptoms').value = '';
+      document.getElementById('diagnosis').value = '';
+      document.getElementById('impression').value = '';
+      document.getElementById('recommendation').value = '';
+      buildReportText();
+    }
+
+    function loadDashboardData() {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.status === 'success') {
+            document.getElementById('statTotal').innerText = res.stats.total;
+            document.getElementById('statEcho').innerText = res.stats.echo;
+            document.getElementById('statSono').innerText = res.stats.sono;
+            document.getElementById('statUGI').innerText = res.stats.ugi;
+            document.getElementById('statLGI').innerText = res.stats.lgi;
+
+            loadedRecords = res.records;
+            renderRecordsTable(res.records);
+          }
+        })
+        .getRecentRecords(30);
+    }
+
+    function renderRecordsTable(records) {
+      const tbody = document.getElementById('recordsTbody');
+      if (!records || records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">尚無檢查紀錄</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      records.forEach((r, idx) => {
+        let badgeClass = 'badge-echo';
+        if (r.examType === 'Abdominal Sonography') badgeClass = 'badge-sono';
+        else if (r.examType === 'UGI Endoscopy') badgeClass = 'badge-ugi';
+        else if (r.examType === 'LGI Endoscopy') badgeClass = 'badge-lgi';
+
+        html += `
+          <tr>
+            <td><strong>${r.examId}</strong></td>
+            <td>${r.examDate}</td>
+            <td><span class="badge ${badgeClass}">${r.examType}</span></td>
+            <td>${r.doctorName}</td>
+            <td><code>${r.patientId}</code></td>
+            <td><strong>${r.diagnosis || r.impression || '已完成報告'}</strong></td>
+            <td>
+              <div style="display:flex; gap:6px;">
+                <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="viewRecordDetail(${idx})">
+                  <i class="fa-solid fa-eye"></i> 詳情
+                </button>
+                <a href="${r.docUrl || '#'}" target="_blank" class="btn btn-doc" style="padding:4px 8px; font-size:12px;" title="開啟 Google Doc">
+                  <i class="fa-solid fa-file-lines"></i>
+                </a>
+                <a href="${r.pdfUrl || '#'}" target="_blank" class="btn btn-pdf" style="padding:4px 8px; font-size:12px;" title="下載 PDF">
+                  <i class="fa-solid fa-file-pdf"></i>
+                </a>
+                <a href="${r.docxUrl || '#'}" target="_blank" class="btn btn-word" style="padding:4px 8px; font-size:12px;" title="下載 Word">
+                  <i class="fa-solid fa-file-word"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    function viewRecordDetail(idx) {
+      const r = loadedRecords[idx];
+      if (!r) return;
+
+      document.getElementById('modalTitle').innerText = `${r.examType} 完整檢查報告 (${r.examId})`;
+      document.getElementById('modalBody').innerHTML = `
+        <p><strong>檢查日期：</strong> ${r.examDate} (${r.timestamp})</p>
+        <p><strong>操作醫師：</strong> ${r.doctorName}</p>
+        <p><strong>病歷代碼：</strong> ${r.patientId}</p>
+        <hr style="margin:12px 0; border:none; border-top:1px solid rgba(255,255,255,0.1);">
+        <p><strong>臨床症狀與主訴：</strong> ${r.symptoms || '無'}</p>
+        <p><strong>初步診斷：</strong> ${r.diagnosis || '無'}</p>
+        <p><strong>影像詳細所見內容：</strong></p>
+        <pre style="background:rgba(0,0,0,0.4); padding:12px; border-radius:8px; font-family:inherit; white-space:pre-wrap; margin:6px 0; border:1px solid rgba(255,255,255,0.1);">${r.findings || '無'}</pre>
+        <p><strong>檢查結論：</strong> ${r.impression || '無'}</p>
+        <p><strong>處置與建議：</strong> ${r.recommendation || '無'}</p>
+      `;
+
+      document.getElementById('modalActions').innerHTML = `
+        <a href="${r.docUrl}" target="_blank" class="btn btn-doc"><i class="fa-solid fa-file-lines"></i> 開啟 Google Doc</a>
+        <a href="${r.pdfUrl}" target="_blank" class="btn btn-pdf"><i class="fa-solid fa-file-pdf"></i> 下載 PDF</a>
+        <a href="${r.docxUrl}" target="_blank" class="btn btn-word"><i class="fa-solid fa-file-word"></i> 下載 Word</a>
+        <button class="btn btn-secondary" onclick="closeModal()">關閉</button>
+      `;
+
+      document.getElementById('detailModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').classList.remove('active');
+    }
+
+    function handleSearchKey(e) {
+      if (e.key === 'Enter') doSearch();
+    }
+
+    function doSearch() {
+      const q = document.getElementById('searchInput').value;
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res.status === 'success') {
+            loadedRecords = res.records;
+            renderRecordsTable(res.records);
+          }
+        })
+        .searchRecords(q);
+    }
+
+    function showToast(msg, bg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.background = bg || '#10b981';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    // Default init
+    selectExamType('Echocardiogram');
+  </script>
+</body>
+</html>
