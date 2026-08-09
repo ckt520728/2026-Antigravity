@@ -55,13 +55,14 @@
   - 📥 **Word 檔 (DOCX)**：`https://docs.google.com/document/d/{docId}/export?format=docx`
   - 📕 **PDF 檔**：`https://docs.google.com/document/d/{docId}/export?format=pdf`
 
-### 🛑 陷阱 5：`clasp open-web-app` 與版本部署機制
-- **問題現象**：重新 `clasp push` 後，線上 Web App 畫面沒有更新。
-- **原因分析**：GAS Web App 的 `exec` 網址綁定特定 Deployment ID（版本號）。僅推播程式碼不會變更已發布網址的內容（除了 `dev` 測試網址外）。
-- **解決方案**：修改代碼後必須執行：
-  1. `clasp push -f`
-  2. `clasp create-deployment --description "vX.X Update"`
-  3. `clasp open-web-app <deploymentId> --json` 取得最新正式環境 URL。
+### 🛑 陷阱 6：新增 Google API 服務後 Web App 轉址至 `script.google.com/home`
+- **問題現象**：點擊發布的 Web App 網址（`/exec`）沒有載入 HTML 網頁，而是被重定向引導回 Google Apps Script 儀表板 (`script.google.com/home` "我的專案")。
+- **原因分析**：專案引入了未授權的 Google API 服務（例如 `LanguageApp` 翻譯服務、`DocumentApp` 報告生成服務）。在專案擁有者授權前，GAS 會阻擋 Web App 執行。
+- **解決方案**：
+  1. 專案擁有者開啟 Apps Script 編輯器 (`script.google.com/d/<scriptId>/edit`)。
+  2. 選擇任一函式點擊「執行 (Run)」。
+  3. 於彈出視窗完成「審查權限 (Review Permissions)」➔「進階」➔「允許 (Allow)」。
+  4. 重新存取 `/exec` 網址即可正常開啟互動網頁。
 
 ---
 
@@ -69,7 +70,7 @@
 
 | 資源名稱 | 連結 / 路徑 |
 | :--- | :--- |
-| 🌐 **正式版 Web App 網頁 (公開連結)** | [開啟 Web App](https://script.google.com/macros/s/AKfycbxCBy06wQFcy9GwjN_7e-5keX7_SeXudpWi7YTHkBkCJUhZ29XBK0ZeUPifkpyTOcI7Rw/exec) |
+| 🌐 **正式版 Web App 網頁 (公開連結)** | [開啟 Web App](https://script.google.com/macros/s/AKfycbyucGUOYz9eS9IrLWohMtYJ8Hm-oZmhgyhmKXZJjE1gf8DZj_Ra9r9_lzuUHgVVf2zL5g/exec) |
 | 📊 **Google Sheets 流水帳** | [開啟試算表](https://drive.google.com/open?id=1UIJZdR7rPHOPlgNC6w8g7SV3AL0kIW3mGSGRkJZWfWY) |
 | ⚙️ **Apps Script 編輯器** | [開啟 Script 專案](https://script.google.com/d/1vmdg7x6X6kHzRnh1gA7u2GlRk_lnDW6Mvaava0SD-qdsdoowh4AhzyTL/edit) |
 | 📁 **Google Docs 報告資料夾** | Drive 內 `2026 Google Spark/臨床檢查報告_GoogleDocs` |
