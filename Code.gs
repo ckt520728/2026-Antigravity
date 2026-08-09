@@ -686,27 +686,65 @@ function getRecentAdmissionNotes(token, limit) {
 
     var records = [];
     for (var i = data.length - 1; i >= 1 && records.length < limit; i--) {
-      var row = data[i];
-      records.push({
-        noteId: row[0],
-        timestamp: row[1] ? Utilities.formatDate(new Date(row[1]), TZ, 'yyyy-MM-dd HH:mm') : '',
-        examDate: row[2] ? Utilities.formatDate(new Date(row[2]), TZ, 'yyyy-MM-dd') : '',
-        patientId: row[3],
-        patientName: row[4],
-        ageGender: row[5],
-        wardBed: row[6],
-        doctorName: row[7],
-        department: row[8],
-        chiefComplaint: row[9],
-        presentIllness: row[10],
-        impression: row[13],
-        plan: row[14],
-        docUrl: row[15],
-        pdfUrl: row[16],
-        docxUrl: row[17]
-      });
+      records.push(mapAdmissionRow_(data[i]));
     }
     return { status: 'success', records: records };
+  } catch (err) {
+    return { status: 'error', message: err.toString() };
+  }
+}
+
+function mapAdmissionRow_(row) {
+  return {
+    noteId: row[0],
+    timestamp: row[1] ? Utilities.formatDate(new Date(row[1]), TZ, 'yyyy-MM-dd HH:mm') : '',
+    examDate: row[2] ? Utilities.formatDate(new Date(row[2]), TZ, 'yyyy-MM-dd') : '',
+    patientId: row[3],
+    patientName: row[4],
+    ageGender: row[5],
+    wardBed: row[6],
+    doctorName: row[7],
+    department: row[8],
+    chiefComplaint: row[9],
+    presentIllness: row[10],
+    impression: row[13],
+    plan: row[14],
+    docUrl: row[15],
+    pdfUrl: row[16],
+    docxUrl: row[17]
+  };
+}
+
+/**
+ * Keyword search across admission notes.
+ * Searches note ID, admission date, MRN, patient name, age/gender, ward/bed,
+ * attending, department, chief complaint, present illness and impression.
+ * @param {string} token
+ * @param {string} query
+ */
+function searchAdmissionNotes(token, query) {
+  var gate = authFail_(token);
+  if (gate) return gate;
+
+  try {
+    query = (query || '').toLowerCase().trim();
+    var ss = getSpreadsheet();
+    var sheet = ss.getSheetByName('Master_AdmissionNotes');
+    if (!sheet) return { status: 'success', records: [] };
+
+    var data = sheet.getDataRange().getValues();
+    var results = [];
+
+    for (var i = data.length - 1; i >= 1; i--) {
+      var row = data[i];
+      var haystack = [
+        row[0], row[2], row[3], row[4], row[5], row[6],
+        row[7], row[8], row[9], row[10], row[13]
+      ].join(' ').toLowerCase();
+      if (!query || haystack.indexOf(query) !== -1) results.push(mapAdmissionRow_(row));
+      if (results.length >= 50) break;
+    }
+    return { status: 'success', records: results };
   } catch (err) {
     return { status: 'error', message: err.toString() };
   }

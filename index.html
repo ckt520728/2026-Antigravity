@@ -3170,10 +3170,27 @@ ap + '\n\n' +
 
   function handleSearchKey(e) { if (e.key === 'Enter') doSearch(); }
   function doSearch() {
-    if (dashTab !== 'exam') { loadDashboardData(); return; }
-    server('searchRecords', document.getElementById('searchInput').value).then(function (res) {
-      if (res && res.status === 'success') { loadedRecords = res.records; renderExamTable(res.records); }
-    }).catch(function () {});
+    var q = document.getElementById('searchInput').value;
+    var isExam = dashTab === 'exam';
+    var fn = isExam ? 'searchRecords' : 'searchAdmissionNotes';
+    var render = isExam ? renderExamTable : renderAdmissionTable;
+
+    server(fn, q).then(function (res) {
+      if (!res || res.status !== 'success') {
+        showToast('搜尋失敗：' + ((res && res.message) || '未知錯誤'), 'var(--danger)');
+        return;
+      }
+      loadedRecords = res.records;
+      render(res.records);
+      if (q.trim()) {
+        showToast(res.records.length
+          ? '找到 ' + res.records.length + ' 筆符合「' + q.trim() + '」的紀錄'
+          : '沒有符合「' + q.trim() + '」的紀錄', res.records.length ? 'var(--ok)' : 'var(--warn)');
+      }
+    }).catch(function (err) {
+      if (err && err.message === 'AUTH_REQUIRED') return;
+      showToast('搜尋失敗：' + (err && err.message ? err.message : err), 'var(--danger)');
+    });
   }
 
   /* ---------- speech & translation ---------- */
