@@ -180,6 +180,42 @@ function createReport(record, id, timestamp) {
 
 Generating export URLs by string is far faster and simpler than converting blobs through the Drive service.
 
+### Text styling: `setForegroundColor`, never `setFontColor`
+
+`setFontColor` is a **SpreadsheetApp `Range`** method. A DocumentApp `Paragraph` colours text with **`setForegroundColor`**. The names are close enough that the wrong one reads as correct, and the failure is invisible until someone presses Save:
+
+```
+TypeError: body.appendParagraph(...).setFontSize(...).setFontColor is not a function
+```
+
+Because report generation usually runs *before* the Sheets append, the whole save aborts — in the reference implementation this went undetected across two releases, so nothing had ever been saved successfully.
+
+Do not blanket find-and-replace: the same file legitimately calls `Range.setFontColor` when styling sheet headers. Fix only the DocumentApp call sites.
+
+Paragraph-level styling that does exist: `setFontSize`, `setBold`, `setItalic`, `setUnderline`, `setFontFamily`, `setForegroundColor`, `setBackgroundColor`, `setAlignment`, `setSpacingBefore/After`, `setIndentStart/End/FirstLine`, `setHeading`, `setLinkUrl`.
+
+### Repeating page headers
+
+For a letterhead that appears on every printed page, use a real header section rather than body paragraphs:
+
+```javascript
+var header = doc.getHeader() || doc.addHeader();   // addHeader() throws if one exists
+header.clear();
+var table = header.appendTable([['', '', '']]);
+table.setBorderColor('#000000').setBorderWidth(1);
+table.setColumnWidth(0, 215).setColumnWidth(1, 190).setColumnWidth(2, 105);
+```
+
+A fresh table cell already contains one empty paragraph — reuse it for the first line, or every cell starts with a blank row:
+
+```javascript
+var first = cell.getChild(0).asParagraph();
+first.setText(lines[0]);
+for (var i = 1; i < lines.length; i++) cell.appendParagraph(lines[i]);
+```
+
+DocumentApp cannot insert an auto-updating page-number field; a footer page number has to be static or omitted.
+
 ### Sheet tab bootstrap
 
 ```javascript
@@ -371,3 +407,10 @@ For a large single-file frontend, write it in sections to a scratch directory an
 | `User has not enabled the Google Apps Script API` | API off in the Google account | Turn it on at `https://script.google.com/home/usersettings` |
 | `clasp: command not found` but credentials exist | Not installed globally; `~/.clasprc.json` still valid | `npx -y @google/clasp@latest <cmd>` (match the `.clasp.json` format version) |
 | Docs left in Drive root | Created by `DocumentApp.create()` before being filed | `DriveApp.getFileById(id).moveTo(folder)` after `saveAndClose()` |
+| `...setFontSize(...).setFontColor is not a function` | `setFontColor` is a Sheets `Range` method, not a Docs `Paragraph` one | Use `setForegroundColor`; leave genuine `Range.setFontColor` calls alone |
+| Every cell in a generated table starts with a blank line | A new `TableCell` already holds one empty paragraph | Reuse `cell.getChild(0).asParagraph()` for the first line |
+| A Docs API error only surfaces when a user clicks Save | Static checks cannot tell whether a Google API method exists | Ship a `runSelfTest()` that generates and then trashes a real document |
+
+## Related
+
+- **`admission-note-clinical-exam-system`** — the clinical domain layer: which sections a note needs, hospital form layout, ROS/PE interaction patterns, exam-modality guideline anchors, PHI handling.
