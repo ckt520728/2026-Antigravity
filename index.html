@@ -519,12 +519,33 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="admDate"><i class="fa-solid fa-calendar-check"></i> 入院日期 (Admission Date)</label>
-            <input type="date" id="admDate">
+            <label for="admNationalId"><i class="fa-solid fa-address-card"></i> 身分證號碼 (National ID)
+              <span class="hint">— 非必填</span></label>
+            <input type="text" id="admNationalId" placeholder="院內表頭欄位，可留白">
           </div>
           <div class="form-group">
-            <label for="admWardBed"><i class="fa-solid fa-bed"></i> 病房與床號 (Ward / Bed)</label>
-            <input type="text" id="admWardBed" placeholder="例如：8A-12">
+            <label for="admBirthDate"><i class="fa-solid fa-cake-candles"></i> 生日 (Birth Date)</label>
+            <input type="text" id="admBirthDate" placeholder="例如：0420221（民國）或 1953/02/21">
+          </div>
+          <div class="form-group">
+            <label for="admGender"><i class="fa-solid fa-venus-mars"></i> 性別 (Sex)</label>
+            <select id="admGender">
+              <option value="男">男 (Male)</option>
+              <option value="女">女 (Female)</option>
+              <option value="">未填 (Unspecified)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="admDate"><i class="fa-solid fa-calendar-check"></i> 入院日期 (Admission Date)</label>
+            <input type="date" id="admDate">
+            <span id="admRocDate" class="hint"></span>
+          </div>
+          <div class="form-group">
+            <label for="admWardBed"><i class="fa-solid fa-bed"></i> 床號 (Bed No.)</label>
+            <input type="text" id="admWardBed" placeholder="例如：512-1">
           </div>
           <div class="form-group">
             <label for="admDoctorName"><i class="fa-solid fa-user-doctor"></i> 主治醫師 (Attending)</label>
@@ -645,6 +666,14 @@
             <label for="admAllergies"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);"></i> 過敏史 (Allergies)</label>
             <textarea id="admAllergies" rows="3">No Known Drug Allergy (NKDA)</textarea>
             <div class="tag-container" id="allergyChips"></div>
+          </div>
+        </div>
+
+        <div class="form-group full-width" style="margin-top:18px;">
+          <label for="admHospitalizationHx"><i class="fa-solid fa-hospital"></i> 住院史 (History of Hospitalization)</label>
+          <textarea id="admHospitalizationHx" rows="2" placeholder="例如：115/1/21-115/2/17 陽明醫院 — 1.UGI bleeding 2.UTI 3.Acute bronchopneumonia"></textarea>
+          <div class="tag-container">
+            <span class="tag-chip" onclick="appendToField('admHospitalizationHx','Denied any previous hospitalization.','space')">+ 否認住院史</span>
           </div>
         </div>
       </div>
@@ -1875,6 +1904,9 @@
    * ADMISSION NOTE — config-driven sections, live preview, save
    * ========================================================================= */
 
+  /** Letterhead shown in the preview. Keep in sync with HOSPITAL_NAME in Code.gs. */
+  var HOSPITAL_NAME = '陽明醫院';
+
   var CC_CHIPS = [
     ['右下腹痛 3 天', 'Right lower quadrant abdominal pain for 3 days'],
     ['發燒畏寒 2 天', 'Fever and chills for 2 days'],
@@ -2296,6 +2328,7 @@
   function markPastHistoryNonContributory() {
     document.getElementById('admPastHistory').value = 'Past medical history is non-contributory.';
     document.getElementById('admSurgicalHistory').value = 'Denied any previous operation.';
+    document.getElementById('admHospitalizationHx').value = 'Denied any previous hospitalization.';
     document.getElementById('admMedications').value = 'No regular medication before admission.';
     document.getElementById('admAllergies').value = 'No Known Drug Allergy (NKDA)';
     onAdmissionInput();
@@ -2352,18 +2385,33 @@
     return out.join(' | ');
   }
 
+  /** 檢驗報告 — laboratory values. */
   function buildLabsText() {
-    var rows = [
-      ['CBC', 'labCBC'], ['Biochemistry', 'labBCS'], ['Inflammatory markers', 'labCRP'],
-      ['Urinalysis', 'labUA'], ['Chest radiograph', 'labCXR'], ['Electrocardiogram', 'labEKG']
-    ];
-    var out = rows.map(function (r) {
+    return [['CBC', 'labCBC'], ['BCS', 'labBCS'], ['CRP', 'labCRP'], ['U/A', 'labUA']]
+      .map(function (r) {
+        var v = document.getElementById(r[1]).value.trim();
+        return v ? r[0] + '  ' + v : '';
+      }).filter(Boolean).join('\n');
+  }
+
+  /** 檢查報告 — imaging and other studies. */
+  function buildStudiesText() {
+    var out = [['CxR', 'labCXR'], ['EKG', 'labEKG']].map(function (r) {
       var v = document.getElementById(r[1]).value.trim();
-      return v ? '• ' + r[0] + ': ' + v : '';
+      return v ? r[0] + '  ' + v : '';
     }).filter(Boolean);
     var other = document.getElementById('labOther').value.trim();
-    if (other) out.push('• Other studies: ' + other);
+    if (other) out.push(other);
     return out.join('\n');
+  }
+
+  /** ROC-calendar rendering of the admission date, as printed on the paper form. */
+  function toRocDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso + 'T00:00:00');
+    if (isNaN(d.getTime())) return iso;
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    return (d.getFullYear() - 1911) + ' 年 ' + pad(d.getMonth() + 1) + ' 月 ' + pad(d.getDate()) + ' 日';
   }
 
   function buildProblemsText() {
@@ -2400,62 +2448,105 @@
   function buildAdmissionNotePreview() {
     updateHPDeadline();
     var g = function (id, fb) { var e = document.getElementById(id); var v = e ? e.value.trim() : ''; return v || fb || ''; };
+    var ind = function (s, n) {
+      var p = new Array((n || 4) + 1).join(' ');
+      return String(s).split('\n').map(function (l) { return l ? p + l : l; }).join('\n');
+    };
 
-    var ros = buildROSText() || 'A complete 10-system review was performed and is negative except as noted in the HPI.';
-    var pe = buildPEText() || 'Physical examination unremarkable.';
-    var labs = buildLabsText() || 'Pending at the time of admission.';
-    var ap = buildProblemsText() || '(尚未填寫問題清單 — 請在第 9 節新增至少一個 problem)';
+    var roc = toRocDate(document.getElementById('admDate').value);
+    var rocHint = document.getElementById('admRocDate');
+    if (rocHint) rocHint.textContent = roc ? '民國 ' + roc : '';
 
-    var text =
-'========================================================================\n' +
-'                        MEDICAL ADMISSION NOTE\n' +
-'                   2026 Google Spark Medical Center\n' +
-'========================================================================\n\n' +
-'PATIENT GENERAL DATA\n' +
-'------------------------------------------------------------------------\n' +
-'Patient Name  : ' + g('admPatientName', 'Anonymous Patient') + '\n' +
-'MRN / Chart No: ' + g('admPatientId', 'MRN-UNSPECIFIED') + '\n' +
-'Age / Gender  : ' + g('admAgeGender', 'N/A') + '\n' +
-'Admission Date: ' + g('admDate', 'N/A') + '\n' +
-'Ward / Bed    : ' + g('admWardBed', 'N/A') + '\n' +
-'Attending Dr. : ' + g('admDoctorName') + '\n' +
-'Department    : ' + g('admDepartment') + '\n' +
-'Informant     : ' + g('admInformant') + ' (' + g('admReliability') + ')\n\n' +
-'1. CHIEF COMPLAINT (CC)\n' +
-'------------------------------------------------------------------------\n' +
-g('admChiefComplaint', 'No chief complaint recorded.') + '\n\n' +
-'2. HISTORY OF PRESENT ILLNESS (HPI)\n' +
-'------------------------------------------------------------------------\n' +
-g('admPresentIllness', 'No detailed present illness recorded.') + '\n\n' +
-'3. PAST HISTORY, MEDICATIONS & ALLERGIES\n' +
-'------------------------------------------------------------------------\n' +
-'• Past Medical History : ' + g('admPastHistory', 'Non-contributory.') + '\n' +
-'• Past Surgical History: ' + g('admSurgicalHistory', 'Denied.') + '\n' +
-'• Current Medications  : ' + g('admMedications', 'None reported on admission.') + '\n' +
-'• Allergies            : ' + g('admAllergies', 'No Known Drug Allergy (NKDA)') + '\n\n' +
-'4. FAMILY & SOCIAL HISTORY\n' +
-'------------------------------------------------------------------------\n' +
-'• Family History: ' + g('admFamilyHistory', 'Non-contributory.') + '\n' +
-'• Social History: ' + buildSocialText() + '\n\n' +
-'5. REVIEW OF SYSTEMS (ROS)\n' +
-'------------------------------------------------------------------------\n' +
-ros + '\n\n' +
-'6. VITAL SIGNS & PHYSICAL EXAMINATION\n' +
-'------------------------------------------------------------------------\n' +
-'• Vital Signs: ' + (buildVitalsText() || 'Not recorded.') + '\n' +
-'• Findings:\n' + pe + '\n\n' +
-'7. ADMISSION LABORATORY & IMAGING\n' +
-'------------------------------------------------------------------------\n' +
-labs + '\n\n' +
-'8. IMPRESSION & ADMISSION PLAN (Problem-based)\n' +
-'------------------------------------------------------------------------\n' +
-ap + '\n\n' +
-'========================================================================\n' +
-'Admitting Physician: ' + g('admDoctorName') + '\n' +
-'Record Timestamp   : ' + new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }) + '\n' +
-'========================================================================';
+    var ros = buildROSText();
+    var pe = buildPEText();
+    var labs = buildLabsText();
+    var studies = buildStudiesText();
+    var probs = nonEmptyProblems();
 
-    document.getElementById('admissionNoteLivePreview').textContent = text;
+    var RULE = '════════════════════════════════════════════════════════════════════════';
+    var THIN = '────────────────────────────────────────────────────────────────────────';
+
+    var out = [];
+    out.push(RULE);
+    out.push('                              ' + HOSPITAL_NAME);
+    out.push('                          ADMISSION  NOTE');
+    out.push(THIN);
+    out.push('病歷號：' + g('admPatientId') + '          床號：' + g('admWardBed'));
+    out.push('姓　　名：' + g('admPatientName') + '        生日：' + g('admBirthDate'));
+    out.push('身分證號碼：' + g('admNationalId') + '      性別：' + g('admGender'));
+    out.push('住院日期：' + roc);
+    out.push(RULE);
+    out.push('');
+
+    out.push('主訴(Chief Complaints)：');
+    out.push(ind(g('admChiefComplaint', '—')));
+    out.push('');
+
+    out.push('現在病歷(Present Illness)：');
+    out.push(ind(g('admPresentIllness', '—')));
+    out.push('');
+
+    out.push('過去病史(Past History)：');
+    out.push(ind('Past history :'));
+    out.push(ind('1. Disease : ' + g('admPastHistory', 'Non-contributory.'), 6));
+    out.push(ind('2. History of trauma or surgery : ' + g('admSurgicalHistory', 'Denied.'), 6));
+    out.push(ind('3. History of hospitalization : ' + g('admHospitalizationHx', 'Denied.'), 6));
+    out.push(ind('4. Home medication reviews : ' + g('admMedications', 'None.'), 6));
+    out.push('');
+
+    out.push('藥物過敏(Drug Allergy)：');
+    out.push(ind(g('admAllergies', 'The patient is not allergic to any type of food or medicine.')));
+    out.push('');
+
+    out.push('家族史(Family History)：');
+    out.push(ind(g('admFamilyHistory', 'There was no family history of hereditary or oncologic disease.')));
+    out.push(ind('Personal and social history : ' + buildSocialText()));
+    out.push('');
+
+    out.push('系統回顧(Review of Systems)：');
+    out.push(ind('Review of systems'));
+    out.push(ind(ros || '—', 6));
+    out.push('');
+
+    out.push('理學檢查(Physical Examination)：');
+    out.push(ind('Vital sign: ' + (buildVitalsText() || '—')));
+    out.push(ind(pe || '—'));
+    out.push('');
+
+    out.push('檢驗報告：');
+    out.push(ind(labs || 'Pending.'));
+    out.push('');
+
+    out.push('檢查報告：');
+    out.push(ind(studies || 'Pending.'));
+    out.push('');
+
+    out.push('初步診斷(Impression)：');
+    if (probs.length) {
+      probs.forEach(function (p, i) { out.push(ind((i + 1) + '.' + p.problem, 6)); });
+    } else {
+      out.push(ind('(尚未填寫問題清單 — 請在第 9 節新增至少一個 problem)', 6));
+    }
+    out.push('');
+
+    out.push('治療及計劃(Management and Plan)：');
+    if (probs.length) {
+      var n = 0;
+      probs.forEach(function (p) {
+        String(p.plan || '').split('\n').forEach(function (l) {
+          var t = l.replace(/^\s*\d+[.)]\s*/, '').trim();
+          if (t) out.push(ind((++n) + '.' + t, 6));
+        });
+      });
+      if (!n) out.push(ind('1.Routine admission care.', 6));
+    } else {
+      out.push(ind('—', 6));
+    }
+    out.push('');
+    out.push('');
+    out.push('                                                  主治醫師：' + g('admDoctorName'));
+
+    document.getElementById('admissionNoteLivePreview').textContent = out.join('\n');
   }
 
   /* ---------- validation & save ---------- */
@@ -2490,6 +2581,10 @@ ap + '\n\n' +
       patientId: document.getElementById('admPatientId').value.trim(),
       patientName: document.getElementById('admPatientName').value.trim() || 'Anonymous Patient',
       ageGender: document.getElementById('admAgeGender').value.trim() || 'Unspecified',
+      nationalId: document.getElementById('admNationalId').value.trim(),
+      birthDate: document.getElementById('admBirthDate').value.trim(),
+      gender: document.getElementById('admGender').value,
+      hospitalizationHistory: document.getElementById('admHospitalizationHx').value.trim(),
       examDate: document.getElementById('admDate').value || new Date().toISOString().slice(0, 10),
       wardBed: document.getElementById('admWardBed').value.trim() || 'N/A',
       doctorName: document.getElementById('admDoctorName').value,
@@ -2507,7 +2602,9 @@ ap + '\n\n' +
       reviewOfSystems: buildROSText(),
       vitalSigns: buildVitalsText(),
       physicalExam: buildPEText(),
-      labsImaging: buildLabsText(),
+      labsReport: buildLabsText(),
+      studiesReport: buildStudiesText(),
+      labsImaging: [buildLabsText(), buildStudiesText()].filter(Boolean).join('\n'),
       problemList: probs,
       impression: probs.map(function (p, i) { return (i + 1) + '. ' + p.problem; }).join('\n'),
       plan: probs.map(function (p, i) { return '# ' + (i + 1) + ' ' + p.problem + '\n' + p.plan; }).join('\n\n')
@@ -2542,6 +2639,7 @@ ap + '\n\n' +
   function resetAdmissionForm() {
     if (!confirm('確定清除住院病歷表單的所有欄位？')) return;
     ['admPatientId', 'admPatientName', 'admAgeGender', 'admWardBed', 'admChiefComplaint',
+      'admNationalId', 'admBirthDate', 'admHospitalizationHx',
       'admPresentIllness', 'admPastHistory', 'admSurgicalHistory', 'admMedications',
       'admFamilyHistory', 'admPackYear', 'admAlcoholDetail', 'admBetelDetail', 'admOccupation',
       'admTravelContact', 'admRosExtra', 'admBW', 'admBH', 'admBMI', 'admPain', 'admGCS',

@@ -15,6 +15,12 @@
 var SPREADSHEET_ID = '1UIJZdR7rPHOPlgNC6w8g7SV3AL0kIW3mGSGRkJZWfWY';
 var TZ = 'Asia/Taipei';
 
+/**
+ * Letterhead shown in the repeating page header of the generated admission note.
+ * Change this one line to re-brand the document for another hospital.
+ */
+var HOSPITAL_NAME = '陽明醫院';
+
 /* ==========================================================================
  * AUTH — passcode gate
  *
@@ -536,7 +542,8 @@ function saveAdmissionNoteRecord(token, record) {
       '初步診斷 (Impression)', '治療計畫 (Plan)', 'Google Doc 網址', 'PDF 下載網址', 'Word 下載網址',
       '手術史 (Past Surgical History)', '目前用藥 (Current Medications)', '家族史 (Family History)',
       '個人社會史 (Social History)', '系統回顧 (Review of Systems)', '生命徵象 (Vital Signs)',
-      '入院檢驗與影像 (Labs & Imaging)', '問題清單 JSON (Problem List)'
+      '入院檢驗與影像 (Labs & Imaging)', '問題清單 JSON (Problem List)',
+      '身分證號碼 (National ID)', '出生日期 (Birth Date)', '住院史 (Hospitalization History)'
     ];
 
     var sheet = getOrCreateSheet(ss, 'Master_AdmissionNotes', headers);
@@ -557,7 +564,10 @@ function saveAdmissionNoteRecord(token, record) {
       record.reviewOfSystems || '',
       record.vitalSigns || '',
       record.labsImaging || '',
-      JSON.stringify(record.problemList || [])
+      JSON.stringify(record.problemList || []),
+      record.nationalId || '',
+      record.birthDate || '',
+      record.hospitalizationHistory || ''
     ]);
 
     return {
@@ -575,8 +585,12 @@ function saveAdmissionNoteRecord(token, record) {
 
 /**
  * Generate the formal Google Doc admission note.
- * Section order follows the standard teaching-hospital H&P:
- * demographics → CC → HPI → PMH/PSH/Meds/Allergy → FHx/SHx → ROS → Vitals+PE → Labs → A&P.
+ *
+ * Layout mirrors the hospital's paper ADMISSION NOTE form (see
+ * 02_參考資料/Admission Note_format): a bordered three-column letterhead in the
+ * repeating page header, then 中文(English)： section headings in the order
+ * 主訴 → 現在病歷 → 過去病史 → 藥物過敏 → 家族史 → 系統回顧 → 理學檢查 →
+ * 檢驗報告 → 檢查報告 → 初步診斷 → 治療及計劃 → 主治醫師.
  */
 function createAdmissionNoteDocReport(record, noteId, timestamp) {
   var reportsFolder = getReportsFolder_('住院病歷報告_GoogleDocs');
@@ -588,73 +602,84 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
 
   body.setMarginTop(40).setMarginBottom(40).setMarginLeft(48).setMarginRight(48);
 
-  body.appendParagraph('2026 Google Spark Medical Center — Admission Record')
-    .setFontSize(9.5).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+  // Letterhead lives in the page header so it repeats on every printed page,
+  // exactly like the hospital's pre-printed form.
+  buildAdmissionPageHeader_(doc, record);
 
-  body.appendParagraph('ADMISSION NOTE\n住院病歷紀錄書')
-    .setFontSize(18).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setForegroundColor('#0f172a');
+  // 主訴 / 現在病歷
+  appendHospitalSection_(body, '主訴', 'Chief Complaints');
+  appendHospitalLine_(body, record.chiefComplaint || '—');
 
-  body.appendHorizontalRule();
+  appendHospitalSection_(body, '現在病歷', 'Present Illness');
+  appendHospitalLine_(body, record.presentIllness || '—');
 
-  var metaTable = body.appendTable([
-    ['Patient Name (姓名)', record.patientName || 'N/A', 'MRN / Chart No (病歷號)', record.patientId || 'N/A'],
-    ['Age / Gender (年齡/性別)', record.ageGender || 'N/A', 'Admission Date (入院日期)', record.examDate || 'N/A'],
-    ['Ward / Bed (病房床號)', record.wardBed || 'N/A', 'Attending Doctor (主治醫師)', record.doctorName || 'Dr. Kwo-Ta Chu'],
-    ['Department (診斷科別)', record.department || 'Nephrology', 'Note Record ID (報告編號)', noteId],
-    ['Informant (病史提供者)', record.informant || 'Patient', 'Reliability (可信度)', record.reliability || 'Reliable']
-  ]);
-  metaTable.setBorderColor('#cbd5e1');
+  // 過去病史 — the form's four fixed subheadings
+  appendHospitalSection_(body, '過去病史', 'Past History');
+  appendHospitalLine_(body, 'Past history :');
+  appendHospitalLine_(body, '1. Disease : ' + (record.pastHistory || 'Non-contributory.'), 36);
+  appendHospitalLine_(body, '2. History of trauma or surgery : ' + (record.surgicalHistory || 'Denied.'), 36);
+  appendHospitalLine_(body, '3. History of hospitalization : ' + (record.hospitalizationHistory || 'Denied.'), 36);
+  appendHospitalLine_(body, '4. Home medication reviews : ' + (record.medications || 'None.'), 36);
 
-  appendDocSection_(body, '1. CHIEF COMPLAINT (CC)', record.chiefComplaint || 'No chief complaint provided.');
-  appendDocSection_(body, '2. HISTORY OF PRESENT ILLNESS (HPI)', record.presentIllness || 'No detailed history of present illness.');
+  appendHospitalSection_(body, '藥物過敏', 'Drug Allergy');
+  appendHospitalLine_(body, record.allergies || 'The patient is not allergic to any type of food or medicine.');
 
-  body.appendParagraph('\n3. PAST HISTORY, MEDICATIONS & ALLERGIES')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph('• Past Medical History: ' + (record.pastHistory || 'Non-contributory.')).setFontSize(10.5);
-  body.appendParagraph('• Past Surgical History: ' + (record.surgicalHistory || 'Denied.')).setFontSize(10.5);
-  body.appendParagraph('• Current Medications: ' + (record.medications || 'None reported on admission.')).setFontSize(10.5);
-  body.appendParagraph('• Allergies: ' + (record.allergies || 'No Known Drug Allergy (NKDA)')).setFontSize(10.5);
-
-  body.appendParagraph('\n4. FAMILY & SOCIAL HISTORY')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph('• Family History: ' + (record.familyHistory || 'Non-contributory.')).setFontSize(10.5);
-  body.appendParagraph('• Social History: ' + (record.socialHistory || 'Non-contributory.')).setFontSize(10.5);
-
-  appendDocSection_(body, '5. REVIEW OF SYSTEMS (ROS)',
-    record.reviewOfSystems || 'A complete 10-system review was performed and is negative except as noted in the HPI.');
-
-  body.appendParagraph('\n6. VITAL SIGNS & PHYSICAL EXAMINATION')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph('• Vital Signs: ' + (record.vitalSigns || 'Not recorded.')).setFontSize(10.5);
-  body.appendParagraph(record.physicalExam || 'Physical examination unremarkable.').setFontSize(10.5);
-
-  appendDocSection_(body, '7. ADMISSION LABORATORY & IMAGING',
-    record.labsImaging || 'Pending at the time of admission.');
-
-  body.appendParagraph('\n8. IMPRESSION & ADMISSION PLAN (Problem-based)')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-
-  var problems = record.problemList || [];
-  if (problems.length) {
-    for (var i = 0; i < problems.length; i++) {
-      var p = problems[i] || {};
-      body.appendParagraph('# ' + (i + 1) + '. ' + (p.problem || 'Unnamed problem'))
-        .setFontSize(11).setBold(true).setForegroundColor('#0f172a');
-      body.appendParagraph('    Plan: ' + (p.plan || 'To be determined.')).setFontSize(10.5).setBold(false);
-    }
-  } else {
-    body.appendParagraph('【Impression / Tentative Diagnosis】\n' + (record.impression || 'Pending initial diagnostic evaluations.'))
-      .setFontSize(11).setBold(true).setForegroundColor('#0f172a');
-    body.appendParagraph('【Therapeutic & Workup Plan】\n' + (record.plan || 'Routine admission care.'))
-      .setFontSize(10.5).setBold(false);
+  appendHospitalSection_(body, '家族史', 'Family History');
+  appendHospitalLine_(body, record.familyHistory || 'There was no family history of hereditary or oncologic disease.');
+  if (record.socialHistory) {
+    appendHospitalLine_(body, 'Personal and social history : ' + record.socialHistory);
   }
 
-  body.appendHorizontalRule();
+  appendHospitalSection_(body, '系統回顧', 'Review of Systems');
+  appendHospitalLine_(body, 'Review of systems');
+  appendHospitalLine_(body, record.reviewOfSystems || '—', 36);
 
-  body.appendParagraph('\nAttending / Admitting Physician: ______________________ (' + (record.doctorName || 'Dr. Kwo-Ta Chu') + ')\n' +
-    'Electronically recorded in the 2026 Google Spark Cloud Registry at ' +
-    Utilities.formatDate(timestamp, TZ, 'yyyy-MM-dd HH:mm'))
-    .setFontSize(9).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+  appendHospitalSection_(body, '理學檢查', 'Physical Examination');
+  appendHospitalLine_(body, 'Vital sign: ' + (record.vitalSigns || '—'));
+  appendHospitalLine_(body, record.physicalExam || '—');
+
+  // 檢驗報告 / 檢查報告 — plain headings on the paper form, no English gloss
+  styleP_(body.appendParagraph('檢驗報告：'), { size: 11, bold: true, before: 10, after: 2 });
+  appendHospitalLine_(body, record.labsReport || record.labsImaging || 'Pending.');
+
+  styleP_(body.appendParagraph('檢查報告：'), { size: 11, bold: true, before: 10, after: 2 });
+  appendHospitalLine_(body, record.studiesReport || 'Pending.');
+
+  // 初步診斷 / 治療及計劃 — numbered, from the problem list
+  var problems = record.problemList || [];
+
+  appendHospitalSection_(body, '初步診斷', 'Impression');
+  if (problems.length) {
+    for (var i = 0; i < problems.length; i++) {
+      appendHospitalLine_(body, (i + 1) + '.' + ((problems[i] || {}).problem || 'Unnamed problem'), 36);
+    }
+  } else {
+    appendHospitalLine_(body, record.impression || 'Pending initial diagnostic evaluations.', 36);
+  }
+
+  appendHospitalSection_(body, '治療及計劃', 'Management and Plan');
+  if (problems.length) {
+    var planNo = 0;
+    for (var j = 0; j < problems.length; j++) {
+      var pl = String((problems[j] || {}).plan || '').split('\n');
+      for (var k = 0; k < pl.length; k++) {
+        var line = pl[k].replace(/^\s*\d+[.)]\s*/, '').trim();
+        if (line) appendHospitalLine_(body, (++planNo) + '.' + line, 36);
+      }
+    }
+    if (!planNo) appendHospitalLine_(body, '1.Routine admission care.', 36);
+  } else {
+    appendHospitalLine_(body, record.plan || 'Routine admission care.', 36);
+  }
+
+  // 主治醫師 signature block, right-aligned as on the form
+  styleP_(body.appendParagraph(''), { size: 10, before: 24 });
+  styleP_(body.appendParagraph('主治醫師：' + (record.doctorName || '')),
+    { size: 10.5, align: DocumentApp.HorizontalAlignment.RIGHT, before: 18 });
+  styleP_(body.appendParagraph('Note ID: ' + noteId + '　|　' +
+    Utilities.formatDate(timestamp, TZ, 'yyyy-MM-dd HH:mm')),
+    { size: 8, align: DocumentApp.HorizontalAlignment.RIGHT, before: 6 })
+    .setForegroundColor('#808080');
 
   doc.saveAndClose();
   DriveApp.getFileById(doc.getId()).moveTo(reportsFolder);
@@ -664,6 +689,97 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
 function appendDocSection_(body, heading, text) {
   body.appendParagraph('\n' + heading).setFontSize(12).setBold(true).setForegroundColor('#1e293b');
   body.appendParagraph(text).setFontSize(10.5).setBold(false);
+}
+
+/* --------------------------------------------------------------------------
+ * Hospital admission-note formatting helpers
+ * -------------------------------------------------------------------------- */
+
+/** Convert an ISO date (yyyy-MM-dd) to the ROC calendar form used on the form. */
+function toRocDate_(iso) {
+  if (!iso) return '';
+  var d = new Date(String(iso) + 'T00:00:00');
+  if (isNaN(d.getTime())) return String(iso);
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  return (d.getFullYear() - 1911) + ' 年 ' + pad(d.getMonth() + 1) + ' 月 ' + pad(d.getDate()) + ' 日';
+}
+
+/** Apply a compact paragraph style; returns the paragraph for chaining. */
+function styleP_(p, opts) {
+  opts = opts || {};
+  p.setFontSize(opts.size || 9).setBold(!!opts.bold);
+  if (opts.align) p.setAlignment(opts.align);
+  p.setSpacingBefore(opts.before || 0).setSpacingAfter(opts.after || 0);
+  return p;
+}
+
+/**
+ * Fill a table cell with several styled lines.
+ * A cell always contains one empty paragraph, so the first line reuses it
+ * rather than appending — otherwise every cell starts with a blank row.
+ */
+function setCellLines_(cell, lines) {
+  var first = cell.getChild(0).asParagraph();
+  first.setText(lines[0].text);
+  styleP_(first, lines[0]);
+  for (var i = 1; i < lines.length; i++) {
+    styleP_(cell.appendParagraph(lines[i].text), lines[i]);
+  }
+  cell.setPaddingTop(2).setPaddingBottom(2).setPaddingLeft(5).setPaddingRight(5);
+}
+
+/**
+ * Build the bordered letterhead block that repeats on every printed page,
+ * matching the hospital's paper ADMISSION NOTE form:
+ *
+ *   +---------------------+------------------------+--------------+
+ *   |      <醫院名稱>      | 病歷號 / 姓名 /         | 床號 / 生日 / |
+ *   |   ADMISSION  NOTE   | 身分證號碼 / 住院日期    | 性別          |
+ *   +---------------------+------------------------+--------------+
+ *
+ * Uses a real Google Docs header section so it repeats across pages.
+ */
+function buildAdmissionPageHeader_(doc, record) {
+  var header = doc.getHeader() || doc.addHeader();
+  header.clear();
+
+  var CENTER = DocumentApp.HorizontalAlignment.CENTER;
+  var table = header.appendTable([['', '', '']]);
+  table.setBorderColor('#000000').setBorderWidth(1);
+
+  setCellLines_(table.getCell(0, 0), [
+    { text: HOSPITAL_NAME, size: 16, bold: true, align: CENTER, before: 2 },
+    { text: 'ADMISSION  NOTE', size: 12, bold: true, align: CENTER, after: 2 }
+  ]);
+
+  setCellLines_(table.getCell(0, 1), [
+    { text: '病歷號：' + (record.patientId || '') },
+    { text: '姓　　名：' + (record.patientName || '') },
+    { text: '身分證號碼：' + (record.nationalId || '') },
+    { text: '住院日期：' + toRocDate_(record.examDate) }
+  ]);
+
+  setCellLines_(table.getCell(0, 2), [
+    { text: '床號：' + (record.wardBed || '') },
+    { text: '生日：' + (record.birthDate || '') },
+    { text: '性別：' + (record.gender || record.ageGender || '') }
+  ]);
+
+  table.setColumnWidth(0, 215).setColumnWidth(1, 190).setColumnWidth(2, 105);
+  return header;
+}
+
+/** Section heading in the hospital's 中文(English)： style. */
+function appendHospitalSection_(body, zh, en) {
+  return styleP_(body.appendParagraph(zh + '(' + en + ')：'),
+    { size: 11, bold: true, before: 10, after: 2 });
+}
+
+/** Plain body line, indented like the handwritten form. */
+function appendHospitalLine_(body, text, indent) {
+  var p = styleP_(body.appendParagraph(text), { size: 10 });
+  p.setIndentStart(indent || 18);
+  return p;
 }
 
 /**
@@ -802,12 +918,15 @@ function runSelfTest() {
   var admDoc = step('createAdmissionNoteDocReport() — incl. problem-list branch', function () {
     return createAdmissionNoteDocReport({
       patientId: 'SELFTEST', patientName: 'Self Test', ageGender: '60yo Male',
+      gender: 'Male', nationalId: 'SELFTEST', birthDate: '0500101',
       examDate: '2026-01-01', wardBed: 'A-1', doctorName: 'Self Test',
       department: 'Nephrology', informant: 'Patient', reliability: 'Reliable',
       chiefComplaint: 'self test', presentIllness: 'self test', pastHistory: 'self test',
-      surgicalHistory: 'self test', medications: 'self test', allergies: 'NKDA',
+      surgicalHistory: 'self test', hospitalizationHistory: 'self test',
+      medications: 'self test', allergies: 'NKDA',
       familyHistory: 'self test', socialHistory: 'self test', reviewOfSystems: 'self test',
-      vitalSigns: 'self test', physicalExam: 'self test', labsImaging: 'self test',
+      vitalSigns: 'self test', physicalExam: 'self test',
+      labsReport: 'self test', studiesReport: 'self test', labsImaging: 'self test',
       problemList: [{ problem: 'Problem 1', plan: '1. step one\n2. step two' }]
     }, 'SELFTEST-ADM', now);
   });
