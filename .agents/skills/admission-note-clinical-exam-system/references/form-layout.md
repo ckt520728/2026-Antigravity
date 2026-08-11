@@ -33,8 +33,8 @@ function toRocDate_(iso) {
 }
 ```
 
-Birth date on these forms is often already ROC-encoded (`0420221` = 民國 42/02/21).
-Accept it as free text rather than trying to parse it.
+Birth date on these forms is often already ROC-encoded — e.g. `0400101` means
+民國 40/01/01. Accept it as free text rather than trying to parse it.
 
 ---
 
