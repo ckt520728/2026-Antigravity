@@ -7,11 +7,11 @@
   <title>臨床醫療紀錄與報告系統 v6.0 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-     
+    /* ---------- Theme tokens ---------- */
     :root,
     html[data-theme="dark"] {
       --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
@@ -76,7 +76,7 @@
 
     .container { max-width: 1320px; margin: 0 auto; padding: 20px; }
 
-     
+    /* ---------- Lock screen ---------- */
     #lockScreen {
       position: fixed; inset: 0; z-index: 3000;
       display: flex; align-items: center; justify-content: center;
@@ -105,7 +105,7 @@
     }
     .lock-foot { margin-top: 22px; font-size: 11.5px; color: var(--text-muted); line-height: 1.7; }
 
-     
+    /* ---------- Header ---------- */
     .header-bar {
       display: flex; justify-content: space-between; align-items: center;
       gap: 16px; flex-wrap: wrap; padding: 18px 24px;
@@ -145,7 +145,7 @@
     }
     .icon-btn:hover { color: var(--text-main); border-color: var(--primary); }
 
-     
+    /* ---------- Panels ---------- */
     .panel {
       background: var(--card-bg); backdrop-filter: blur(16px);
       border: 1px solid var(--card-border); border-radius: var(--radius-lg);
@@ -191,7 +191,7 @@
     .unit-input-group input { flex: 1; }
     .unit-label { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
 
-     
+    /* ---------- Chips ---------- */
     .tag-container { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
     .tag-chip {
       padding: 5px 11px; background: var(--chip-bg); border: 1px solid var(--chip-border);
@@ -200,7 +200,7 @@
     }
     .tag-chip:hover { background: rgba(99, 102, 241, 0.22); color: var(--text-main); border-color: var(--primary); }
 
-     
+    /* tri-state ROS chip */
     .ros-chip {
       padding: 5px 11px; border-radius: 20px; font-size: 12px; cursor: pointer;
       background: var(--chip-bg); border: 1px solid var(--chip-border);
@@ -234,7 +234,7 @@
     .checkbox-label { font-size: 13px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 6px; }
     .checkbox-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; }
 
-     
+    /* ---------- Buttons ---------- */
     .btn {
       padding: 11px 20px; font-size: 13.5px; font-weight: 600; border-radius: var(--radius-md);
       border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
@@ -282,7 +282,7 @@
       100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
     }
 
-     
+    /* ---------- Exam cards ---------- */
     .exam-selector-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
     .exam-card {
       background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border);
@@ -313,7 +313,7 @@
     .special-module.active { display: block; animation: fadeIn 0.25s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-     
+    /* ---------- Problem list ---------- */
     .problem-row {
       display: grid; grid-template-columns: 34px 1fr 1.4fr 34px; gap: 12px; align-items: start;
       padding: 12px; margin-bottom: 10px; background: var(--panel-inner);
@@ -329,7 +329,7 @@
     }
     .problem-del:hover { color: var(--danger); border-color: var(--danger); }
 
-     
+    /* ---------- Preview ---------- */
     .report-preview-box {
       background: var(--pre-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md);
       padding: 18px; font-family: 'Consolas', 'Courier New', 'Noto Sans TC', monospace;
@@ -337,7 +337,7 @@
       max-height: 520px; overflow-y: auto; color: var(--text-main);
     }
 
-     
+    /* ---------- Dashboard ---------- */
     .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
     .stat-box {
       background: var(--card-bg); border: 1px solid var(--card-border);
@@ -361,7 +361,7 @@
     .badge-lgi  { background: rgba(6, 182, 212, 0.2);  color: #22d3ee; }
     .badge-adm  { background: rgba(99, 102, 241, 0.2); color: var(--primary-soft); }
 
-     
+    /* ---------- Modal / toast / sticky bar ---------- */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(6px); z-index: 2500; align-items: center; justify-content: center; padding: 20px;
@@ -387,7 +387,7 @@
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); display: inline-block; }
     .dot.warn { background: var(--warn); }
 
-     
+    /* ---------- Responsive ---------- */
     @media (max-width: 1100px) {
       .exam-selector-grid { grid-template-columns: repeat(2, 1fr); }
       .stats-grid { grid-template-columns: repeat(3, 1fr); }
@@ -407,7 +407,7 @@
       .action-bar .status { width: 100%; margin-bottom: 6px; }
     }
 
-     
+    /* ---------- Print ---------- */
     @media print {
       body { background: #fff; color: #000; padding: 0; }
       .header-bar, .action-bar, .nav-tabs, .template-bar, .tag-container,
@@ -422,7 +422,9 @@
 </head>
 <body>
 
-  
+  <!-- ===================== LOCK SCREEN =====================
+       Hidden while Code.gs has AUTH_ENABLED = false. The markup stays here so
+       turning the gate back on is a one-line server-side change. -->
   <div id="lockScreen" style="display:none;">
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
@@ -447,7 +449,7 @@
     </div>
   </div>
 
-  
+  <!-- ===================== APP ===================== -->
   <div id="app">
   <div class="container">
 
@@ -498,10 +500,10 @@
         語音辨識與中英翻譯為一般用途工具（非醫療專用），輸出必須經人工校閱。</span>
     </div>
 
-
+    <!-- ===================== VIEW: ADMISSION NOTE ===================== -->
     <div id="admissionNoteView">
 
-      
+      <!-- 1. Demographics -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-hospital-user" style="color:var(--primary);"></i>
@@ -599,7 +601,7 @@
         </div>
       </div>
 
-      
+      <!-- 2. Chief Complaint -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-comment-medical" style="color:var(--accent-ugi);"></i>
@@ -619,7 +621,7 @@
         </div>
       </div>
 
-      
+      <!-- 3. HPI -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-file-waveform" style="color:var(--accent-lgi);"></i>
@@ -642,7 +644,7 @@
         </div>
       </div>
 
-      
+      <!-- 4. Past history / meds / allergy -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-notes-medical" style="color:var(--accent-echo);"></i>
@@ -686,7 +688,7 @@
         </div>
       </div>
 
-      
+      <!-- 5. Family & Social history -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-people-roof" style="color:var(--accent-sono);"></i>
@@ -762,7 +764,7 @@
         </div>
       </div>
 
-      
+      <!-- 6. Review of Systems -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-list-ul" style="color:var(--primary-soft);"></i>
@@ -779,7 +781,7 @@
         </div>
       </div>
 
-      
+      <!-- 7. Vitals & PE -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-stethoscope" style="color:var(--accent-sono);"></i>
@@ -841,7 +843,7 @@
         <div id="peGrid"></div>
       </div>
 
-      
+      <!-- 8. Labs & imaging -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-flask-vial" style="color:var(--accent-ugi);"></i>
@@ -888,7 +890,7 @@
             <label>尿液檢查 U/A</label>
             <div style="display:flex; gap:8px;">
               <input type="text" id="labUADate" class="lab-date" placeholder="2/18" style="max-width:82px;">
-              <input type="text" id="labUA" placeholder="Protein:2&#43;  RBC:5-10/HPF  WBC:20-30/HPF">
+              <input type="text" id="labUA" placeholder="Protein:2+  RBC:5-10/HPF  WBC:20-30/HPF">
             </div>
           </div>
           <div class="form-group">
@@ -923,7 +925,7 @@
         </div>
       </div>
 
-      
+      <!-- 9. Problem-based A&P -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-bullseye" style="color:var(--primary);"></i>
@@ -948,7 +950,7 @@
         </p>
       </div>
 
-      
+      <!-- Live preview -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-eye" style="color:var(--primary);"></i>
@@ -963,7 +965,7 @@
       </div>
     </div>
 
-    
+    <!-- ===================== VIEW: EXAM REPORTS ===================== -->
     <div id="entryView" style="display:none;">
 
       <div class="exam-selector-grid">
@@ -985,7 +987,7 @@
         </div>
       </div>
 
-      
+      <!-- Basic info (RSNA header block) -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-clipboard-user"></i>
@@ -1044,7 +1046,7 @@
         </div>
       </div>
 
-      
+      <!-- 1. ECHO -->
       <div id="moduleEcho" class="special-module active">
         <div class="template-bar">
           <span style="font-weight:600; font-size:12.5px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速範本：</span>
@@ -1113,16 +1115,16 @@
           <div class="form-group">
             <label>右心室功能 (RV Function / TAPSE)</label>
             <select id="echoRV" onchange="buildReportText()">
-              <option value="RV size and systolic function normal (TAPSE &gt; 17 mm)">Normal RV (TAPSE &gt; 17 mm)</option>
+              <option value="RV size and systolic function normal (TAPSE > 17 mm)">Normal RV (TAPSE &gt; 17 mm)</option>
               <option value="Mildly dilated RV with preserved systolic function">Mildly dilated RV</option>
-              <option value="RV dilatation with reduced systolic function (TAPSE &lt; 17 mm)">RV dysfunction (TAPSE &lt; 17 mm)</option>
+              <option value="RV dilatation with reduced systolic function (TAPSE < 17 mm)">RV dysfunction (TAPSE &lt; 17 mm)</option>
             </select>
           </div>
           <div class="form-group">
             <label>下腔靜脈 (IVC / Volume Status)</label>
             <select id="echoIVC" onchange="buildReportText()">
-              <option value="IVC normal caliber with &gt; 50% respiratory collapse (normal RA pressure)">Normal IVC (正常)</option>
-              <option value="IVC dilated with &lt; 50% respiratory collapse (elevated RA pressure)">Dilated IVC (右房壓上升)</option>
+              <option value="IVC normal caliber with > 50% respiratory collapse (normal RA pressure)">Normal IVC (正常)</option>
+              <option value="IVC dilated with < 50% respiratory collapse (elevated RA pressure)">Dilated IVC (右房壓上升)</option>
               <option value="IVC collapsed, suggesting hypovolemia">Collapsed IVC (血容量不足)</option>
             </select>
           </div>
@@ -1196,7 +1198,7 @@
         </div>
       </div>
 
-      
+      <!-- 2. ABDOMINAL SONO -->
       <div id="moduleSono" class="special-module">
         <div class="template-bar">
           <span style="font-weight:600; font-size:12.5px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速範本：</span>
@@ -1315,7 +1317,7 @@
         </div>
       </div>
 
-      
+      <!-- 3. UGI -->
       <div id="moduleUGI" class="special-module">
         <div class="template-bar">
           <span style="font-weight:600; font-size:12.5px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速範本：</span>
@@ -1331,10 +1333,10 @@
             <label>食道黏膜 (Esophagus)</label>
             <select id="ugiEsophagus" onchange="buildReportText()">
               <option value="Esophagus with normal lumen and smooth mucosa">Normal (正常)</option>
-              <option value="Mucosal breaks &lt; 5 mm confined to mucosal folds (Reflux esophagitis, LA Grade A)">GERD LA Grade A</option>
-              <option value="Mucosal breaks &gt; 5 mm not extending between two mucosal folds (Reflux esophagitis, LA Grade B)">GERD LA Grade B</option>
+              <option value="Mucosal breaks < 5 mm confined to mucosal folds (Reflux esophagitis, LA Grade A)">GERD LA Grade A</option>
+              <option value="Mucosal breaks > 5 mm not extending between two mucosal folds (Reflux esophagitis, LA Grade B)">GERD LA Grade B</option>
               <option value="Continuous mucosal breaks between tops of mucosal folds (Reflux esophagitis, LA Grade C)">GERD LA Grade C</option>
-              <option value="Circumferential mucosal break involving &gt; 75% of circumference (Reflux esophagitis, LA Grade D)">GERD LA Grade D</option>
+              <option value="Circumferential mucosal break involving > 75% of circumference (Reflux esophagitis, LA Grade D)">GERD LA Grade D</option>
               <option value="Esophageal candidiasis with white plaques">Esophageal Candidiasis</option>
               <option value="Esophageal varices noted">Esophageal Varices (靜脈曲張)</option>
             </select>
@@ -1402,7 +1404,7 @@
             <label>CLO Test (幽門桿菌)</label>
             <select id="ugiCLO" onchange="buildReportText()">
               <option value="Rapid urease (CLO) test: not performed">Not performed (未執行)</option>
-              <option value="Rapid urease (CLO) test at the antrum: positive (&#43;)">Positive (+)</option>
+              <option value="Rapid urease (CLO) test at the antrum: positive (+)">Positive (+)</option>
               <option value="Rapid urease (CLO) test at the antrum: negative (-)">Negative (−)</option>
             </select>
           </div>
@@ -1413,7 +1415,7 @@
         </div>
       </div>
 
-      
+      <!-- 4. LGI -->
       <div id="moduleLGI" class="special-module">
         <div class="template-bar">
           <span style="font-weight:600; font-size:12.5px;"><i class="fa-solid fa-wand-magic-sparkles"></i> 快速範本：</span>
@@ -1441,7 +1443,7 @@
               <option value="Bowel preparation excellent (BBPS 9/9)">BBPS 9/9 (極佳)</option>
               <option value="Bowel preparation good (BBPS 7-8/9)">BBPS 7-8/9 (良好)</option>
               <option value="Bowel preparation fair (BBPS 6/9)">BBPS 6/9 (尚可，仍達標)</option>
-              <option value="Bowel preparation inadequate (BBPS &lt; 6/9, residual stool)">BBPS &lt; 6 (不足，建議提早重做)</option>
+              <option value="Bowel preparation inadequate (BBPS < 6/9, residual stool)">BBPS &lt; 6 (不足，建議提早重做)</option>
             </select>
           </div>
           <div class="form-group">
@@ -1501,7 +1503,7 @@
         </div>
       </div>
 
-      
+      <!-- Findings & impression -->
       <div class="panel">
         <div class="panel-title">
           <i class="fa-solid fa-file-waveform"></i>
@@ -1541,7 +1543,7 @@
       </div>
     </div>
 
-    
+    <!-- ===================== VIEW: DASHBOARD ===================== -->
     <div id="dashboardView" style="display:none;">
       <div class="stats-grid">
         <div class="stat-box"><div class="stat-title"><i class="fa-solid fa-folder-closed"></i> 總檢查數</div><div class="stat-number" id="statTotal">0</div></div>
@@ -1581,9 +1583,9 @@
       </div>
     </div>
 
-  </div>
+  </div><!-- /container -->
 
-  
+  <!-- ===================== STICKY ACTION BAR ===================== -->
   <div class="action-bar no-print">
     <div class="status">
       <span class="dot" id="saveDot"></span>
@@ -1597,9 +1599,9 @@
       <i class="fa-solid fa-cloud-arrow-up"></i> <span id="barSaveLabel">儲存並產出 Doc / PDF / Word</span>
     </button>
   </div>
-  </div>
+  </div><!-- /app -->
 
-  
+  <!-- ===================== MODAL / TOAST ===================== -->
   <div class="modal-overlay" id="detailModal">
     <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; gap:12px;">
@@ -1614,8 +1616,9 @@
   <div id="toast">儲存成功！</div>
 
   <script>
-  
-
+  /* =========================================================================
+   * CORE — auth, server bridge, theme, toast, view routing, draft autosave
+   * ========================================================================= */
 
   var TOKEN_KEY = 'spark_session_v6';
   var DRAFT_KEY = 'spark_draft_v6';
@@ -1623,25 +1626,25 @@
 
   var session = { token: null, expiresAt: 0 };
   var currentView = 'admission';
-  var authEnabled = false;   
+  var authEnabled = false;   // mirrors AUTH_ENABLED in Code.gs; refreshed on boot
 
   var NOT_HOSTED_MSG =
     '這個頁面不是由 Google Apps Script 提供的，所以無法連線到後端。\n\n' +
     '請不要直接開啟雲端硬碟資料夾裡的 index.html 檔案，' +
     '要開啟已部署的 Web App 網址（結尾是 /exec）。';
 
-   
+  /** True when the page is really being served by Apps Script HtmlService. */
   function hasBackend() {
     return typeof google !== 'undefined' && google && google.script && google.script.run;
   }
 
-   
+  /* ---------- storage helpers (localStorage may be blocked in some sandboxes) ---------- */
   function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
   function lsDel(k) { try { window.localStorage.removeItem(k); } catch (e) {} }
 
-   
-   
+  /* ---------- server bridge ---------- */
+  /** Calls a server function with the session token injected as the first argument. */
   function server(fnName) {
     var args = Array.prototype.slice.call(arguments, 1);
     if (!hasBackend()) return Promise.reject(new Error(NOT_HOSTED_MSG));
@@ -1660,7 +1663,7 @@
     });
   }
 
-   
+  /** Calls a server function WITHOUT the token (login endpoints only). */
   function serverRaw(fnName) {
     var args = Array.prototype.slice.call(arguments, 1);
     if (!hasBackend()) return Promise.reject(new Error(NOT_HOSTED_MSG));
@@ -1672,7 +1675,7 @@
     });
   }
 
-   
+  /* ---------- auth ---------- */
   function doLogin() {
     var input = document.getElementById('passcodeInput');
     var btn = document.getElementById('loginBtn');
@@ -1720,7 +1723,7 @@
   }
 
   function handleAuthExpired() {
-    if (!authEnabled) return;   
+    if (!authEnabled) return;   // gate is off — never bounce the user to a login screen
     session.token = null;
     lsDel(TOKEN_KEY);
     document.getElementById('app').style.display = 'none';
@@ -1755,7 +1758,7 @@
     el.innerHTML = '<i class="fa-solid fa-clock"></i> 登入有效 ' + (hrs > 0 ? hrs + ' 小時' : mins + ' 分鐘');
   }
 
-   
+  /* ---------- theme ---------- */
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     var icon = document.querySelector('#themeBtn i');
@@ -1766,7 +1769,7 @@
     applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   }
 
-   
+  /* ---------- toast / modal ---------- */
   var toastTimer = null;
   function showToast(msg, bg) {
     var t = document.getElementById('toast');
@@ -1808,7 +1811,7 @@
     ].join(''));
   }
 
-   
+  /* ---------- view routing ---------- */
   function switchView(view) {
     currentView = view;
     document.querySelectorAll('.tab-btn[data-view]').forEach(function (b) {
@@ -1845,7 +1848,7 @@
     else if (currentView === 'entry') resetForm();
   }
 
-   
+  /* ---------- clipboard ---------- */
   function copyText(text, okMsg) {
     var done = function () { showToast(okMsg || '已複製到剪貼簿', 'var(--ok)'); };
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1870,7 +1873,7 @@
     copyText(el ? el.textContent : '', '病歷全文已複製，可直接貼入院內 HIS');
   }
 
-   
+  /* ---------- draft autosave ---------- */
   var draftTimer = null;
   function scheduleDraftSave() {
     setSaveStatus('編輯中...', true);
@@ -1948,7 +1951,7 @@
   }
   function clearDraft() { lsDel(DRAFT_KEY); }
 
-   
+  /* ---------- keyboard ---------- */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeModal();
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
@@ -1963,10 +1966,11 @@
   </script>
 
   <script>
-  
+  /* =========================================================================
+   * ADMISSION NOTE — config-driven sections, live preview, save
+   * ========================================================================= */
 
-
-   
+  /** Letterhead shown in the preview. Keep in sync with HOSPITAL_NAME in Code.gs. */
   var HOSPITAL_NAME = '陽明醫院';
 
   var CC_CHIPS = [
@@ -2172,7 +2176,7 @@
   var peState = {};    // 'sysId|itemIdx|flagIdx' -> '+' | '-'
   var peActive = {};   // sysId -> true 表示醫師已檢查該區塊，才會列印
 
-
+  /* ---------- renderers ---------- */
   function renderChipRow(containerId, pairs, targetId, mode) {
     var c = document.getElementById(containerId);
     if (!c) return;
@@ -2445,7 +2449,7 @@
     onAdmissionInput();
   }
 
-   
+  /* ---------- problem list ---------- */
   function renderProblems(list) {
     var container = document.getElementById('problemList');
     var items = list || [{ problem: '', plan: '' }];
@@ -2501,7 +2505,7 @@
     showToast('已帶入 ' + added.length + ' 個問題與處置計畫，請依病人狀況調整。');
   }
 
-   
+  /* ---------- one-click helpers ---------- */
   function markPastHistoryNonContributory() {
     document.getElementById('admPastHistory').value = 'Past medical history is non-contributory.';
     document.getElementById('admSurgicalHistory').value = 'Denied any previous operation.';
@@ -2527,7 +2531,7 @@
     onAdmissionInput();
   }
 
-   
+  /* ---------- composed text blocks ---------- */
   function buildSocialText() {
     var parts = [];
     var smoke = document.getElementById('admSmoking').value;
@@ -2547,8 +2551,8 @@
     return parts.join('. ') + '.';
   }
 
-  /* 個人史 — 依院內表單，列在「過去病史」四個子標題之後，而非家族史底下。
-     表單固定四項；職業／TOCC／生活功能有填才續編號，避免遺失已輸入資料。 */
+  /** 個人史 — 依院內表單列在「過去病史」四個子標題之後，而非家族史底下。
+      表單固定四項；職業／TOCC／生活功能有填才續編號，避免遺失已輸入資料。 */
   function buildPersonalHistoryLines() {
     var g = function (id) { return document.getElementById(id).value.trim(); };
     var withDetail = function (base, detail) { return base + (detail ? ' (' + detail + ')' : ''); };
@@ -2583,7 +2587,6 @@
     return out.join(' | ');
   }
 
-   
   /* 院內表單的檢驗寫法是「檢查別 + 日期 + 空格分隔的值」，不是條列句子：
        CBC   2/18   WBC:12.3  Hgb:10.2  PLT:210  MCV:88
      欄位對齊是為了讓查房時一眼掃得到。 */
@@ -2614,12 +2617,7 @@
     ['EKG', 'labEKGDate', 'labEKG']
   ];
 
-  function buildLabsText() {
-    return LAB_PANELS.map(function (r) { return labLine_(r[0], r[1], r[2]); })
-      .filter(Boolean).join('\n');
-  }
-
-  /* 由住院日期一鍵帶入各檢查日期（表單寫成 M/D）。 */
+  /** 由住院日期一鍵帶入各檢查日期（表單寫成 M/D）。 */
   function fillLabDates() {
     var iso = document.getElementById('admDate').value;
     if (!iso) { showToast('請先填寫住院日期。', 'var(--warning, #d97706)'); return; }
@@ -2633,7 +2631,13 @@
     showToast('已帶入住院日期 ' + md + '，可個別修改。');
   }
 
-   
+  /** 檢驗報告 — laboratory values. */
+  function buildLabsText() {
+    return LAB_PANELS.map(function (r) { return labLine_(r[0], r[1], r[2]); })
+      .filter(Boolean).join('\n');
+  }
+
+  /** 檢查報告 — imaging and other studies. */
   function buildStudiesText() {
     var out = STUDY_PANELS.map(function (r) { return labLine_(r[0], r[1], r[2]); })
       .filter(Boolean);
@@ -2642,7 +2646,7 @@
     return out.join('\n');
   }
 
-   
+  /** ROC-calendar rendering of the admission date, as printed on the paper form. */
   function toRocDate(iso) {
     if (!iso) return '';
     var d = new Date(iso + 'T00:00:00');
@@ -2660,7 +2664,7 @@
     }).join('\n\n');
   }
 
-   
+  /* ---------- live preview ---------- */
   function onAdmissionInput() {
     buildAdmissionNotePreview();
     scheduleDraftSave();
@@ -2788,7 +2792,7 @@
     document.getElementById('admissionNoteLivePreview').textContent = out.join('\n');
   }
 
-   
+  /* ---------- validation & save ---------- */
   function validateAdmission() {
     var required = [
       ['admPatientId', '病歷號 (MRN)'],
@@ -2840,7 +2844,7 @@
       socialHistory: buildSocialText(),
       /* 個人史已改列於「過去病史」之下（院內表單格式）。
          預覽與「複製全文」已採新位置；Google Doc 端仍由 Code.gs 決定，
-         待取得後端原始碼後改為在 過去病史 區塊列印本欄位。 */
+         待後端改為在 過去病史 區塊列印本欄位後即一致。 */
       personalHistory: buildPersonalHistoryLines().join('\n'),
       reviewOfSystems: buildROSText(),
       vitalSigns: buildVitalsText(),
@@ -2908,14 +2912,15 @@
   </script>
 
   <script>
-  
-
+  /* =========================================================================
+   * EXAM REPORTS — structured builders, templates, dashboard, speech, boot
+   * ========================================================================= */
 
   var currentExamType = 'Echocardiogram';
   var loadedRecords = [];
   var dashTab = 'exam';
 
-   
+  /** Fields the user has hand-edited; the generator must not overwrite these. */
   var manualEdits = {};
 
   var EXAM_TECHNIQUE = {
@@ -2965,7 +2970,7 @@
     buildReportText();
   }
 
-   
+  /* ---------- polyp rows ---------- */
   function renderPolyps(list) {
     var c = document.getElementById('polypList');
     c.innerHTML = (list || []).map(function (p, i) {
@@ -3015,7 +3020,7 @@
   }
   function clearPolyps() { renderPolyps([]); buildReportText(); }
 
-   
+  /* ---------- report generator ---------- */
   function setIfAuto(id, value) {
     if (manualEdits[id]) return;
     var el = document.getElementById(id);
@@ -3224,7 +3229,7 @@
   }
   function copyExamReport() { copyText(buildExamFullText(), '檢查報告全文已複製'); }
 
-   
+  /* ---------- exam templates ---------- */
   function applyTemplateValues(map) {
     Object.keys(map).forEach(function (id) {
       var el = document.getElementById(id);
@@ -3329,7 +3334,7 @@
     }
   }
 
-   
+  /* ---------- exam save ---------- */
   function submitExamRecord() {
     var pid = document.getElementById('patientId');
     if (!pid.value.trim()) {
@@ -3403,7 +3408,7 @@
     if (!silent) showToast('表單已清除');
   }
 
-   
+  /* ---------- dashboard ---------- */
   function switchDashTab(tab) {
     dashTab = tab;
     document.getElementById('dashTabExam').classList.toggle('active', tab === 'exam');
@@ -3535,7 +3540,7 @@
     });
   }
 
-   
+  /* ---------- speech & translation ---------- */
   var recognition = null;
   var activeSpeechTarget = null;
 
@@ -3596,7 +3601,7 @@
     });
   }
 
-   
+  /* ---------- boot ---------- */
   var booted = false;
   function bootApp() {
     if (booted) return;
@@ -3618,14 +3623,14 @@
     document.getElementById('admDate').value = today;
     document.getElementById('examDate').value = today;
 
-    
+    // Wire every admission field to preview + autosave
     document.querySelectorAll('#admissionNoteView input, #admissionNoteView select, #admissionNoteView textarea')
       .forEach(function (el) {
         el.addEventListener('input', onAdmissionInput);
         el.addEventListener('change', onAdmissionInput);
       });
 
-    
+    // Exam fields: mark manual edits on the four generated outputs, autosave the rest
     ['findings', 'diagnosis', 'impression', 'recommendation', 'examTechnique'].forEach(function (id) {
       document.getElementById(id).addEventListener('input', function () { markManual(id); scheduleDraftSave(); });
     });
@@ -3645,7 +3650,7 @@
     setInterval(updateSessionInfo, 60000);
   }
 
-   
+  /** Shown when the page is opened as a local file instead of the /exec URL. */
   function showBackendWarning() {
     var bar = document.createElement('div');
     bar.className = 'no-print';
@@ -3662,7 +3667,7 @@
     app.insertBefore(bar, app.firstChild);
   }
 
-   
+  /* ---------- entry point ---------- */
   (function init() {
     applyTheme(lsGet(THEME_KEY) || 'dark');
 
@@ -3671,9 +3676,9 @@
       if (e.key === 'Enter') doLogin();
     });
 
-    
-    
-    
+    // The app renders immediately; the passcode gate is only raised if the
+    // server reports AUTH_ENABLED = true. This keeps the UI usable even when
+    // the backend is unreachable.
     bootApp();
 
     if (!hasBackend()) {
@@ -3701,8 +3706,8 @@
         }
       }).catch(showLockScreen);
     }).catch(function () {
-      
-      
+      // Older deployment without getAuthConfig, or a transient failure:
+      // leave the app open rather than locking the user out.
       updateSessionInfo();
     });
   })();

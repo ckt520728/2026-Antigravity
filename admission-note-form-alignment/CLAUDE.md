@@ -25,10 +25,12 @@ the source of truth for both tiers. Script ID:
 owning Google account, which Claude cannot perform. The deployment ID for
 `create-deployment -i` also still needs `clasp list-deployments` after that login.
 
-⚠️ **`src/index.html` here is NOT the canonical source.** It descends from a recovery of
-the deployed `/exec` page, so it lost every original comment and had some HTML entities
-decoded. Before anything is deployed, the changes in it must be **re-applied onto the
-repo's `index.html`** — see `handoff.md` §2b. Do not overwrite the repo copy with it.
+✅ **`src/index.html` is now the repo's real `index.html` with our changes applied** —
+re-based 2026-08-12, comments and entities intact, diff scoped to 13 intended hunks. It is
+safe to copy over the repo's `index.html` when deploying.
+
+🔴 **The passcode gate is off** (`Code.gs:49`, `AUTH_ENABLED = false`) while the live URL
+answers 200 unauthenticated and the form collects 身分證號碼. See `handoff.md` §2b.
 
 ## Layout
 

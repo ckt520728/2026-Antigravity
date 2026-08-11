@@ -154,18 +154,42 @@ What this settles:
   So the 3-line patch in §1c is now a concrete, verifiable change rather than a guess.
 - **Deployment now needs only `clasp login`** — the script ID is no longer missing.
 
-### ⚠️ Consequence for `src/index.html` — must be re-based next cycle
+### ✅ `src/index.html` re-based onto the real source (cycle 5)
 
-My working copy descends from the `/exec` recovery, which passed through Google's sandbox
-and therefore **lost every source comment** and HTML-entity-decoded some attributes
-(`&amp;` → `&`). Diff against the repo's `index.html` is ~372 lines, almost all of it
-comments and entities rather than logic.
+**Done 2026-08-12.** `src/index.html` is now the repo's own `index.html` with the cycle 2–4
+changes re-applied on top. The lossy recovery-derived copy is gone.
 
-**Do not commit `src/index.html` over the repo's `index.html`.** The next cycle should
-re-apply the cycle 2–4 changes onto the repo's copy, which is the real source. The changes
-are well isolated (`ROS_SYSTEMS`, `PE_FORM` + its render/build functions,
-`buildPersonalHistoryLines`, `LAB_PANELS`/`labLine_`, the draft v7 migration, the
-disclaimer bar) and `tests/check_note_output.js` will confirm the port.
+Verification:
+
+- every comment the recovery had stripped is back — `/* ---------- Theme tokens ---------- */`,
+  `<!-- VIEW: ADMISSION NOTE -->`, `/** 檢驗報告 — laboratory values. */`, the section
+  numbering comments, `<!-- /container -->`, and the `AUTH_ENABLED` notes;
+- HTML entities are back to the source form (`&amp;`→`&`, `&#43;`→`+`, `&gt;`/`&lt;` inside
+  `value=` attributes), which matters because those strings are *emitted into reports*;
+- diff vs the repo original is **13 hunks, all intended** — disclaimer bar,
+  `admWaterExposure`, lab UI, draft v6→v7, `ROS_SYSTEMS`, `PE_FORM`, `peState`/`peActive`,
+  the ROS/PE functions, `markSocialDenied`, `markLabsPending`,
+  `buildPersonalHistoryLines`, the lab builders, the composer move, the record field, and
+  the clear-form id list. No stray edits;
+- **31/31** assertions pass, 3/3 script blocks parse, 0 unresolved handlers, 0 stale
+  `PE_SYSTEMS` references.
+
+`src/index.html` can now be copied over the repo's `index.html` when deploying.
+
+### 🔴 Found during the re-base: the passcode gate is OFF
+
+`Code.gs:49` has `AUTH_ENABLED = false`, and the frontend comment confirms the lock-screen
+markup is deliberately hidden while it is false. The live `/exec` still answers **200 to an
+unauthenticated request**.
+
+So the app is currently **open to anyone with the link**, and that link is now in a public
+repo, while the form collects **身分證號碼**. Turning it on is small but needs a deploy:
+
+1. `Code.gs:49` → `var AUTH_ENABLED = true;`
+2. run `setAppPasscode()` once from the editor to store the salted hash in Script Properties
+3. redeploy with `-i <deploymentId>`
+
+Until then, treat the URL as public.
 
 ### To unblock — Dr Chu, please do one of these
 
@@ -332,10 +356,12 @@ reading. Worth keeping in mind before that file is shared or attached to anythin
 - [x] G4 — lab panel format, + SMA/KUB panels and per-panel dates *(cycle 4)*
 - [x] G6 — **already existed**: `runSelfTest()` at `Code.gs:881`
 
+- [x] **Re-based `src/index.html` onto the repo's real source** *(cycle 5)* — see §2b
+
 **Ready when asked:**
 - [ ] G3 — medication grouping by date + issuing hospital (frontend-only)
-- [ ] **Re-base `src/index.html` onto the repo's `index.html`** — see §2b ⚠️
 - [ ] Apply the §1c `Code.gs` patch (now a concrete change, source in hand)
+- [ ] 🔴 Turn the passcode gate on — `AUTH_ENABLED = true` + `setAppPasscode()` (§2b)
 
 **Needs a deploy to confirm:**
 - [ ] That the generated **Doc** renders the new ROS / PE / labs blocks correctly

@@ -33,18 +33,21 @@ untouched.
 `node tests/check_note_output.js` runs 31 assertions over the note generators against a
 stubbed DOM. All pass.
 
-## ⚠️ Before anyone deploys this
+## Deploying
 
-`src/index.html` was reconstructed from the **deployed page**, before the real source in
-this repo was found. It is faithful in logic but **lost the original source comments**.
+`src/index.html` **is** `../index.html` with these changes applied on top — re-based onto
+the real source on 2026-08-12, comments and HTML entities intact. Diff against
+`../index.html` is 13 hunks, all intended. It can be copied over `../index.html` directly.
 
-**Do not copy it over `../index.html`.** Re-apply the changes onto the repo's own
-`index.html` — they are well isolated (`ROS_SYSTEMS`, `PE_FORM` and its render/build
-functions, `buildPersonalHistoryLines`, `LAB_PANELS`/`labLine_`, the draft v7 migration,
-the disclaimer bar) — then re-run the test suite. See `handoff.md` §2b.
-
-One backend change is also outstanding: print `record.personalHistory` under 過去病史 and
+One backend change is still outstanding: print `record.personalHistory` under 過去病史 and
 drop the `Personal and social history :` line at `../Code.gs:629`. See `handoff.md` §1c.
+
+## 🔴 The passcode gate is currently off
+
+`../Code.gs:49` has `AUTH_ENABLED = false`, and the live `/exec` answers **200 to an
+unauthenticated request** — so anyone with the link can open an app that collects
+**身分證號碼**. Turning it on: set `AUTH_ENABLED = true`, run `setAppPasscode()` once from
+the editor, redeploy with `-i <deploymentId>`.
 
 ## Provenance and PHI
 
