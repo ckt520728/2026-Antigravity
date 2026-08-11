@@ -4,3 +4,7 @@ Thumbs.db
 *.gdoc
 *.gslides
 *.gsheet
+
+# Scanned hospital forms — contain real patient identifiers (病歷號/姓名/身分證號碼).
+# Layout reference only; never commit these.
+02_參考資料/
