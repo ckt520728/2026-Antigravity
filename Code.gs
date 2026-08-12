@@ -1,5 +1,5 @@
 /**
- * Clinical Documentation & Admission Note System — v6.7
+ * Clinical Documentation & Admission Note System — v6.8
  * 2026 Google Spark x Google Apps Script Cloud Engine
  *
  * Master Log        : Google Sheets (Master_AdmissionNotes / Master_Exams + per-type tabs)
@@ -581,6 +581,7 @@ function saveAdmissionNoteRecord(token, record) {
       message: '住院病歷紀錄已登錄至試算表，並已生成正式 Google Doc / PDF / Word 報告！'
     };
   } catch (err) {
+    logDiagnostic_('saveAdmissionNoteRecord', err);
     return { status: 'error', message: '住院病歷儲存失敗：' + err.toString() };
   }
 }
@@ -609,14 +610,6 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
   // buildAdmissionLetterhead_ for why this is not in the page header.
   buildAdmissionLetterhead_(body, record);
   buildAdmissionPageHeader_(doc, record);
-
-  // DocumentApp.create() seeds the body with one empty paragraph, which would push
-  // the letterhead down a line. Safe to drop now that the table is in place.
-  var seed = body.getChild(0);
-  if (seed.getType() === DocumentApp.ElementType.PARAGRAPH &&
-      seed.asParagraph().getText() === '') {
-    seed.removeFromParent();
-  }
 
   // 主訴 / 現在病歷
   appendHospitalSection_(body, '主訴', 'Chief Complaints');
@@ -706,9 +699,46 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
     { size: 8, align: DocumentApp.HorizontalAlignment.RIGHT, before: 6 })
     .setForegroundColor('#808080');
 
+  // DocumentApp.create() seeds the body with one empty paragraph that would push the
+  // letterhead down a line. Removed last, once there is other content, so the body is
+  // never left as a bare table. Cosmetic — never let it fail the whole document.
+  try {
+    var seed = body.getChild(0);
+    if (body.getNumChildren() > 1 &&
+        seed.getType() === DocumentApp.ElementType.PARAGRAPH &&
+        seed.asParagraph().getText() === '') {
+      seed.removeFromParent();
+    }
+  } catch (e) {
+    logDiagnostic_('removeSeedParagraph', e);
+  }
+
   doc.saveAndClose();
   DriveApp.getFileById(doc.getId()).moveTo(reportsFolder);
   return docLinks_(doc.getId());
+}
+
+/**
+ * Append a failure to a `_Diagnostics` tab so problems that only appear inside a
+ * generated document can be inspected afterwards, instead of surfacing as a toast
+ * the user has to relay by hand. Never throws — diagnostics must not break callers.
+ */
+function logDiagnostic_(context, err) {
+  try {
+    var ss = getSpreadsheet();
+    var sheet = ss.getSheetByName('_Diagnostics');
+    if (!sheet) {
+      sheet = ss.insertSheet('_Diagnostics');
+      sheet.appendRow(['時間 (Timestamp)', '位置 (Context)', '錯誤 (Error)', '堆疊 (Stack)']);
+      sheet.setFrozenRows(1);
+    }
+    sheet.appendRow([
+      Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm:ss'),
+      String(context),
+      err && err.message ? err.message : String(err),
+      err && err.stack ? String(err.stack).slice(0, 900) : ''
+    ]);
+  } catch (ignored) {}
 }
 
 function appendDocSection_(body, heading, text) {
@@ -806,17 +836,35 @@ function buildAdmissionLetterhead_(body, record) {
  * Keeps every printed page identifiable if the note runs past page 1.
  */
 function buildAdmissionPageHeader_(doc, record) {
-  var header = doc.getHeader() || doc.addHeader();
-  header.clear();
+  // Cosmetic only — the letterhead that matters is in the body. A failure here must
+  // never stop the note from being generated, which is exactly what happened when
+  // this called getChild(0) on a freshly added header that has no children yet.
+  try {
+    var header = doc.getHeader() || doc.addHeader();
+    header.clear();
 
-  var bits = [HOSPITAL_NAME + ' ADMISSION NOTE'];
-  if (record.patientId) bits.push('病歷號：' + record.patientId);
-  if (record.patientName) bits.push('姓名：' + record.patientName);
-  if (record.wardBed) bits.push('床號：' + record.wardBed);
+    var bits = [HOSPITAL_NAME + ' ADMISSION NOTE'];
+    if (record.patientId) bits.push('病歷號：' + record.patientId);
+    if (record.patientName) bits.push('姓名：' + record.patientName);
+    if (record.wardBed) bits.push('床號：' + record.wardBed);
 
-  styleP_(header.getChild(0).asParagraph().setText(bits.join('　|　')), { size: 8 })
-    .setForegroundColor('#666666');
-  return header;
+    // appendParagraph always works; getChild(0) does not.
+    styleP_(header.appendParagraph(bits.join('　|　')), { size: 8 })
+      .setForegroundColor('#666666');
+
+    // clear() may leave an empty paragraph behind it; drop any leading blanks.
+    while (header.getNumChildren() > 1) {
+      var first = header.getChild(0);
+      if (first.getType() === DocumentApp.ElementType.PARAGRAPH &&
+          first.asParagraph().getText() === '') {
+        first.removeFromParent();
+      } else break;
+    }
+    return header;
+  } catch (e) {
+    logDiagnostic_('buildAdmissionPageHeader_', e);
+    return null;
+  }
 }
 
 /** Section heading in the hospital's 中文(English)： style. */
@@ -982,6 +1030,7 @@ function regenerateAdmissionNoteDoc(token, noteId) {
       message: '已用目前版本重新產生 ' + noteId + ' 的文件。'
     };
   } catch (err) {
+    logDiagnostic_('regenerateAdmissionNoteDoc', err);
     return { status: 'error', message: '重新產生失敗：' + err.toString() };
   }
 }
