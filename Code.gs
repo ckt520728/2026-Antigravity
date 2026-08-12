@@ -1,5 +1,5 @@
 /**
- * Clinical Documentation & Admission Note System — v6.0
+ * Clinical Documentation & Admission Note System — v6.4
  * 2026 Google Spark x Google Apps Script Cloud Engine
  *
  * Master Log        : Google Sheets (Master_AdmissionNotes / Master_Exams + per-type tabs)
@@ -36,17 +36,19 @@ var HOSPITAL_NAME = '陽明醫院';
 /**
  * MASTER SWITCH for the passcode gate.
  *
- *   false — anyone with the link goes straight into the app (current setting).
- *   true  — the login screen is shown and every data function requires a valid token.
+ *   false — anyone with the link goes straight into the app.
+ *   true  — the login screen is shown and every data function requires a valid
+ *           token (current setting).
  *
- * To turn the gate back on later:
- *   1. set AUTH_ENABLED = true here
- *   2. run `setAppPasscode` once from the editor to set the passcode
- *   3. clasp push + redeploy with -i <deploymentId>
- * The whole auth implementation below stays intact while the switch is off,
- * so re-enabling is a one-line change.
+ * ⚠️ ON since 2026-08-12, because the form collects 身分證號碼 and the /exec URL
+ * is published in a PUBLIC repo. Do not switch this back to false while the link
+ * is shared with staff.
+ *
+ * ⚠️ REMAINING STEP FOR THE OWNER: until `setAppPasscode` is run once from the
+ * editor, the passcode falls back to DEFAULT_PASSCODE below — which is readable
+ * in the public repo. Run it to set a real passcode.
  */
-var AUTH_ENABLED = false;
+var AUTH_ENABLED = true;
 
 var PROP_PASSCODE_HASH = 'APP_PASSCODE_HASH';
 var PROP_PASSCODE_SALT = 'APP_PASSCODE_SALT';
@@ -621,14 +623,24 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
   appendHospitalLine_(body, '3. History of hospitalization : ' + (record.hospitalizationHistory || 'Denied.'), 36);
   appendHospitalLine_(body, '4. Home medication reviews : ' + (record.medications || 'None.'), 36);
 
+  // Personal History belongs here on 陽明醫院's form — under 過去病史, not 家族史.
+  // The frontend composes the numbered block; fall back to socialHistory for
+  // records saved before the field existed.
+  if (record.personalHistory) {
+    appendHospitalLine_(body, 'Personal History :');
+    String(record.personalHistory).split('\n').forEach(function (line) {
+      if (line) appendHospitalLine_(body, line, 36);
+    });
+  } else if (record.socialHistory) {
+    appendHospitalLine_(body, 'Personal History :');
+    appendHospitalLine_(body, record.socialHistory, 36);
+  }
+
   appendHospitalSection_(body, '藥物過敏', 'Drug Allergy');
   appendHospitalLine_(body, record.allergies || 'The patient is not allergic to any type of food or medicine.');
 
   appendHospitalSection_(body, '家族史', 'Family History');
   appendHospitalLine_(body, record.familyHistory || 'There was no family history of hereditary or oncologic disease.');
-  if (record.socialHistory) {
-    appendHospitalLine_(body, 'Personal and social history : ' + record.socialHistory);
-  }
 
   appendHospitalSection_(body, '系統回顧', 'Review of Systems');
   appendHospitalLine_(body, 'Review of systems');

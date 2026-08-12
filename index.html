@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臨床醫療紀錄與報告系統 v6.0 | Clinical Documentation System</title>
+  <title>臨床醫療紀錄與報告系統 v6.4 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -429,7 +429,7 @@
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h1>臨床醫療紀錄與報告系統</h1>
-      <p class="sub">Clinical Documentation &amp; Admission Note System v6.0<br>本系統含病患資料，請輸入通行密碼進入。</p>
+      <p class="sub">Clinical Documentation &amp; Admission Note System v6.4<br>本系統含病患資料，請輸入通行密碼進入。</p>
 
       <input type="password" id="passcodeInput" placeholder="請輸入密碼" autocomplete="current-password" autofocus>
       <div id="lockError"></div>
@@ -457,7 +457,7 @@
       <div class="brand">
         <div class="brand-icon"><i class="fa-solid fa-notes-medical"></i></div>
         <div class="brand-title">
-          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.0</span></h1>
+          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.4</span></h1>
           <p>Admission Note × Structured Exam Reports × 中文語音轉英文</p>
         </div>
       </div>
@@ -488,6 +488,16 @@
           <i class="fa-solid fa-right-from-bracket"></i>
         </button>
       </div>
+    </div>
+
+    <!-- 產品內免責聲明：工具負責紀錄與排版，不做診斷。三個分頁都看得到。 -->
+    <div id="disclaimerBar" role="note" style="display:flex; gap:10px; align-items:flex-start;
+         padding:10px 14px; margin-bottom:16px; border-radius:8px; font-size:12.5px; line-height:1.6;
+         border:1px solid var(--warning, #d97706); background:rgba(217,119,6,0.08); color:var(--text-muted);">
+      <i class="fa-solid fa-triangle-exclamation" style="margin-top:2px; color:var(--warning, #d97706);"></i>
+      <span><b style="color:var(--text, inherit);">本系統僅用於臨床紀錄與文書格式化，不提供診斷、治療或用藥建議。</b>
+        所有產出均為草稿，須由負責醫師逐項確認後，方可作為正式病歷；
+        語音辨識與中英翻譯為一般用途工具（非醫療專用），輸出必須經人工校閱。</span>
     </div>
 
     <!-- ===================== VIEW: ADMISSION NOTE ===================== -->
@@ -743,6 +753,14 @@
               <option value="Totally dependent, bedridden">Totally dependent (臥床)</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="admWaterExposure"><i class="fa-solid fa-droplet"></i> 污染水源暴露 (Contaminated water)</label>
+            <select id="admWaterExposure">
+              <option value="no">no (否認)</option>
+              <option value="yes">yes (有暴露)</option>
+              <option value="unknown">unknown (不詳)</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -831,36 +849,73 @@
           <i class="fa-solid fa-flask-vial" style="color:var(--accent-ugi);"></i>
           <span>8. 入院檢驗與影像 (Admission Laboratory &amp; Imaging)</span>
           <span class="spacer"></span>
+          <span class="hint">院內格式：檢查別 + 日期 + 空格分隔的 <code>項目:值</code></span>
+          <button class="btn-ghost" onclick="fillLabDates()"><i class="fa-solid fa-calendar-day"></i> 帶入住院日期</button>
           <button class="btn-ghost" onclick="markLabsPending()"><i class="fa-solid fa-hourglass-half"></i> 標記為 pending</button>
         </div>
 
         <div class="select-grid">
           <div class="form-group">
             <label>血液常規 CBC</label>
-            <input type="text" id="labCBC" placeholder="WBC 12.3 K/uL, Hb 10.2 g/dL, Plt 210 K/uL">
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labCBCDate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labCBC" placeholder="WBC:12.3  Hgb:10.2  PLT:210  MCV:88">
+            </div>
           </div>
           <div class="form-group">
-            <label>生化 Biochemistry</label>
-            <input type="text" id="labBCS" placeholder="Na 138, K 4.2, BUN 32, Cr 2.1 (eGFR 30), Glu 145">
+            <label>生化 BCS</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labBCSDate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labBCS" placeholder="BUN:32  Cr:2.1  Na:138  K:4.2  Cl:104  Sugar:145  CRP:8.5">
+            </div>
           </div>
           <div class="form-group">
-            <label>發炎指標 Inflammatory</label>
-            <input type="text" id="labCRP" placeholder="CRP 8.5 mg/dL, Procalcitonin 0.4 ng/mL">
+            <label>生化 SMA</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labSMADate" class="lab-date" placeholder="11/14" style="max-width:82px;">
+              <input type="text" id="labSMA" placeholder="GOT:32  GPT:28  TG:150  Chol:190  Alb:3.6">
+            </div>
           </div>
         </div>
 
         <div class="select-grid">
           <div class="form-group">
-            <label>尿液檢查 Urinalysis</label>
-            <input type="text" id="labUA" placeholder="Protein 2+, RBC 5-10/HPF, WBC 20-30/HPF">
+            <label>發炎指標 Inflammatory</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labCRPDate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labCRP" placeholder="CRP:8.5  PCT:0.4">
+            </div>
           </div>
           <div class="form-group">
-            <label>胸部 X 光 CXR</label>
-            <input type="text" id="labCXR" placeholder="Bilateral lower lung infiltration, no pleural effusion">
+            <label>尿液檢查 U/A</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labUADate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labUA" placeholder="Protein:2+  RBC:5-10/HPF  WBC:20-30/HPF">
+            </div>
           </div>
           <div class="form-group">
             <label>心電圖 EKG</label>
-            <input type="text" id="labEKG" placeholder="Normal sinus rhythm, rate 82, no acute ST-T change">
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labEKGDate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labEKG" placeholder="Normal sinus rhythm, rate 82, no acute ST-T change">
+            </div>
+          </div>
+        </div>
+
+        <div class="select-grid">
+          <div class="form-group">
+            <label>胸部 X 光 CxR</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labCXRDate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labCXR" placeholder="Bilateral lower lung infiltration, no pleural effusion">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>腹部平片 KUB</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="labKUBDate" class="lab-date" placeholder="2/18" style="max-width:82px;">
+              <input type="text" id="labKUB" placeholder="No dilated bowel loops, no free air">
+            </div>
           </div>
         </div>
 
@@ -1744,8 +1799,8 @@
       '<p style="margin-bottom:12px;">本系統分三個分頁：<b>住院病歷</b>、<b>檢查報告</b>、<b>歷史紀錄</b>。</p>',
       '<ul style="padding-left:20px; display:flex; flex-direction:column; gap:8px;">',
       '<li><b>草稿自動保存</b>：每次輸入後 1 秒自動存在這台瀏覽器，關掉分頁再回來會自動還原。</li>',
-      '<li><b>ROS 三態晶片</b>：點 1 次為陽性 (+)、2 次為陰性 (−)、3 次取消。「全部否認」可一鍵把 10 個系統標成陰性。</li>',
-      '<li><b>理學檢查</b>：「全部填入正常」會把 10 個系統填入標準正常敘述，再依實際情況修改即可。</li>',
+      '<li><b>ROS 三態晶片</b>：點 1 次為陽性 (+)、2 次為陰性 (−)、3 次取消。「全部否認」可一鍵把院內表單的 9 個系統標成陰性；<b>未點選的項目不會列印</b>，避免記載未詢問的陰性發現。</li>',
+      '<li><b>理學檢查</b>：依院內表單以「編號項目 + (+)/(−)」記錄。點各區塊的「正常」或「全部填入正常」帶入標準項目，再切換異常項目；<b>未檢查的區塊不會列印</b>。</li>',
       '<li><b>問題導向 A&amp;P</b>：每個 problem 對應一段 plan；點常用入院情境可一次帶入完整問題清單。</li>',
       '<li><b>檢查報告的 Findings</b>：只要你手動改過，系統就不會再自動覆寫；要重新套用選項請按「依選項重新生成」。</li>',
       '<li><b>複製全文</b>：預覽區右上角可一鍵複製，直接貼回院內 HIS。</li>',
@@ -1852,9 +1907,10 @@
     var fhx = [];
     document.querySelectorAll('#fhxChips .tag-chip.on').forEach(function (c) { fhx.push(c.getAttribute('data-value')); });
     return {
-      v: 6, savedAt: Date.now(), view: currentView,
+      v: 7, savedAt: Date.now(), view: currentView,
       fields: fields, pmh: pmh, fhx: fhx,
-      ros: rosState, problems: collectProblems(), polyps: collectPolyps()
+      ros: rosState, pe: peState, peActive: peActive,
+      problems: collectProblems(), polyps: collectPolyps()
     };
   }
   function restoreDraft() {
@@ -1862,7 +1918,9 @@
     if (!raw) return false;
     var d;
     try { d = JSON.parse(raw); } catch (e) { return false; }
-    if (!d || d.v !== 6) return false;
+    /* v6 草稿的 ROS／PE 鍵值對應舊的通用範本，已不適用；
+       仍還原已輸入的文字，只捨棄過期的勾選狀態。 */
+    if (!d || (d.v !== 6 && d.v !== 7)) return false;
 
     Object.keys(d.fields || {}).forEach(function (id) {
       var el = document.getElementById(id);
@@ -1877,8 +1935,16 @@
       var c = document.querySelector('#fhxChips .tag-chip[data-value="' + v + '"]');
       if (c) c.classList.add('on');
     });
-    rosState = d.ros || {};
+    rosState = (d.v === 7 && d.ros) ? d.ros : {};
     renderROS();
+    peState = (d.v === 7 && d.pe) ? d.pe : {};
+    peActive = (d.v === 7 && d.peActive) ? d.peActive : {};
+    renderPE();
+    // renderPE() 重建了 textarea，需重新套回草稿中的理學檢查內容
+    PE_FORM.forEach(function (sys) {
+      var el = document.getElementById(sys[0]);
+      if (el && d.fields && typeof d.fields[sys[0]] === 'string') el.value = d.fields[sys[0]];
+    });
     renderProblems(d.problems && d.problems.length ? d.problems : null);
     renderPolyps(d.polyps || []);
     return true;
@@ -2000,50 +2066,76 @@
     ['惡性腫瘤', 'malignancy'], ['肝病', 'chronic liver disease'], ['無特殊', 'non-contributory']
   ];
 
+  /* 系統回顧 — 陽明醫院 ADMISSION NOTE 表單的 9 個系統。
+     順序、系統名稱與症狀項目均依院內表單，勿改為通用範本。
+     第 4 欄為表單上列印用的英文系統名。 */
   var ROS_SYSTEMS = [
-    ['general', '一般 General', ['Fever', 'Chills', 'Body weight loss', 'Fatigue', 'Night sweats', 'Poor appetite']],
-    ['heent', '頭頸五官 HEENT', ['Headache', 'Blurred vision', 'Sore throat', 'Hearing impairment', 'Epistaxis']],
-    ['resp', '呼吸 Respiratory', ['Cough', 'Sputum', 'Dyspnea', 'Hemoptysis', 'Wheezing', 'Chest wall pain']],
-    ['cv', '心血管 Cardiovascular', ['Chest pain', 'Palpitation', 'Orthopnea', 'Paroxysmal nocturnal dyspnea', 'Leg edema', 'Syncope']],
-    ['gi', '消化 Gastrointestinal', ['Nausea', 'Vomiting', 'Abdominal pain', 'Diarrhea', 'Constipation', 'Tarry stool', 'Hematochezia', 'Jaundice']],
-    ['gu', '泌尿生殖 Genitourinary', ['Dysuria', 'Frequency', 'Urgency', 'Hematuria', 'Oliguria', 'Foamy urine', 'Flank pain']],
-    ['msk', '肌肉骨骼 Musculoskeletal', ['Joint pain', 'Joint swelling', 'Myalgia', 'Low back pain', 'Morning stiffness']],
-    ['neuro', '神經 Neurological', ['Dizziness', 'Vertigo', 'Seizure', 'Limb weakness', 'Numbness', 'Consciousness change']],
-    ['skin', '皮膚 Skin', ['Rash', 'Pruritus', 'Petechiae', 'Ecchymosis', 'Poor wound healing']],
-    ['endo', '內分泌血液 Endocrine / Hematologic', ['Polyuria', 'Polydipsia', 'Heat intolerance', 'Cold intolerance', 'Easy bruising', 'Lymphadenopathy']]
+    ['systemic', '1. 全身 Systemic', ['fever', 'BW loss', 'change of appetite', 'night sweat'], 'systemic'],
+    ['skin', '2. 皮膚 Skin', ['petechiae', 'purpura', 'skin rash', 'itching'], 'skin'],
+    ['heent', '3. 頭頸五官 HEENT', ['blurred vision', 'ocular pain', 'hearing loss', 'tinnitus', 'vertigo', 'nasal stuffiness', 'nasal discharge', 'nasal bleeding', 'gum bleeding', 'sore throat', 'headache', 'oral ulcer'], 'HEENT'],
+    ['cv', '4. 心血管 Cardiovascular', ['exertional chest tightness', 'PND', 'orthopnea', 'palpitation'], 'Cardiovascular'],
+    ['resp', '5. 呼吸 Respiratory', ['dyspnea', 'cough', 'chest pain', 'hemoptysis'], 'Respiratory'],
+    ['gi', '6. 消化 GI', ['anorexia', 'nausea', 'vomiting', 'dysphagia', 'heart burn', 'hunger pain', 'constipation', 'diarrhea', 'melena', 'change of bowel habit', 'small caliber of stool'], 'GI'],
+    ['gu', '7. 泌尿生殖 Urogenital', ['flank pain', 'hematuria', 'urinary frequency', 'urgency', 'dysuria', 'nocturia', 'polyuria', 'oliguria'], 'Urogenital'],
+    ['msk', '8. 肌肉骨骼 Musculoskeletal', ['bone pain', 'arthralgia', 'myalgia', 'weakness'], 'Musculoskeletal'],
+    ['neuro', '9. 神經 Neurological', ['numbness', 'paresis/paralysis'], 'Neurological']
   ];
 
-  var PE_SYSTEMS = [
-    ['peGeneral', 'General / Consciousness (一般外觀與意識)',
-      'Conscious and alert, oriented to time, place and person; not in acute distress.',
-      [['意識混亂', 'Confused and disoriented.'], ['病容明顯', 'Acutely ill-looking and in obvious distress.'], ['惡病質', 'Cachectic appearance.']]],
-    ['peHEENT', 'HEENT (頭頸五官)',
-      'Anicteric sclerae, pink conjunctivae, no oral ulcer, no palpable cervical lymphadenopathy.',
-      [['黃疸', 'Icteric sclerae.'], ['結膜蒼白', 'Pale conjunctivae.'], ['口腔黏膜乾燥', 'Dry oral mucosa.'], ['頸部淋巴結腫大', 'Palpable cervical lymphadenopathy.']]],
-    ['peNeck', 'Neck (頸部)',
-      'Supple, no jugular vein engorgement, thyroid not enlarged, no carotid bruit.',
-      [['頸靜脈怒張', 'Jugular vein engorgement noted.'], ['甲狀腺腫大', 'Diffusely enlarged thyroid gland.'], ['頸部僵硬', 'Neck stiffness present.']]],
-    ['peChest', 'Chest / Lungs (胸部與肺)',
-      'Symmetric expansion; bilateral clear breath sounds without crackles or wheezing.',
-      [['雙肺底濕囉音', 'Bilateral basal crackles.'], ['喘鳴音', 'Expiratory wheezing over both lung fields.'], ['右下肺呼吸音減弱', 'Decreased breath sounds over the right lower lung field.']]],
-    ['peHeart', 'Heart (心臟)',
-      'Regular heart beat, normal S1 and S2, no murmur, no gallop, no pericardial friction rub.',
-      [['收縮期雜音', 'Systolic ejection murmur grade II/VI over the left sternal border.'], ['心律不整', 'Irregularly irregular heart beat.'], ['S3 奔馬音', 'S3 gallop audible.']]],
-    ['peAbdomen', 'Abdomen (腹部)',
-      'Soft and flat, normoactive bowel sounds, no tenderness, no rebound tenderness, liver and spleen impalpable.',
-      [['右下腹壓痛 (McBurney)', 'Tenderness over the right lower quadrant with positive McBurney point and rebound tenderness.'], ['上腹壓痛', 'Epigastric tenderness on deep palpation.'], ['腹脹腹水', 'Distended abdomen with shifting dullness.'], ['腸蠕動音亢進', 'Hyperactive bowel sounds.']]],
-    ['peBack', 'Back / Flank (背部與腰部)',
-      'No costovertebral angle knocking tenderness, no spinal deformity or tenderness.',
-      [['右側腎區叩痛', 'Right costovertebral angle knocking tenderness.'], ['左側腎區叩痛', 'Left costovertebral angle knocking tenderness.']]],
-    ['peExtremities', 'Extremities (四肢)',
-      'Freely movable, no pitting edema, symmetric peripheral pulses, capillary refill less than 2 seconds.',
-      [['雙下肢凹陷性水腫 2+', 'Bilateral pitting edema, grade 2+.'], ['周邊脈搏減弱', 'Diminished dorsalis pedis pulses bilaterally.'], ['關節腫脹', 'Swelling and warmth over the right knee joint.']]],
-    ['peNeuro', 'Neurological (神經學)',
-      'Cranial nerves grossly intact, muscle power 5/5 in all limbs, no focal neurological deficit, deep tendon reflexes symmetric.',
-      [['單側肢體無力', 'Muscle power 3/5 over the left limbs.'], ['病理反射陽性', 'Positive Babinski sign.'], ['腦膜刺激徵', 'Positive meningeal signs.']]],
-    ['peSkin', 'Skin (皮膚)',
-      'No rash, no petechiae, no pressure ulcer, skin turgor fair.',
-      [['皮疹', 'Maculopapular rash over the trunk.'], ['瘀點瘀斑', 'Petechiae and ecchymoses over both lower legs.'], ['壓瘡', 'Stage II pressure ulcer over the sacrum.']]]
+  /* 理學檢查 — 陽明醫院 ADMISSION NOTE 表單結構。
+     表單以「編號項目 + (+)/(-)」記錄，非整段敘述，故此處以項目為單位。
+     欄位：[id, 表單列印名稱, 介面標題, 型別, 內容]
+       型別 'text'  → 內容為單行預設字串
+       型別 'items' → 內容為編號項目陣列：
+            { f: [[項目名, 正常符號], ...], pre: 選填前綴 }  → 可切換 (+)/(-)
+            { t: '自由文字' }                                → 直接列印，於文字框內編輯 */
+  var PE_FORM = [
+    ['peGeneral', 'General appearance', '一般外觀 General appearance', 'text', 'Acute-ill-looking'],
+    ['peConscious', 'Conscious', '意識 Conscious (GCS)', 'text', 'E4V5M6'],
+    ['peHEENT', 'HEENT', '頭頸五官 HEENT', 'items', [
+      { f: [['Conjunctivae pale', '-'], ['icteric sclerae', '-']] },
+      { f: [['Tonsil enlargement', '-']] },
+      { t: 'Pupil : 3.0/3.0, Light reflex : +/+' }
+    ]],
+    ['peNeck', 'Neck', '頸部 Neck', 'items', [
+      { f: [['supple', '+']] },
+      { f: [['JVE', '-']] },
+      { f: [['Carotid bruit', '-']] },
+      { f: [['Lymphadenopathy', '-']] },
+      { f: [['Thyroid enlargement', '-']] }
+    ]],
+    ['peChest', 'Chest/lung', '胸部與肺 Chest / Lung', 'items', [
+      { f: [['Deformity', '-']] },
+      { f: [['Symmetric expansion', '+']] },
+      { f: [['Tenderness of ribs', '-']] },
+      { t: 'Breathing sound : clear' }
+    ]],
+    ['peHeart', 'Heart', '心臟 Heart', 'items', [
+      { t: 'Heart beat : RHB' },
+      { f: [['Heart murmur', '-']] },
+      { t: 'PMI at 4th intercostal space' },
+      { pre: 'Palpable', f: [['Thrill', '-'], ['Heave', '-']] },
+      { f: [['Gallop', '-'], ['Friction rub', '-']] }
+    ]],
+    ['peAbdomen', 'Abdomen', '腹部 Abdomen', 'items', [
+      { f: [['soft', '+']] },
+      { t: 'Bowel sound : normoactive' },
+      { f: [['Hepatomegaly', '-']] },
+      { f: [['Tympanic percussion', '-']] },
+      { f: [['Tenderness', '-']] },
+      { f: [['Rebounding pain', '-']] },
+      { f: [['Muscle guarding', '-']] },
+      { f: [['Flank knocking pain tenderness', '-']] },
+      { f: [['Murphy sign', '-']] },
+      { f: [['Shifting dullness', '-']] },
+      { f: [['Scar', '-']] }
+    ]],
+    ['peExtremities', 'Extremities', '四肢 Extremities', 'items', [
+      { f: [['Freely movable', '+']] },
+      { f: [['Pitting edema', '-']] },
+      { f: [['Clubbing finger', '-']] },
+      { f: [['Cyanosis', '-']] }
+    ]],
+    ['peWound', 'Wound', '傷口 Wound', 'text', 'as wound record note']
   ];
 
   var ADMISSION_SCENARIOS = {
@@ -2081,6 +2173,8 @@
   };
 
   var rosState = {};
+  var peState = {};    // 'sysId|itemIdx|flagIdx' -> '+' | '-'
+  var peActive = {};   // sysId -> true 表示醫師已檢查該區塊，才會列印
 
   /* ---------- renderers ---------- */
   function renderChipRow(containerId, pairs, targetId, mode) {
@@ -2190,73 +2284,160 @@
     });
     renderROS();
     onAdmissionInput();
-    showToast('已將 10 個系統標記為陰性，再把陽性症狀點成 ＋ 即可。');
+    showToast('已將 ' + ROS_SYSTEMS.length + ' 個系統標記為陰性，再把陽性症狀點成 ＋ 即可。');
   }
   function rosClear() { rosState = {}; renderROS(); onAdmissionInput(); }
 
+  /* 依院內表單格式輸出：  1.systemic：fever(-)；BW loss(-)
+     僅輸出醫師實際點選過的項目 —— 未點選者不列印，避免記載未詢問的陰性發現。 */
   function buildROSText() {
     var out = [];
-    ROS_SYSTEMS.forEach(function (sys) {
-      var pos = [], neg = [];
+    ROS_SYSTEMS.forEach(function (sys, idx) {
+      var parts = [];
       sys[2].forEach(function (item) {
         var st = rosState[sys[0] + '|' + item];
-        if (st === 'pos') pos.push(item);
-        else if (st === 'neg') neg.push(item);
+        if (st === 'pos') parts.push(item + '(+)');
+        else if (st === 'neg') parts.push(item + '(-)');
       });
-      if (!pos.length && !neg.length) return;
-      var label = sys[1].replace(/^[^A-Za-z]+/, '').trim() || sys[1];
-      var parts = [];
-      if (pos.length) parts.push(pos.join(' (+), ') + ' (+)');
-      if (neg.length) parts.push('denied ' + neg.join(', ').toLowerCase());
-      out.push(label + ': ' + parts.join('; ') + '.');
+      if (!parts.length) return;
+      out.push((idx + 1) + '.' + sys[3] + '：' + parts.join('；'));
     });
     var extra = document.getElementById('admRosExtra').value.trim();
     if (extra) out.push(extra);
     return out.join('\n');
   }
 
+  function peFind(id) {
+    return PE_FORM.filter(function (s) { return s[0] === id; })[0];
+  }
+  function peKey(id, i, j) { return id + '|' + i + '|' + j; }
+  function peSign(id, items, i, j) {
+    return peState[peKey(id, i, j)] || items[i].f[j][1];
+  }
+
+  /* 把某系統的狀態組成表單格式的編號項目文字。
+     未啟用 (醫師尚未點「正常」或切換任一項目) 的系統回傳空字串，不列印。 */
+  function composePE(id) {
+    var sys = peFind(id);
+    if (!sys || !peActive[id]) return '';
+    if (sys[3] === 'text') return sys[4];
+    return sys[4].map(function (item, i) {
+      var body;
+      if (item.t) {
+        body = item.t;
+      } else {
+        var flags = item.f.map(function (fl, j) {
+          return fl[0] + '(' + peSign(id, sys[4], i, j) + ')';
+        }).join(', ');
+        body = item.pre ? item.pre + ' : ' + flags : flags;
+      }
+      return (i + 1) + '.' + body;
+    }).join('\n');
+  }
+
+  function peSyncField(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = composePE(id);
+  }
+
+  function peRefreshChips(id) {
+    var sys = peFind(id);
+    if (!sys || sys[3] !== 'items') return;
+    sys[4].forEach(function (item, i) {
+      if (item.t) return;
+      item.f.forEach(function (fl, j) {
+        var chip = document.querySelector('#peGrid [data-pe="' + peKey(id, i, j) + '"]');
+        if (!chip) return;
+        var sign = peSign(id, sys[4], i, j);
+        chip.setAttribute('data-state', sign === '+' ? 'pos' : 'neg');
+        chip.textContent = fl[0] + '(' + sign + ')';
+      });
+    });
+  }
+
   function renderPE() {
-    document.getElementById('peGrid').innerHTML = PE_SYSTEMS.map(function (sys) {
+    document.getElementById('peGrid').innerHTML = PE_FORM.map(function (sys) {
+      var chips = '';
+      if (sys[3] === 'items') {
+        chips = '<div class="tag-container">' + sys[4].map(function (item, i) {
+          if (item.t) return '';
+          return item.f.map(function (fl, j) {
+            var sign = peSign(sys[0], sys[4], i, j);
+            return '<span class="ros-chip" data-pe="' + escapeHtml(peKey(sys[0], i, j)) +
+              '" data-state="' + (sign === '+' ? 'pos' : 'neg') + '">' +
+              escapeHtml(fl[0] + '(' + sign + ')') + '</span>';
+          }).join('');
+        }).join('') + '</div>';
+      }
+      var ph = sys[3] === 'text' ? sys[4] : '點「正常」帶入標準項目，或直接點上方項目切換 (+)／(−)';
       return '<div class="form-group" style="margin-bottom:14px;">' +
-        '<label>' + escapeHtml(sys[1]) +
+        '<label>' + escapeHtml(sys[2]) +
         ' <button class="btn-ghost" style="padding:2px 8px; font-size:11px;" data-normal="' + sys[0] + '">正常</button></label>' +
-        '<textarea id="' + sys[0] + '" rows="2" placeholder="' + escapeHtml(sys[2]) + '"></textarea>' +
-        '<div class="tag-container">' + sys[3].map(function (p) {
-          return '<span class="tag-chip" data-target="' + sys[0] + '" data-text="' + escapeHtml(p[1]) + '">+ ' + escapeHtml(p[0]) + '</span>';
-        }).join('') + '</div></div>';
+        chips +
+        '<textarea id="' + sys[0] + '" rows="' + (sys[3] === 'items' ? Math.min(sys[4].length, 6) : 1) +
+        '" placeholder="' + escapeHtml(ph) + '"></textarea>' +
+        '</div>';
     }).join('');
 
-    document.querySelectorAll('#peGrid .tag-chip').forEach(function (chip) {
+    document.querySelectorAll('#peGrid [data-pe]').forEach(function (chip) {
       chip.addEventListener('click', function () {
-        appendToField(chip.getAttribute('data-target'), chip.getAttribute('data-text'), 'space');
+        var key = chip.getAttribute('data-pe');
+        var id = key.split('|')[0];
+        peState[key] = peState[key] === '+' ? '-' : '+';
+        peActive[id] = true;
+        peRefreshChips(id);
+        peSyncField(id);
+        onAdmissionInput();
       });
     });
     document.querySelectorAll('#peGrid [data-normal]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         var id = btn.getAttribute('data-normal');
-        var sys = PE_SYSTEMS.filter(function (s) { return s[0] === id; })[0];
-        document.getElementById(id).value = sys[2];
+        peFind(id) && Object.keys(peState).forEach(function (k) {
+          if (k.split('|')[0] === id) delete peState[k];
+        });
+        peActive[id] = true;
+        peRefreshChips(id);
+        peSyncField(id);
         onAdmissionInput();
       });
     });
   }
 
   function peAllNormal() {
-    PE_SYSTEMS.forEach(function (sys) { document.getElementById(sys[0]).value = sys[2]; });
+    peState = {};
+    PE_FORM.forEach(function (sys) {
+      peActive[sys[0]] = true;
+      peRefreshChips(sys[0]);
+      peSyncField(sys[0]);
+    });
     onAdmissionInput();
-    showToast('已填入 10 個系統的標準正常敘述，請依實際情況修改。');
+    showToast('已依院內表單填入 ' + PE_FORM.length + ' 個區塊的正常項目，再切換異常項目即可。');
   }
   function peClear() {
-    PE_SYSTEMS.forEach(function (sys) { document.getElementById(sys[0]).value = ''; });
+    peState = {};
+    peActive = {};
+    PE_FORM.forEach(function (sys) {
+      peRefreshChips(sys[0]);
+      var el = document.getElementById(sys[0]);
+      if (el) el.value = '';
+    });
     onAdmissionInput();
   }
+
+  /* 輸出格式比照表單，續行對齊於標題之後：
+       HEENT: 1.Conjunctivae pale(-), icteric sclerae(-)
+              2.Tonsil enlargement(-)                       */
   function buildPEText() {
-    return PE_SYSTEMS.map(function (sys) {
-      var v = document.getElementById(sys[0]).value.trim();
+    return PE_FORM.map(function (sys) {
+      var el = document.getElementById(sys[0]);
+      var v = el ? el.value.trim() : '';
       if (!v) return '';
-      var label = sys[1].split(' (')[0];
-      return label + ': ' + v;
+      var lines = v.split('\n');
+      var pad = new Array(sys[1].length + 3).join(' ');
+      return sys[1] + ': ' + lines[0] +
+        lines.slice(1).map(function (l) { return '\n' + pad + l; }).join('');
     }).filter(Boolean).join('\n');
   }
 
@@ -2340,10 +2521,11 @@
     document.getElementById('admPackYear').value = '';
     document.getElementById('admAlcoholDetail').value = '';
     document.getElementById('admBetelDetail').value = '';
+    document.getElementById('admWaterExposure').value = 'no';
     onAdmissionInput();
   }
   function markLabsPending() {
-    ['labCBC', 'labBCS', 'labCRP', 'labUA', 'labCXR', 'labEKG'].forEach(function (id) {
+    ['labCBC', 'labBCS', 'labSMA', 'labCRP', 'labUA', 'labCXR', 'labKUB', 'labEKG'].forEach(function (id) {
       if (!document.getElementById(id).value.trim()) document.getElementById(id).value = 'Pending';
     });
     onAdmissionInput();
@@ -2369,6 +2551,26 @@
     return parts.join('. ') + '.';
   }
 
+  /* 個人史 — 依院內表單，列在「過去病史」四個子標題之後，而非家族史底下。
+     表單固定四項；職業／TOCC／生活功能有填才續編號，避免遺失已輸入資料。 */
+  function buildPersonalHistoryLines() {
+    var g = function (id) { return document.getElementById(id).value.trim(); };
+    var withDetail = function (base, detail) { return base + (detail ? ' (' + detail + ')' : ''); };
+    var lines = [
+      'Smoking : ' + withDetail(g('admSmoking'), g('admPackYear')),
+      'Drinking : ' + withDetail(g('admAlcohol'), g('admAlcoholDetail')),
+      'Betel nut chewing : ' + withDetail(g('admBetelNut'), g('admBetelDetail')),
+      'Exposures to contaminated water : ' + (g('admWaterExposure') || 'no')
+    ];
+    var occ = g('admOccupation');
+    if (occ) lines.push('Occupation : ' + occ);
+    var tocc = g('admTravelContact');
+    if (tocc) lines.push('TOCC : ' + tocc);
+    var func = g('admFunctional');
+    if (func) lines.push('Functional status : ' + func);
+    return lines.map(function (l, i) { return (i + 1) + '. ' + l; });
+  }
+
   function buildVitalsText() {
     var v = function (id) { return document.getElementById(id).value.trim(); };
     var out = [];
@@ -2385,21 +2587,60 @@
     return out.join(' | ');
   }
 
-  /** 檢驗報告 — laboratory values. */
+  /** 檢驗報告 — laboratory values.
+      院內表單的檢驗寫法是「檢查別 + 日期 + 空格分隔的值」，不是條列句子：
+        CBC   2/18   WBC:12.3  Hgb:10.2  PLT:210  MCV:88
+      欄位對齊是為了讓查房時一眼掃得到。 */
+  function padRight_(s, n) {
+    s = String(s == null ? '' : s);
+    while (s.length < n) s += ' ';
+    return s;
+  }
+  function labLine_(label, dateId, valueId) {
+    var vEl = document.getElementById(valueId);
+    var v = vEl ? vEl.value.trim() : '';
+    if (!v) return '';
+    var dEl = document.getElementById(dateId);
+    var d = dEl ? dEl.value.trim() : '';
+    return d ? padRight_(label, 5) + padRight_(d, 7) + v : padRight_(label, 5) + v;
+  }
+
+  var LAB_PANELS = [
+    ['CBC', 'labCBCDate', 'labCBC'],
+    ['BCS', 'labBCSDate', 'labBCS'],
+    ['SMA', 'labSMADate', 'labSMA'],
+    ['CRP', 'labCRPDate', 'labCRP'],
+    ['U/A', 'labUADate', 'labUA']
+  ];
+  var STUDY_PANELS = [
+    ['CxR', 'labCXRDate', 'labCXR'],
+    ['KUB', 'labKUBDate', 'labKUB'],
+    ['EKG', 'labEKGDate', 'labEKG']
+  ];
+
   function buildLabsText() {
-    return [['CBC', 'labCBC'], ['BCS', 'labBCS'], ['CRP', 'labCRP'], ['U/A', 'labUA']]
-      .map(function (r) {
-        var v = document.getElementById(r[1]).value.trim();
-        return v ? r[0] + '  ' + v : '';
-      }).filter(Boolean).join('\n');
+    return LAB_PANELS.map(function (r) { return labLine_(r[0], r[1], r[2]); })
+      .filter(Boolean).join('\n');
+  }
+
+  /* 由住院日期一鍵帶入各檢查日期（表單寫成 M/D）。 */
+  function fillLabDates() {
+    var iso = document.getElementById('admDate').value;
+    if (!iso) { showToast('請先填寫住院日期。', 'var(--warning, #d97706)'); return; }
+    var parts = String(iso).split('-');
+    var md = parseInt(parts[1], 10) + '/' + parseInt(parts[2], 10);
+    LAB_PANELS.concat(STUDY_PANELS).forEach(function (r) {
+      var el = document.getElementById(r[1]);
+      if (el && !el.value.trim()) el.value = md;
+    });
+    onAdmissionInput();
+    showToast('已帶入住院日期 ' + md + '，可個別修改。');
   }
 
   /** 檢查報告 — imaging and other studies. */
   function buildStudiesText() {
-    var out = [['CxR', 'labCXR'], ['EKG', 'labEKG']].map(function (r) {
-      var v = document.getElementById(r[1]).value.trim();
-      return v ? r[0] + '  ' + v : '';
-    }).filter(Boolean);
+    var out = STUDY_PANELS.map(function (r) { return labLine_(r[0], r[1], r[2]); })
+      .filter(Boolean);
     var other = document.getElementById('labOther').value.trim();
     if (other) out.push(other);
     return out.join('\n');
@@ -2493,6 +2734,9 @@
     out.push(ind('3. History of hospitalization : ' + g('admHospitalizationHx', 'Denied.'), 6));
     out.push(ind('4. Home medication reviews : ' + g('admMedications', 'None.'), 6));
     out.push('');
+    out.push(ind('Personal History :'));
+    buildPersonalHistoryLines().forEach(function (l) { out.push(ind(l, 6)); });
+    out.push('');
 
     out.push('藥物過敏(Drug Allergy)：');
     out.push(ind(g('admAllergies', 'The patient is not allergic to any type of food or medicine.')));
@@ -2500,7 +2744,6 @@
 
     out.push('家族史(Family History)：');
     out.push(ind(g('admFamilyHistory', 'There was no family history of hereditary or oncologic disease.')));
-    out.push(ind('Personal and social history : ' + buildSocialText()));
     out.push('');
 
     out.push('系統回顧(Review of Systems)：');
@@ -2599,6 +2842,9 @@
       allergies: document.getElementById('admAllergies').value.trim(),
       familyHistory: document.getElementById('admFamilyHistory').value.trim(),
       socialHistory: buildSocialText(),
+      /* 個人史依院內表單改列於「過去病史」之下。socialHistory 保持不變，
+         Sheets 既有欄位語意不受影響；Doc 端由 Code.gs 列印本欄位。 */
+      personalHistory: buildPersonalHistoryLines().join('\n'),
       reviewOfSystems: buildROSText(),
       vitalSigns: buildVitalsText(),
       physicalExam: buildPEText(),
@@ -2643,7 +2889,9 @@
       'admPresentIllness', 'admPastHistory', 'admSurgicalHistory', 'admMedications',
       'admFamilyHistory', 'admPackYear', 'admAlcoholDetail', 'admBetelDetail', 'admOccupation',
       'admTravelContact', 'admRosExtra', 'admBW', 'admBH', 'admBMI', 'admPain', 'admGCS',
-      'labCBC', 'labBCS', 'labCRP', 'labUA', 'labCXR', 'labEKG', 'labOther'
+      'labCBC', 'labBCS', 'labSMA', 'labCRP', 'labUA', 'labCXR', 'labKUB', 'labEKG', 'labOther',
+      'labCBCDate', 'labBCSDate', 'labSMADate', 'labCRPDate', 'labUADate',
+      'labCXRDate', 'labKUBDate', 'labEKGDate'
     ].forEach(function (id) { var e = document.getElementById(id); if (e) e.value = ''; });
 
     document.getElementById('admAllergies').value = 'No Known Drug Allergy (NKDA)';
