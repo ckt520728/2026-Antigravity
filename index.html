@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臨床醫療紀錄與報告系統 v6.9 | Clinical Documentation System</title>
+  <title>臨床醫療紀錄與報告系統 v7.0 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -429,7 +429,7 @@
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h1>臨床醫療紀錄與報告系統</h1>
-      <p class="sub">Clinical Documentation &amp; Admission Note System v6.9<br>本系統含病患資料，請輸入通行密碼進入。</p>
+      <p class="sub">Clinical Documentation &amp; Admission Note System v7.0<br>本系統含病患資料，請輸入通行密碼進入。</p>
 
       <input type="password" id="passcodeInput" placeholder="請輸入密碼" autocomplete="current-password" autofocus>
       <div id="lockError"></div>
@@ -457,7 +457,7 @@
       <div class="brand">
         <div class="brand-icon"><i class="fa-solid fa-notes-medical"></i></div>
         <div class="brand-title">
-          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.9</span></h1>
+          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v7.0</span></h1>
           <p>Admission Note × Structured Exam Reports × 中文語音轉英文</p>
         </div>
       </div>
@@ -1019,6 +1019,75 @@
           <div class="form-group">
             <label for="examPatientName"><i class="fa-solid fa-user"></i> 病患姓名 (Name)</label>
             <input type="text" id="examPatientName" placeholder="選填">
+          </div>
+          <div class="form-group">
+            <label for="examBirthDate"><i class="fa-solid fa-cake-candles"></i> 生日 (Birth Date)</label>
+            <input type="text" id="examBirthDate" placeholder="例如：0420221（民國）或 1953/02/21" oninput="syncExamAge()">
+          </div>
+          <div class="form-group">
+            <label for="examAge"><i class="fa-solid fa-hourglass-half"></i> 年齡 (Age)</label>
+            <input type="text" id="examAge" placeholder="填生日後自動帶入" oninput="markExamAgeManual()">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="examGender"><i class="fa-solid fa-venus-mars"></i> 性別 (Sex)</label>
+            <select id="examGender">
+              <option value="Male">男 (Male)</option>
+              <option value="Female">女 (Female)</option>
+              <option value="">未填 (Unspecified)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="examPayerStatus"><i class="fa-solid fa-id-badge"></i> 身份別 (Status)</label>
+            <select id="examPayerStatus">
+              <option value="NHI (健保)">健保 (NHI)</option>
+              <option value="Self-pay (自費)">自費 (Self-pay)</option>
+              <option value="Occupational injury (職災)">職災 (Occupational injury)</option>
+              <option value="">未填 (Unspecified)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="examDepartment"><i class="fa-solid fa-building-user"></i> 科別 (Department)</label>
+            <select id="examDepartment">
+              <option value="Cardiology (心臟內科)">Cardiology (心臟內科)</option>
+              <option value="Gastroenterology (胃腸肝膽科)">Gastroenterology (胃腸肝膽科)</option>
+              <option value="Nephrology (腎臟科)">Nephrology (腎臟科)</option>
+              <option value="General Internal Medicine (一般內科)">General Internal Medicine (一般內科)</option>
+              <option value="Pulmonology (胸腔內科)">Pulmonology (胸腔內科)</option>
+              <option value="Metabolism &amp; Endocrinology (新陳代謝科)">Metabolism &amp; Endocrinology (新陳代謝科)</option>
+              <option value="Infectious Disease (感染科)">Infectious Disease (感染科)</option>
+              <option value="General Surgery (一般外科)">General Surgery (一般外科)</option>
+              <option value="">未填 (Unspecified)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="examTime"><i class="fa-solid fa-clock"></i> 檢查時間 (Exam Time)</label>
+            <input type="time" id="examTime">
+          </div>
+          <div class="form-group">
+            <label for="examSource"><i class="fa-solid fa-hospital-user"></i> 患者來源 (Patient Source)</label>
+            <select id="examSource">
+              <option value="Outpatient (門診)">門診 (Outpatient)</option>
+              <option value="Inpatient (住院)">住院 (Inpatient)</option>
+              <option value="Emergency (急診)">急診 (Emergency)</option>
+              <option value="Health check-up (健檢)">健檢 (Health check-up)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="examRequestingUnit"><i class="fa-solid fa-paper-plane"></i> 送檢單位 (Requesting Unit)</label>
+            <input type="text" id="examRequestingUnit" placeholder="例如：Internal Medicine OPD">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="examLicenseNo"><i class="fa-solid fa-certificate"></i> 執照號碼 (License No.)</label>
+            <input type="text" id="examLicenseNo" placeholder="例如：專科醫師證書字號">
           </div>
           <div class="form-group span-2">
             <label for="examIndication"><i class="fa-solid fa-circle-question"></i> 臨床適應症 (Indication)</label>
@@ -3308,23 +3377,92 @@
     showToast('已依目前選項重新生成報告文字');
   }
 
+  /* ---------- hospital-form header fields ---------- */
+
+  /** Titles for the << … >> line, mirroring examReportTitle_() in Code.gs. */
+  var EXAM_REPORT_TITLES = {
+    'Echocardiogram': 'ECHOCARDIOGRAPHY REPORT',
+    'Abdominal Sonography': 'ABDOMINAL SONOGRAPHY REPORT',
+    'UGI Endoscopy': 'UGI ENDOSCOPY REPORT',
+    'LGI Endoscopy': 'LGI ENDOSCOPY REPORT'
+  };
+  function examReportTitle(type) { return EXAM_REPORT_TITLES[type] || 'EXAMINATION REPORT'; }
+
+  // Age is derived from the birth date, but the doctor always wins: once the box
+  // has been typed in by hand, syncExamAge stops overwriting it.
+  var examAgeManual = false;
+  function markExamAgeManual() { examAgeManual = true; }
+
+  /**
+   * Age in years from a birth date written either 民國 (0420221 / 042/02/21) or
+   * Western (1953-02-21 / 1953/02/21). Returns '' when the text cannot be parsed
+   * — the box is then left for the doctor rather than filled with a guess.
+   */
+  function ageFromBirth(birth, onDate) {
+    var s = String(birth || '').trim();
+    if (!s) return '';
+    var y, m, d;
+    var west = s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/);
+    if (west) {
+      y = +west[1]; m = +west[2]; d = +west[3];
+    } else {
+      var digits = s.replace(/[^0-9]/g, '');
+      if (digits.length !== 7) return '';
+      y = +digits.slice(0, 3) + 1911; m = +digits.slice(3, 5); d = +digits.slice(5, 7);
+    }
+    if (!m || !d || m > 12 || d > 31) return '';
+    var ref = onDate ? new Date(onDate + 'T00:00:00') : new Date();
+    if (isNaN(ref.getTime())) ref = new Date();
+    var age = ref.getFullYear() - y;
+    if (ref.getMonth() + 1 < m || (ref.getMonth() + 1 === m && ref.getDate() < d)) age--;
+    return (age >= 0 && age < 130) ? String(age) : '';
+  }
+
+  function syncExamAge() {
+    if (examAgeManual) return;
+    var age = ageFromBirth(
+      document.getElementById('examBirthDate').value,
+      document.getElementById('examDate').value
+    );
+    if (age !== '') document.getElementById('examAge').value = age;
+  }
+
   function buildExamFullText() {
     var v = function (id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
+    var pad = function (s, n) { s = String(s); while (s.length < n) s += ' '; return s; };
+    // Mirrors the generated Doc (createGoogleDocReport in Code.gs) so what the
+    // doctor pastes into HIS matches the filed report line for line.
     return [
-      '[' + currentExamType + ']',
-      'Patient: ' + (v('examPatientName') || '—') + '  |  ID: ' + (v('patientId') || '—') + '  |  Date: ' + v('examDate'),
-      'Operator: ' + v('doctorName'),
+      '<< ' + examReportTitle(currentExamType) + ' >>',
+      pad('Chart No. : ' + (v('patientId') || '—'), 34) + 'Name : ' + (v('examPatientName') || '—'),
+      pad('Age : ' + v('examAge'), 16) + pad('Birth Date : ' + v('examBirthDate'), 34) +
+        'Sex : ' + v('examGender'),
+      pad('Dept. : ' + v('examDepartment'), 46) + 'Status : ' + v('examPayerStatus'),
+      pad('Exam Date : ' + v('examDate'), 26) + pad('Exam Time : ' + v('examTime'), 24) +
+        'Source : ' + v('examSource'),
       '',
-      'INDICATION: ' + (v('examIndication') || v('symptoms') || '—'),
-      'TECHNIQUE: ' + v('examTechnique'),
-      'COMPARISON: ' + (v('examComparison') || 'None.'),
+      'S : ' + (v('symptoms') || '—'),
+      'O : Indication  : ' + (v('examIndication') || v('symptoms') || '—'),
+      '    Technique   : ' + (v('examTechnique') || '—'),
+      '    Comparison  : ' + (v('examComparison') || 'No prior study available for comparison.'),
       '',
-      'FINDINGS:',
+      'Clinical Diagnosis :',
+      v('diagnosis') || '—',
+      '',
+      'Exam Item :',
+      currentExamType,
+      '',
+      'Report Content :',
       v('findings'),
       '',
-      'IMPRESSION: ' + v('impression'),
-      'DIAGNOSIS: ' + v('diagnosis'),
-      'RECOMMENDATION: ' + v('recommendation')
+      'Impression :',
+      v('impression') || '—',
+      '',
+      'Recommendation :',
+      v('recommendation') || '—',
+      '',
+      'Reporting Physician : ' + v('doctorName'),
+      'License No. : ' + v('examLicenseNo')
     ].join('\n');
   }
   function copyExamReport() { copyText(buildExamFullText(), '檢查報告全文已複製'); }
@@ -3455,6 +3593,16 @@
       indication: g('examIndication'),
       technique: g('examTechnique'),
       comparison: g('examComparison'),
+      // Header fields on the hospital's printed exam form — all optional.
+      birthDate: g('examBirthDate'),
+      patientAge: g('examAge'),
+      gender: g('examGender'),
+      payerStatus: g('examPayerStatus'),
+      department: g('examDepartment'),
+      examTime: g('examTime'),
+      patientSource: g('examSource'),
+      requestingUnit: g('examRequestingUnit'),
+      licenseNo: g('examLicenseNo'),
       symptoms: g('symptoms'),
       diagnosis: g('diagnosis'),
       findings: g('findings'),
@@ -3497,11 +3645,16 @@
 
   function resetForm(silent) {
     if (!silent && !confirm('確定清除檢查報告表單？')) return;
+    // Patient-specific boxes only. 科別 / 身份別 / 患者來源 / 送檢單位 / 執照號碼
+    // are the same for a whole list, so clearing them would mean retyping them
+    // for every patient.
     ['patientId', 'examPatientName', 'examIndication', 'symptoms',
-      'diagnosis', 'impression', 'recommendation', 'findings'].forEach(function (id) {
+      'diagnosis', 'impression', 'recommendation', 'findings',
+      'examBirthDate', 'examAge'].forEach(function (id) {
       document.getElementById(id).value = '';
     });
     document.getElementById('patientId').classList.remove('invalid');
+    examAgeManual = false;
     manualEdits = {};
     updateLockState();
     buildReportText();
@@ -3782,6 +3935,13 @@
     var today = new Date().toISOString().slice(0, 10);
     document.getElementById('admDate').value = today;
     document.getElementById('examDate').value = today;
+
+    // 檢查時間 defaults to now — the form prints it, and it is almost always
+    // "when the doctor is writing this". restoreDraft() overwrites it if a draft
+    // carried a different time.
+    var nowT = new Date();
+    document.getElementById('examTime').value =
+      ('0' + nowT.getHours()).slice(-2) + ':' + ('0' + nowT.getMinutes()).slice(-2);
 
     // Wire every admission field to preview + autosave
     document.querySelectorAll('#admissionNoteView input, #admissionNoteView select, #admissionNoteView textarea')

@@ -278,16 +278,33 @@ function saveExamRecord(token, record) {
     var comparison = record.comparison || '';
     var rawStructuredData = JSON.stringify(record.structuredDetails || {});
 
+    // Header fields on the hospital's printed exam form. All optional — a blank
+    // prints as a blank label, the way 送檢單位 / 報告時間 are blank on the paper
+    // form, rather than being filled in with a guess.
+    var birthDate = record.birthDate || '';
+    var patientAge = record.patientAge || '';
+    var gender = record.gender || '';
+    var payerStatus = record.payerStatus || '';
+    var department = record.department || '';
+    var examTime = record.examTime || '';
+    var patientSource = record.patientSource || '';
+    var requestingUnit = record.requestingUnit || '';
+    var licenseNo = record.licenseNo || '';
+
     var docResult = createGoogleDocReport(record, examId, timestamp);
 
-    // Columns 1-15 are the v5.0 layout and MUST stay in place; 16-19 are v6.0 additions.
+    // Columns 1-15 are the v5.0 layout and MUST stay in place; 16-19 are v6.0
+    // additions; 20-28 arrived with the hospital-form report layout.
+    // Append only — never insert. See CLAUDE.md constraint 2.
     var masterHeaders = [
       '檢查編號 (Exam ID)', '登錄時間 (Timestamp)', '檢查日期 (Exam Date)', '檢查項目 (Exam Type)',
       '操作醫師 (Operator Doctor)', '病歷代碼 (Patient Code)', '臨床症狀 (Clinical Symptoms)',
       '初步診斷 (Tentative Diagnosis)', '影像所見 (Image Findings)', '檢查結論 (Impression)',
       '建議與處置 (Recommendations)', 'Google Doc 報告網址', 'PDF 下載網址', 'Word 下載網址',
       '明細數據 JSON',
-      '病患姓名 (Patient Name)', '臨床適應症 (Indication)', '檢查技術 (Technique)', '比較影像 (Comparison)'
+      '病患姓名 (Patient Name)', '臨床適應症 (Indication)', '檢查技術 (Technique)', '比較影像 (Comparison)',
+      '出生日期 (Birth Date)', '年齡 (Age)', '性別 (Sex)', '身份別 (Payer Status)', '科別 (Department)',
+      '檢查時間 (Exam Time)', '患者來源 (Patient Source)', '送檢單位 (Requesting Unit)', '執照號碼 (License No.)'
     ];
 
     var masterSheet = getOrCreateSheet(ss, 'Master_Exams', masterHeaders);
@@ -295,7 +312,9 @@ function saveExamRecord(token, record) {
       examId, timestamp, examDate, examType, doctorName, patientId, symptoms, diagnosis,
       findings, impression, recommendation,
       docResult.docUrl, docResult.pdfUrl, docResult.docxUrl, rawStructuredData,
-      patientName, indication, technique, comparison
+      patientName, indication, technique, comparison,
+      birthDate, patientAge, gender, payerStatus, department,
+      examTime, patientSource, requestingUnit, licenseNo
     ]);
 
     var specificHeaders = [
@@ -327,8 +346,18 @@ function saveExamRecord(token, record) {
 
 /**
  * Generate the formal Google Doc exam report.
- * Section order follows the RSNA structured-report layout:
- * demographics → clinical history/indication → technique → comparison → findings → impression → recommendation.
+ *
+ * Layout mirrors 陽明醫院's printed exam-report form (see
+ * 02_參考資料/Admission Note_format/Image_exam_format_1.jpg): a three-column
+ * letterhead line, a four-line demographic block, S/O clinical information,
+ * then Clinical Diagnosis → Exam Item → Report Content → signature footer.
+ *
+ * The RSNA structured order is preserved *inside* that skeleton — indication and
+ * technique/comparison sit under O, findings under Report Content, and
+ * Impression/Recommendation follow as their own sections.
+ *
+ * The centred << … >> title is per exam type (see examReportTitle_), so an
+ * echo report never prints an endoscopy heading.
  */
 function createGoogleDocReport(record, examId, timestamp) {
   var reportsFolder = getReportsFolder_('臨床檢查報告_GoogleDocs');
@@ -340,56 +369,227 @@ function createGoogleDocReport(record, examId, timestamp) {
 
   body.setMarginTop(40).setMarginBottom(40).setMarginLeft(48).setMarginRight(48);
 
-  body.appendParagraph('2026 Google Spark 臨床醫學中心')
-    .setFontSize(10).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+  buildExamLetterhead_(body, record);
 
-  body.appendParagraph('臨床檢查報告書\nMedical Examination Report')
-    .setFontSize(18).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setForegroundColor('#1e293b');
+  // Demographic block — space-padded monospace lines, as printed on the form.
+  // Columns line up only because appendExamLine_ uses a fixed-width face.
+  appendExamLine_(body, padTo_('Chart No. : ' + (record.patientId || ''), 34) +
+    'Name : ' + (record.patientName || ''), 0);
+  appendExamLine_(body, padTo_('Age : ' + (record.patientAge || ''), 16) +
+    padTo_('Birth Date : ' + toRocBirth_(record.birthDate), 34) +
+    'Sex : ' + (record.gender || ''), 0);
+  appendExamLine_(body, padTo_('Dept. : ' + (record.department || ''), 46) +
+    'Status : ' + (record.payerStatus || ''), 0);
+  appendExamLine_(body, padTo_('Exam Date : ' + toRocSlash_(record.examDate), 26) +
+    padTo_('Exam Time : ' + (record.examTime || ''), 24) +
+    'Source : ' + (record.patientSource || ''), 0);
 
-  body.appendParagraph('【 ' + (record.examType || '') + ' 】')
-    .setFontSize(13).setBold(true).setAlignment(DocumentApp.HorizontalAlignment.CENTER).setForegroundColor('#4f46e5');
+  // A blank line, not a rule: the paper form separates the header block from the
+  // S/O text with whitespace only.
+  appendExamLine_(body, '', 0).setSpacingBefore(8);
 
-  body.appendHorizontalRule();
+  // S / O — the clinical information the study was requested on, in the form's
+  // own shorthand. Technique and comparison are objective study parameters, so
+  // they are continuation lines under O rather than sections of their own.
+  appendExamLine_(body, 'S : ' + (record.symptoms || '—'), 0);
+  appendExamLine_(body, 'O : Indication  : ' + (record.indication || record.symptoms || '—'), 0);
+  appendExamLine_(body, 'Technique   : ' + (record.technique || 'Per standard departmental protocol.'), 28);
+  appendExamLine_(body, 'Comparison  : ' + (record.comparison || 'No prior study available for comparison.'), 28);
 
-  var metaTable = body.appendTable([
-    ['報告編號 (Exam ID)', examId, '檢查日期 (Date)', record.examDate || ''],
-    ['病患姓名 (Name)', record.patientName || '—', '病歷代碼 (Patient ID)', record.patientId || ''],
-    ['操作醫師 (Operator)', record.doctorName || '', '報告狀態 (Status)', '已核發 (Completed)'],
-    ['產出時間 (Generated)', Utilities.formatDate(timestamp, TZ, 'yyyy-MM-dd HH:mm'), '', '']
-  ]);
-  metaTable.setBorderColor('#cbd5e1');
+  appendExamSection_(body, 'Clinical Diagnosis');
+  appendExamBlock_(body, record.diagnosis);
 
-  body.appendParagraph('\n一、臨床適應症與病史 (Clinical Indication & History)')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph('• 臨床適應症：' + (record.indication || record.symptoms || '無特定適應症描述')).setFontSize(10.5);
-  body.appendParagraph('• 臨床症狀與主訴：' + (record.symptoms || '無')).setFontSize(10.5);
-  body.appendParagraph('• 初步診斷：' + (record.diagnosis || '無')).setFontSize(10.5);
+  appendExamSection_(body, 'Exam Item');
+  appendExamLine_(body, examItemLabel_(record.examType));
 
-  body.appendParagraph('\n二、檢查技術與比較影像 (Technique & Comparison)')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph('• 檢查技術：' + (record.technique || '依標準作業流程執行')).setFontSize(10.5);
-  body.appendParagraph('• 比較影像：' + (record.comparison || 'No prior study available for comparison.')).setFontSize(10.5);
+  appendExamSection_(body, 'Report Content');
+  appendExamBlock_(body, record.findings || 'No specific finding recorded.');
 
-  body.appendParagraph('\n三、詳細所見 (Findings)')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph(record.findings || '無特別註明影像所見')
-    .setFontSize(10).setFontFamily('Consolas');
+  appendExamSection_(body, 'Impression');
+  appendExamBlock_(body, record.impression || 'No significant abnormality.');
 
-  body.appendParagraph('\n四、檢查結論與處置建議 (Impression & Recommendations)')
-    .setFontSize(12).setBold(true).setForegroundColor('#1e293b');
-  body.appendParagraph('【檢查結論】' + (record.impression || '無特別異常'))
-    .setFontSize(11).setBold(true).setForegroundColor('#0f172a');
-  body.appendParagraph('【處置與建議】' + (record.recommendation || '定期臨床追蹤')).setFontSize(10.5);
+  appendExamSection_(body, 'Recommendation');
+  appendExamBlock_(body, record.recommendation || 'Routine clinical follow-up.');
 
-  body.appendHorizontalRule();
+  // Signature footer — the same three lines as the bottom of the paper form.
+  appendExamLine_(body, '', 0).setSpacingBefore(16);
+  appendExamLine_(body, 'Reporting Physician  : ' + (record.doctorName || ''), 0);
+  appendExamLine_(body, padTo_('Specialist Physician : ' + (record.doctorName || ''), 54) +
+    'License No. : ' + (record.licenseNo || ''), 0);
+  appendExamLine_(body, padTo_('Report Date : ' + toRocSlash_(timestamp), 26) +
+    'Report Time : ' + Utilities.formatDate(timestamp, TZ, 'HH:mm'), 0);
 
-  body.appendParagraph('\n報告操作醫師簽章： ______________________ (' + (record.doctorName || '') + ')\n' +
-    '(本報告由系統自動歸檔至 Google 雲端硬碟與資料庫流水帳)')
-    .setFontSize(9.5).setForegroundColor('#64748b').setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+  styleP_(body.appendParagraph('Exam ID: ' + examId + '　|　' +
+    Utilities.formatDate(timestamp, TZ, 'yyyy-MM-dd HH:mm')), { size: 8, before: 12 })
+    .setForegroundColor('#808080');
+
+  // DocumentApp.create() seeds the body with one empty paragraph that would push
+  // the letterhead down a line. Cosmetic — never let it fail the whole report.
+  try {
+    var seed = body.getChild(0);
+    if (body.getNumChildren() > 1 &&
+        seed.getType() === DocumentApp.ElementType.PARAGRAPH &&
+        seed.asParagraph().getText() === '') {
+      seed.removeFromParent();
+    }
+  } catch (e) {
+    logDiagnostic_('createGoogleDocReport/removeSeedParagraph', e);
+  }
 
   doc.saveAndClose();
   DriveApp.getFileById(doc.getId()).moveTo(reportsFolder);
   return docLinks_(doc.getId());
+}
+
+/* --------------------------------------------------------------------------
+ * Hospital exam-report formatting helpers
+ *
+ * The paper form has no large titles — 臨床診斷／檢查項目／報告內容 are printed
+ * at the same size as the text under them, on a fixed-width printer. So section
+ * labels here are body size + bold, NOT Doc headings, and every body line uses
+ * one monospace face. Promoting a label to a real heading, or mixing in a
+ * proportional font, breaks both the resemblance and the padded columns.
+ * -------------------------------------------------------------------------- */
+
+var EXAM_DOC_FONT = 'Consolas';
+var EXAM_DOC_SIZE = 10;
+
+/** Centred << … >> title, one per exam type the web app offers. */
+function examReportTitle_(examType) {
+  switch (examType) {
+    case 'Echocardiogram': return 'ECHOCARDIOGRAPHY REPORT';
+    case 'Abdominal Sonography': return 'ABDOMINAL SONOGRAPHY REPORT';
+    case 'UGI Endoscopy': return 'UGI ENDOSCOPY REPORT';
+    case 'LGI Endoscopy': return 'LGI ENDOSCOPY REPORT';
+    default: return 'EXAMINATION REPORT';
+  }
+}
+
+/** The Exam Item line — English name with the Chinese one shown on the picker. */
+function examItemLabel_(examType) {
+  switch (examType) {
+    case 'Echocardiogram': return 'Echocardiogram (心臟超音波)';
+    case 'Abdominal Sonography': return 'Abdominal Sonography (腹部超音波)';
+    case 'UGI Endoscopy': return 'UGI Endoscopy (上消化道內視鏡)';
+    case 'LGI Endoscopy': return 'LGI Endoscopy (下消化道內視鏡)';
+    default: return String(examType || 'Unspecified');
+  }
+}
+
+/**
+ * Display width in fixed-width columns: full-width CJK counts as two.
+ * Without this a Chinese patient name throws every later column out of line.
+ */
+function dispWidth_(text) {
+  var s = String(text == null ? '' : text);
+  var w = 0;
+  for (var i = 0; i < s.length; i++) {
+    w += /[ᄀ-ᅟ⺀-〾ぁ-㏿㐀-䶿一-鿿ꀀ-꓏가-힣豈-﫿︰-﹏＀-｠￠-￦]/
+      .test(s.charAt(i)) ? 2 : 1;
+  }
+  return w;
+}
+
+/** Right-pad to a column width; never truncates, so long values just push over. */
+function padTo_(text, width) {
+  var out = String(text == null ? '' : text);
+  while (dispWidth_(out) < width) out += ' ';
+  return out;
+}
+
+/**
+ * ROC calendar in the form's slash notation: 2026-08-13 → 115/08/13.
+ * Accepts an ISO string, a Date, or text already in ROC form.
+ */
+function toRocSlash_(value) {
+  if (!value) return '';
+  var s = String(value).trim();
+  if (/^\d{2,3}\/\d{1,2}\/\d{1,2}$/.test(s)) return s;
+  var d = (value instanceof Date) ? value : new Date(s.length <= 10 ? s + 'T00:00:00' : s);
+  if (isNaN(d.getTime())) return s;
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  return (d.getFullYear() - 1911) + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate());
+}
+
+/**
+ * Birth date as the form prints it: 民國042/02/21.
+ * Accepts 0420221, 042/02/21 or 1953-02-21. Anything else is passed through
+ * unchanged rather than guessed at — a wrong birth date is worse than a raw one.
+ */
+function toRocBirth_(value) {
+  var s = String(value == null ? '' : value).trim();
+  if (!s) return '';
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+
+  var west = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
+  if (west) {
+    return '民國' + ('00' + (Number(west[1]) - 1911)).slice(-3) +
+      '/' + pad(Number(west[2])) + '/' + pad(Number(west[3]));
+  }
+  if (/^民國/.test(s)) return s;
+
+  var digits = s.replace(/[^0-9]/g, '');
+  if (digits.length === 7) {
+    return '民國' + digits.slice(0, 3) + '/' + digits.slice(3, 5) + '/' + digits.slice(5, 7);
+  }
+  return s;
+}
+
+/**
+ * The three-column letterhead line: hospital / << TITLE >> / requesting unit.
+ * A borderless table, because a paragraph cannot be left, centre and right
+ * aligned at once. It lives in the BODY, not the page header — Google Docs
+ * drops tables from headers when exporting to .docx (see
+ * buildAdmissionLetterhead_ for the incident this rule came from).
+ */
+function buildExamLetterhead_(body, record) {
+  var table = body.appendTable([['', '', '']]);
+  table.setBorderWidth(0);
+
+  setCellLines_(table.getCell(0, 0), [
+    { text: HOSPITAL_NAME, size: 11, bold: true, align: DocumentApp.HorizontalAlignment.LEFT }
+  ]);
+  setCellLines_(table.getCell(0, 1), [
+    { text: '<< ' + examReportTitle_(record.examType) + ' >>', size: 12, bold: true,
+      align: DocumentApp.HorizontalAlignment.CENTER }
+  ]);
+  setCellLines_(table.getCell(0, 2), [
+    { text: 'Requesting Unit : ' + (record.requestingUnit || ''), size: 9,
+      align: DocumentApp.HorizontalAlignment.RIGHT }
+  ]);
+
+  table.setColumnWidth(0, 96).setColumnWidth(1, 288).setColumnWidth(2, 132);
+  return table;
+}
+
+/** Section label: body size, bold, no colour — exactly as the form prints it. */
+function appendExamSection_(body, label) {
+  return styleP_(body.appendParagraph(label + ' :'),
+    { size: EXAM_DOC_SIZE, bold: true, before: 10, after: 2 })
+    .setFontFamily(EXAM_DOC_FONT);
+}
+
+/** One monospace body line. Pass indent 0 for the space-padded column lines. */
+function appendExamLine_(body, text, indent) {
+  var p = styleP_(body.appendParagraph(String(text == null ? '' : text)), { size: EXAM_DOC_SIZE });
+  p.setFontFamily(EXAM_DOC_FONT).setIndentStart(indent == null ? 24 : indent);
+  return p;
+}
+
+/**
+ * A multi-line value, one paragraph per line, so the leading spaces the
+ * templates use for sub-items survive. Leading blank lines are dropped;
+ * an empty value prints the form's em-dash rather than nothing.
+ */
+function appendExamBlock_(body, text, indent) {
+  var lines = String(text == null ? '' : text).split('\n');
+  var printed = 0;
+  for (var i = 0; i < lines.length; i++) {
+    if (!lines[i].trim() && !printed) continue;
+    appendExamLine_(body, lines[i].replace(/\s+$/, ''), indent);
+    printed++;
+  }
+  if (!printed) appendExamLine_(body, '—', indent);
 }
 
 /**
@@ -446,7 +646,20 @@ function mapExamRow_(row) {
     pdfUrl: row[12],
     docxUrl: row[13],
     patientName: row[15] || '',
-    indication: row[16] || ''
+    indication: row[16] || '',
+    technique: row[17] || '',
+    comparison: row[18] || '',
+    // Hospital-form header fields. Rows saved before the layout change have no
+    // such columns, so these read back as ''.
+    birthDate: row[19] || '',
+    patientAge: row[20] || '',
+    gender: row[21] || '',
+    payerStatus: row[22] || '',
+    department: row[23] || '',
+    examTime: row[24] || '',
+    patientSource: row[25] || '',
+    requestingUnit: row[26] || '',
+    licenseNo: row[27] || ''
   };
 }
 
@@ -1170,16 +1383,59 @@ function runSelfTest() {
     return 'ok';
   });
 
+  step('exam header date/width helpers', function () {
+    var cases = [
+      [toRocSlash_('2026-08-13'), '115/08/13'],
+      [toRocSlash_('115/03/04'), '115/03/04'],
+      [toRocBirth_('0420221'), '民國042/02/21'],
+      [toRocBirth_('1953-02-21'), '民國042/02/21'],
+      [toRocBirth_('unparseable'), 'unparseable'],
+      [String(dispWidth_('王小明')), '6'],
+      [padTo_('ab', 5) + '|', 'ab   |']
+    ];
+    for (var i = 0; i < cases.length; i++) {
+      if (cases[i][0] !== cases[i][1]) {
+        throw new Error('case ' + i + ': got "' + cases[i][0] + '", want "' + cases[i][1] + '"');
+      }
+    }
+    return 'ok';
+  });
+
+  step('every exam type has its own << TITLE >>', function () {
+    var types = ['Echocardiogram', 'Abdominal Sonography', 'UGI Endoscopy', 'LGI Endoscopy'];
+    var seen = {};
+    for (var i = 0; i < types.length; i++) {
+      var t = examReportTitle_(types[i]);
+      if (!t || t === 'EXAMINATION REPORT') throw new Error('no title for ' + types[i]);
+      if (seen[t]) throw new Error('duplicate title: ' + t);
+      seen[t] = true;
+      if (!examItemLabel_(types[i])) throw new Error('no exam item label for ' + types[i]);
+    }
+    return 'ok';
+  });
+
   var examDoc = step('createGoogleDocReport() — every paragraph/table style call', function () {
     return createGoogleDocReport({
       examType: 'Echocardiogram', doctorName: 'Self Test', examDate: '2026-01-01',
       patientId: 'SELFTEST', patientName: 'Self Test', indication: 'self test',
       technique: 'self test', comparison: 'none', symptoms: 'self test',
       diagnosis: 'self test', findings: 'line1\nline2', impression: 'self test',
-      recommendation: 'self test'
+      recommendation: 'self test',
+      birthDate: '0420221', patientAge: '73', gender: 'Male',
+      payerStatus: 'NHI (健保)', department: 'Cardiology (心臟內科)', examTime: '09:47',
+      patientSource: 'Inpatient (住院)', requestingUnit: 'Internal Medicine',
+      licenseNo: 'SELFTEST-000376'
     }, 'SELFTEST-EXAM', now);
   });
   if (examDoc && examDoc.docId) created.push(examDoc.docId);
+
+  step('createGoogleDocReport() — empty optional-header branch', function () {
+    var d = createGoogleDocReport({
+      examType: 'LGI Endoscopy', patientId: 'SELFTEST', examDate: '2026-01-01'
+    }, 'SELFTEST-EXAM2', now);
+    if (d && d.docId) created.push(d.docId);
+    return 'ok';
+  });
 
   var admDoc = step('createAdmissionNoteDocReport() — incl. problem-list branch', function () {
     return createAdmissionNoteDocReport({
