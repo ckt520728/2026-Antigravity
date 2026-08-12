@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臨床醫療紀錄與報告系統 v6.4 | Clinical Documentation System</title>
+  <title>臨床醫療紀錄與報告系統 v6.5 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -429,7 +429,7 @@
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h1>臨床醫療紀錄與報告系統</h1>
-      <p class="sub">Clinical Documentation &amp; Admission Note System v6.4<br>本系統含病患資料，請輸入通行密碼進入。</p>
+      <p class="sub">Clinical Documentation &amp; Admission Note System v6.5<br>本系統含病患資料，請輸入通行密碼進入。</p>
 
       <input type="password" id="passcodeInput" placeholder="請輸入密碼" autocomplete="current-password" autofocus>
       <div id="lockError"></div>
@@ -457,7 +457,7 @@
       <div class="brand">
         <div class="brand-icon"><i class="fa-solid fa-notes-medical"></i></div>
         <div class="brand-title">
-          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.4</span></h1>
+          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.5</span></h1>
           <p>Admission Note × Structured Exam Reports × 中文語音轉英文</p>
         </div>
       </div>
@@ -1988,31 +1988,31 @@
 
   var HPI_CHIPS = [
     ['Onset (發作)', [
-      ['突發 3 天前', 'Onset: Sudden onset 3 days prior to this admission.'],
-      ['漸進 2 週', 'Onset: Gradual onset over the past 2 weeks.'],
-      ['昨晚餐後突發', 'Onset: Acute onset after dinner last night.']
+      ['突發 3 天前', 'The symptoms began suddenly 3 days prior to this admission.'],
+      ['漸進 2 週', 'The symptoms developed gradually over the past 2 weeks.'],
+      ['昨晚餐後突發', 'The symptoms started acutely after dinner last night.']
     ]],
     ['Location / Quality (部位與性質)', [
-      ['右下腹鈍痛', 'Location and quality: Dull aching pain over the right lower quadrant.'],
-      ['壓迫性胸痛輻射左臂', 'Location and quality: Squeezing chest pain radiating to the left arm.'],
-      ['上腹灼熱痛', 'Location and quality: Burning epigastric pain.'],
-      ['陣發性絞痛', 'Location and quality: Intermittent cramping abdominal pain.']
+      ['右下腹鈍痛', 'The pain is a dull ache over the right lower quadrant.'],
+      ['壓迫性胸痛輻射左臂', 'The pain is squeezing in character and radiates to the left arm.'],
+      ['上腹灼熱痛', 'The pain is burning in character and localized to the epigastrium.'],
+      ['陣發性絞痛', 'The pain is intermittent and cramping in nature.']
     ]],
     ['Severity / Associated (嚴重度與伴隨)', [
-      ['疼痛 7-8 分', 'Severity: Pain scored 7-8 out of 10 on the visual analog scale.'],
-      ['高燒 38.8°C 畏寒嘔吐', 'Associated symptoms: High fever up to 38.8°C with chills, nausea and vomiting.'],
-      ['輕微活動即喘', 'Associated symptoms: Dyspnea on minimal exertion with productive cough.'],
-      ['體重 1 個月減 5 kg', 'Associated symptoms: Unintentional weight loss of 5 kg over the past month.']
+      ['疼痛 7-8 分', 'The pain is rated 7 to 8 out of 10 on the visual analog scale.'],
+      ['高燒 38.8°C 畏寒嘔吐', 'He also had a high fever up to 38.8°C with chills, nausea and vomiting.'],
+      ['輕微活動即喘', 'He also had dyspnea on minimal exertion with a productive cough.'],
+      ['體重 1 個月減 5 kg', 'He also had unintentional weight loss of 5 kg over the past month.']
     ]],
     ['Relieving / Aggravating (緩解與加重)', [
-      ['深呼吸與activity加重', 'Aggravating factors: Exacerbated by deep inspiration and movement.'],
-      ['休息或制酸劑緩解', 'Relieving factors: Partially relieved by rest and antacids.'],
-      ['坐起可緩解喘', 'Relieving factors: Dyspnea partially relieved in the upright position.']
+      ['深呼吸與活動加重', 'The symptoms are exacerbated by deep inspiration and movement.'],
+      ['休息或制酸劑緩解', 'The symptoms are partially relieved by rest and antacids.'],
+      ['坐起可緩解喘', 'The dyspnea is partially relieved in the upright position.']
     ]],
     ['ED course (急診經過)', [
-      ['急診已給 IV fluid', 'Emergency department course: Intravenous fluid resuscitation was given.'],
-      ['急診已抽血與影像', 'Emergency department course: Laboratory workup and imaging were performed.'],
-      ['急診已給第一劑抗生素', 'Emergency department course: The first dose of empiric antibiotics was administered.']
+      ['急診已給 IV fluid', 'At the emergency department, intravenous fluid resuscitation was given.'],
+      ['急診已抽血與影像', 'Laboratory workup and imaging were performed at the emergency department.'],
+      ['急診已給第一劑抗生素', 'The first dose of empiric antibiotics was administered before admission.']
     ]]
   ];
 
@@ -2248,7 +2248,7 @@
     }).join('');
     document.querySelectorAll('#hpiChips .tag-chip').forEach(function (chip) {
       chip.addEventListener('click', function () {
-        appendToField('admPresentIllness', chip.getAttribute('data-text'), 'newline');
+        appendToField('admPresentIllness', chip.getAttribute('data-text'), 'space');
       });
     });
   }
@@ -2551,6 +2551,30 @@
     return parts.join('. ') + '.';
   }
 
+  /* 現在病歷要寫成敘述句，不是條列片段。
+     LQQOPERA 速填晶片原本每按一次就插入一行「Onset: …」「Associated symptoms: …」，
+     列印出來像項目符號清單，而且同一個標籤會連續重複三次。
+     空行仍然分段；單一換行會併成同一段散文，開頭的「標籤：」會被移除。 */
+  var HPI_LABEL_RE = /^\s*(Onset|Location and quality|Location|Quality|Severity|Associated symptoms|Associated|Aggravating factors|Relieving factors|Emergency department course|Timing|Radiation)\s*:\s*/i;
+  function toNarrativeParagraphs(text) {
+    var paras = String(text == null ? '' : text).split(/\n\s*\n+/);
+    var out = [];
+    paras.forEach(function (para) {
+      var parts = [];
+      para.split('\n').forEach(function (line) {
+        var s = line.replace(HPI_LABEL_RE, '').replace(/^\s*[-•*]\s*/, '').trim();
+        if (!s) return;
+        if (!/[.?!:;,]$/.test(s)) s += '.';
+        parts.push(s);
+      });
+      if (parts.length) out.push(parts.join(' '));
+    });
+    return out.length ? out : ['—'];
+  }
+
+  /* 全形中日韓字元偵測 —— 除了表頭與醫師簽名，病歷內容一律英文。 */
+  function hasCJK(s) { return /[㐀-鿿豈-﫿぀-ヿ]/.test(String(s || '')); }
+
   /* 個人史 — 依院內表單，列在「過去病史」四個子標題之後，而非家族史底下。
      表單固定四項；職業／TOCC／生活功能有填才續編號，避免遺失已輸入資料。 */
   function buildPersonalHistoryLines() {
@@ -2719,15 +2743,15 @@
     out.push(RULE);
     out.push('');
 
-    out.push('主訴(Chief Complaints)：');
+    out.push('Chief Complaints :');
     out.push(ind(g('admChiefComplaint', '—')));
     out.push('');
 
-    out.push('現在病歷(Present Illness)：');
-    out.push(ind(g('admPresentIllness', '—')));
+    out.push('Present Illness :');
+    toNarrativeParagraphs(g('admPresentIllness')).forEach(function (para) { out.push(ind(para)); });
     out.push('');
 
-    out.push('過去病史(Past History)：');
+    out.push('Past History :');
     out.push(ind('Past history :'));
     out.push(ind('1. Disease : ' + g('admPastHistory', 'Non-contributory.'), 6));
     out.push(ind('2. History of trauma or surgery : ' + g('admSurgicalHistory', 'Denied.'), 6));
@@ -2738,41 +2762,41 @@
     buildPersonalHistoryLines().forEach(function (l) { out.push(ind(l, 6)); });
     out.push('');
 
-    out.push('藥物過敏(Drug Allergy)：');
+    out.push('Drug Allergy :');
     out.push(ind(g('admAllergies', 'The patient is not allergic to any type of food or medicine.')));
     out.push('');
 
-    out.push('家族史(Family History)：');
+    out.push('Family History :');
     out.push(ind(g('admFamilyHistory', 'There was no family history of hereditary or oncologic disease.')));
     out.push('');
 
-    out.push('系統回顧(Review of Systems)：');
+    out.push('Review of Systems :');
     out.push(ind('Review of systems'));
     out.push(ind(ros || '—', 6));
     out.push('');
 
-    out.push('理學檢查(Physical Examination)：');
+    out.push('Physical Examination :');
     out.push(ind('Vital sign: ' + (buildVitalsText() || '—')));
     out.push(ind(pe || '—'));
     out.push('');
 
-    out.push('檢驗報告：');
+    out.push('Laboratory Data :');
     out.push(ind(labs || 'Pending.'));
     out.push('');
 
-    out.push('檢查報告：');
+    out.push('Imaging and Other Studies :');
     out.push(ind(studies || 'Pending.'));
     out.push('');
 
-    out.push('初步診斷(Impression)：');
+    out.push('Impression :');
     if (probs.length) {
       probs.forEach(function (p, i) { out.push(ind((i + 1) + '.' + p.problem, 6)); });
     } else {
-      out.push(ind('(尚未填寫問題清單 — 請在第 9 節新增至少一個 problem)', 6));
+      out.push(ind('(No problem entered yet - add at least one problem in section 9.)', 6));
     }
     out.push('');
 
-    out.push('治療及計劃(Management and Plan)：');
+    out.push('Management and Plan :');
     if (probs.length) {
       var n = 0;
       probs.forEach(function (p) {
@@ -2810,6 +2834,64 @@
     return missing;
   }
 
+  /* 病歷內容一律英文（表頭與醫師簽名除外）。這裡列出仍含中文的臨床欄位。 */
+  var ENGLISH_ONLY_FIELDS = [
+    ['admChiefComplaint', '主訴 Chief Complaints'],
+    ['admPresentIllness', '現在病歷 Present Illness'],
+    ['admPastHistory', '過去病史 Disease'],
+    ['admSurgicalHistory', '手術外傷史 Trauma / surgery'],
+    ['admHospitalizationHx', '住院史 Hospitalization'],
+    ['admMedications', '目前用藥 Home medications'],
+    ['admAllergies', '藥物過敏 Drug allergy'],
+    ['admFamilyHistory', '家族史 Family history'],
+    ['admRosExtra', '系統回顧補充 ROS notes'],
+    ['labOther', '其他檢查 Other studies']
+  ];
+
+  function cjkFields() {
+    return ENGLISH_ONLY_FIELDS.filter(function (f) {
+      var el = document.getElementById(f[0]);
+      return el && hasCJK(el.value);
+    });
+  }
+
+  /* 逐一送出翻譯；全部完成後回報。翻譯是一般用途工具，務必人工校閱。 */
+  function translateAllToEnglish(thenSave) {
+    var pending = cjkFields();
+    if (!pending.length) {
+      showToast('目前沒有中文內容需要翻譯。');
+      return;
+    }
+    closeModal();
+    showToast('正在翻譯 ' + pending.length + ' 個欄位…', 'var(--primary)');
+    var i = 0;
+    var next = function () {
+      if (i >= pending.length) {
+        onAdmissionInput();
+        showToast('✅ 已翻譯 ' + pending.length + ' 個欄位，請逐項校閱醫學用語後再儲存。', 'var(--ok)');
+        return;
+      }
+      var f = pending[i++];
+      var el = document.getElementById(f[0]);
+      server('translateChineseToEnglish', el.value.trim()).then(function (res) {
+        if (res && res.status === 'success' && res.translatedText) el.value = res.translatedText;
+        next();
+      }).catch(function (err) {
+        if (err && err.message === 'AUTH_REQUIRED') return;
+        showToast('❌ 「' + f[1] + '」翻譯失敗，請手動改寫。', 'var(--danger)');
+        next();
+      });
+    };
+    next();
+  }
+
+  var _forceSaveWithChinese = false;
+  function saveAnyway() {
+    _forceSaveWithChinese = true;
+    closeModal();
+    submitAdmissionNoteRecord();
+  }
+
   function submitAdmissionNoteRecord() {
     var missing = validateAdmission();
     if (missing.length) {
@@ -2818,6 +2900,23 @@
       if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
+
+    /* 產出的病歷除表頭與簽名外一律英文；發現中文就先攔下來。 */
+    var zh = cjkFields();
+    if (zh.length && !_forceSaveWithChinese) {
+      openModal('這些欄位還是中文',
+        '<p>正式病歷除了表頭與主治醫師簽名之外，內容必須是英文。以下欄位仍含中文：</p>' +
+        '<ul style="padding-left:20px; margin:10px 0;">' +
+        zh.map(function (f) { return '<li>' + escapeHtml(f[1]) + '</li>'; }).join('') +
+        '</ul>' +
+        '<p style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i> ' +
+        '自動翻譯為一般用途工具，非醫療專用，翻完請務必逐項校閱後再儲存。</p>',
+        '<button class="btn btn-secondary" onclick="saveAnyway()">仍要儲存</button>' +
+        '<button class="btn btn-primary" onclick="translateAllToEnglish()">' +
+        '<i class="fa-solid fa-language"></i> 全部翻成英文</button>');
+      return;
+    }
+    _forceSaveWithChinese = false;
 
     var probs = nonEmptyProblems();
     var record = {
@@ -2835,7 +2934,7 @@
       informant: document.getElementById('admInformant').value,
       reliability: document.getElementById('admReliability').value,
       chiefComplaint: document.getElementById('admChiefComplaint').value.trim(),
-      presentIllness: document.getElementById('admPresentIllness').value.trim(),
+      presentIllness: toNarrativeParagraphs(document.getElementById('admPresentIllness').value).join('\n\n'),
       pastHistory: document.getElementById('admPastHistory').value.trim(),
       surgicalHistory: document.getElementById('admSurgicalHistory').value.trim(),
       medications: document.getElementById('admMedications').value.trim(),

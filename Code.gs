@@ -1,5 +1,5 @@
 /**
- * Clinical Documentation & Admission Note System — v6.4
+ * Clinical Documentation & Admission Note System — v6.5
  * 2026 Google Spark x Google Apps Script Cloud Engine
  *
  * Master Log        : Google Sheets (Master_AdmissionNotes / Master_Exams + per-type tabs)
@@ -16,8 +16,8 @@ var SPREADSHEET_ID = '1UIJZdR7rPHOPlgNC6w8g7SV3AL0kIW3mGSGRkJZWfWY';
 var TZ = 'Asia/Taipei';
 
 /**
- * Letterhead shown in the repeating page header of the generated admission note.
- * Change this one line to re-brand the document for another hospital.
+ * Hospital name printed in the admission-note letterhead (top of the body) and in
+ * the slim continuation header. Change this one line to re-brand for another hospital.
  */
 var HOSPITAL_NAME = '陽明醫院';
 
@@ -604,16 +604,29 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
 
   body.setMarginTop(40).setMarginBottom(40).setMarginLeft(48).setMarginRight(48);
 
-  // Letterhead lives in the page header so it repeats on every printed page,
-  // exactly like the hospital's pre-printed form.
+  // Full letterhead at the top of the body (renders in Doc, PDF *and* Word), plus a
+  // slim text-only page header so continuation pages stay identifiable. See
+  // buildAdmissionLetterhead_ for why this is not in the page header.
+  buildAdmissionLetterhead_(body, record);
   buildAdmissionPageHeader_(doc, record);
+
+  // DocumentApp.create() seeds the body with one empty paragraph, which would push
+  // the letterhead down a line. Safe to drop now that the table is in place.
+  var seed = body.getChild(0);
+  if (seed.getType() === DocumentApp.ElementType.PARAGRAPH &&
+      seed.asParagraph().getText() === '') {
+    seed.removeFromParent();
+  }
 
   // 主訴 / 現在病歷
   appendHospitalSection_(body, '主訴', 'Chief Complaints');
   appendHospitalLine_(body, record.chiefComplaint || '—');
 
+  // Present Illness is a narrative paragraph, not a list of labelled fragments.
   appendHospitalSection_(body, '現在病歷', 'Present Illness');
-  appendHospitalLine_(body, record.presentIllness || '—');
+  toNarrativeParagraphs_(record.presentIllness).forEach(function (para) {
+    appendHospitalLine_(body, para);
+  });
 
   // 過去病史 — the form's four fixed subheadings
   appendHospitalSection_(body, '過去病史', 'Past History');
@@ -650,11 +663,11 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
   appendHospitalLine_(body, 'Vital sign: ' + (record.vitalSigns || '—'));
   appendHospitalLine_(body, record.physicalExam || '—');
 
-  // 檢驗報告 / 檢查報告 — plain headings on the paper form, no English gloss
-  styleP_(body.appendParagraph('檢驗報告：'), { size: 11, bold: true, before: 10, after: 2 });
+  // 檢驗報告 / 檢查報告 — English headings, same as every other section
+  appendHospitalSection_(body, '檢驗報告', 'Laboratory Data');
   appendHospitalLine_(body, record.labsReport || record.labsImaging || 'Pending.');
 
-  styleP_(body.appendParagraph('檢查報告：'), { size: 11, bold: true, before: 10, after: 2 });
+  appendHospitalSection_(body, '檢查報告', 'Imaging and Other Studies');
   appendHospitalLine_(body, record.studiesReport || 'Pending.');
 
   // 初步診斷 / 治療及計劃 — numbered, from the problem list
@@ -751,12 +764,19 @@ function setCellLines_(cell, lines) {
  *
  * Uses a real Google Docs header section so it repeats across pages.
  */
-function buildAdmissionPageHeader_(doc, record) {
-  var header = doc.getHeader() || doc.addHeader();
-  header.clear();
-
+/**
+ * The full three-column letterhead, appended to the TOP OF THE BODY.
+ *
+ * ⚠️ It used to live in the page header. Do not move it back. Google Docs drops a
+ * TABLE inside a header when exporting to .docx, so the Word file came out with no
+ * letterhead at all while the Doc and PDF looked correct — reported by Dr Chu
+ * 2026-08-12 from a real note. In the body it renders identically in all three.
+ * `buildAdmissionPageHeader_` still supplies a slim text-only continuation line,
+ * which does survive the .docx export because it contains no table.
+ */
+function buildAdmissionLetterhead_(body, record) {
   var CENTER = DocumentApp.HorizontalAlignment.CENTER;
-  var table = header.appendTable([['', '', '']]);
+  var table = body.appendTable([['', '', '']]);
   table.setBorderColor('#000000').setBorderWidth(1);
 
   setCellLines_(table.getCell(0, 0), [
@@ -778,16 +798,68 @@ function buildAdmissionPageHeader_(doc, record) {
   ]);
 
   table.setColumnWidth(0, 215).setColumnWidth(1, 190).setColumnWidth(2, 105);
+  return table;
+}
+
+/**
+ * Slim continuation header — one line, NO table, so it survives .docx export.
+ * Keeps every printed page identifiable if the note runs past page 1.
+ */
+function buildAdmissionPageHeader_(doc, record) {
+  var header = doc.getHeader() || doc.addHeader();
+  header.clear();
+
+  var bits = [HOSPITAL_NAME + ' ADMISSION NOTE'];
+  if (record.patientId) bits.push('病歷號：' + record.patientId);
+  if (record.patientName) bits.push('姓名：' + record.patientName);
+  if (record.wardBed) bits.push('床號：' + record.wardBed);
+
+  styleP_(header.getChild(0).asParagraph().setText(bits.join('　|　')), { size: 8 })
+    .setForegroundColor('#666666');
   return header;
 }
 
 /** Section heading in the hospital's 中文(English)： style. */
+/**
+ * Section heading. English only — by Dr Chu's instruction the note body carries no
+ * Chinese; only the letterhead and the attending signature stay in Chinese.
+ * The `zh` argument is kept so call sites still document which form section this is.
+ */
 function appendHospitalSection_(body, zh, en) {
-  return styleP_(body.appendParagraph(zh + '(' + en + ')：'),
+  return styleP_(body.appendParagraph(en + ' :'),
     { size: 11, bold: true, before: 10, after: 2 });
 }
 
 /** Plain body line, indented like the handwritten form. */
+/**
+ * Turn a Present Illness written as stacked fragments into flowing narrative.
+ *
+ * The LQQOPERA quick-fill chips used to insert one labelled sentence per line
+ * ("Onset: ...", "Associated symptoms: ..."), which printed as a pseudo-bulleted
+ * list and repeated the same label three times in a row. A blank line still starts
+ * a new paragraph; single line breaks are joined into prose, and any leading
+ * "Label:" is stripped.
+ *
+ * @return {string[]} one string per paragraph; [] becomes ['—'].
+ */
+function toNarrativeParagraphs_(text) {
+  var LABEL = /^\s*(Onset|Location and quality|Location|Quality|Severity|Associated symptoms|Associated|Aggravating factors|Relieving factors|Emergency department course|Timing|Radiation)\s*:\s*/i;
+  var paras = String(text == null ? '' : text).split(/\n\s*\n+/);
+  var out = [];
+  for (var i = 0; i < paras.length; i++) {
+    var lines = paras[i].split('\n');
+    var parts = [];
+    for (var j = 0; j < lines.length; j++) {
+      var s = lines[j].replace(LABEL, '').replace(/^\s*[-•*]\s*/, '').trim();
+      if (!s) continue;
+      if (!/[.?!:;,]$/.test(s)) s += '.';
+      parts.push(s);
+    }
+    if (parts.length) out.push(parts.join(' '));
+  }
+  return out.length ? out : ['—'];
+}
+
 function appendHospitalLine_(body, text, indent) {
   var p = styleP_(body.appendParagraph(text), { size: 10 });
   p.setIndentStart(indent || 18);
