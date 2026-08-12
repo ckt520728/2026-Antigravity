@@ -1,5 +1,5 @@
 /**
- * Clinical Documentation & Admission Note System — v6.8
+ * Clinical Documentation & Admission Note System — v6.9
  * 2026 Google Spark x Google Apps Script Cloud Engine
  *
  * Master Log        : Google Sheets (Master_AdmissionNotes / Master_Exams + per-type tabs)
@@ -723,6 +723,11 @@ function createAdmissionNoteDocReport(record, noteId, timestamp) {
  * generated document can be inspected afterwards, instead of surfacing as a toast
  * the user has to relay by hand. Never throws — diagnostics must not break callers.
  */
+/** True when the string contains CJK characters. Mirrors hasCJK() in index.html. */
+function hasCJK_(s) {
+  return /[㐀-鿿豈-﫿぀-ヿ]/.test(String(s || ''));
+}
+
 function logDiagnostic_(context, err) {
   try {
     var ss = getSpreadsheet();
@@ -824,7 +829,8 @@ function buildAdmissionLetterhead_(body, record) {
   setCellLines_(table.getCell(0, 2), [
     { text: '床號：' + (record.wardBed || '') },
     { text: '生日：' + (record.birthDate || '') },
-    { text: '性別：' + (record.gender || record.ageGender || '') }
+    // No ageGender fallback: it put the patient's age in the 性別 box.
+    { text: '性別：' + (record.gender || '') }
   ]);
 
   table.setColumnWidth(0, 215).setColumnWidth(1, 190).setColumnWidth(2, 105);
@@ -951,14 +957,20 @@ function getRecentAdmissionNotes(token, limit) {
  * a format change means retyping a whole note — the draft is deliberately cleared on
  * a successful save so the next patient's form starts empty.
  *
- * ⚠️ Regeneration is LOSSY for three fields the log does not store separately:
+ * ⚠️ Regeneration is LOSSY for fields the log does not store separately:
  *   - personalHistory  → falls back to the logged socialHistory
  *   - labsReport / studiesReport → only the combined labsImaging column exists,
  *     so everything lands under Laboratory Data
- *   - gender → taken from ageGender
+ *   - gender → NOT recoverable. Left blank rather than guessed. It used to be taken
+ *     from ageGender, which printed the patient's age in the 性別 box — a wrong
+ *     identifier on a clinical document is worse than an empty one.
  * The original files are NOT deleted; the row is repointed at the new ones.
+ *
+ * @param {boolean} translateToEnglish when true, any clinical field still containing
+ *   Chinese is machine-translated and WRITTEN BACK to the log before rendering.
+ *   Caller-driven and explicit — never done silently. Output needs human review.
  */
-function regenerateAdmissionNoteDoc(token, noteId) {
+function regenerateAdmissionNoteDoc(token, noteId, translateToEnglish) {
   var gate = authFail_(token);
   if (gate) return gate;
 
@@ -977,6 +989,29 @@ function regenerateAdmissionNoteDoc(token, noteId) {
 
     var row = data[rowIndex];
 
+    // Optional, explicit, caller-driven translation of any field still in Chinese.
+    // Written back to the log so the record itself stops being bilingual, not just
+    // this rendering of it.
+    var translatedFields = [];
+    if (translateToEnglish) {
+      // 0-based row indices of free-text clinical fields. The PMH/Allergy composite
+      // at index 11 is excluded: translating it would mangle its own labels.
+      [9, 10, 13, 14, 18, 19, 20, 22].forEach(function (idx) {
+        var val = String(row[idx] == null ? '' : row[idx]);
+        if (!val.trim() || !hasCJK_(val)) return;
+        try {
+          var en = LanguageApp.translate(val, 'zh-TW', 'en');
+          if (en && en.trim()) {
+            row[idx] = en;
+            sheet.getRange(rowIndex + 1, idx + 1).setValue(en);
+            translatedFields.push(idx);
+          }
+        } catch (e) {
+          logDiagnostic_('regenerate.translate.col' + (idx + 1), e);
+        }
+      });
+    }
+
     // Column 12 stores "PMH: <pastHistory> | Allergy: <allergies>" — split it back.
     var pmhCell = String(row[11] || '');
     var pastHistory = pmhCell, allergies = '';
@@ -991,7 +1026,9 @@ function regenerateAdmissionNoteDoc(token, noteId) {
     try { problemList = JSON.parse(row[25] || '[]') || []; } catch (e) { problemList = []; }
 
     var record = {
-      patientId: row[3], patientName: row[4], ageGender: row[5], gender: row[5],
+      // gender is deliberately absent — see the LOSSY note above. The letterhead
+      // prints an empty 性別 box rather than the age.
+      patientId: row[3], patientName: row[4], ageGender: row[5], gender: '',
       wardBed: row[6], doctorName: row[7], department: row[8],
       examDate: row[2] ? Utilities.formatDate(new Date(row[2]), TZ, 'yyyy-MM-dd') : '',
       chiefComplaint: row[9],
@@ -1027,7 +1064,11 @@ function regenerateAdmissionNoteDoc(token, noteId) {
       docUrl: links.docUrl,
       pdfUrl: links.pdfUrl,
       docxUrl: links.docxUrl,
-      message: '已用目前版本重新產生 ' + noteId + ' 的文件。'
+      translatedCount: translatedFields.length,
+      message: '已用目前版本重新產生 ' + noteId + ' 的文件。' +
+        (translatedFields.length
+          ? '（已翻譯 ' + translatedFields.length + ' 個欄位並更新紀錄，請校閱）'
+          : '')
     };
   } catch (err) {
     logDiagnostic_('regenerateAdmissionNoteDoc', err);

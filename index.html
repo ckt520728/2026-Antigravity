@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臨床醫療紀錄與報告系統 v6.8 | Clinical Documentation System</title>
+  <title>臨床醫療紀錄與報告系統 v6.9 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -429,7 +429,7 @@
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h1>臨床醫療紀錄與報告系統</h1>
-      <p class="sub">Clinical Documentation &amp; Admission Note System v6.8<br>本系統含病患資料，請輸入通行密碼進入。</p>
+      <p class="sub">Clinical Documentation &amp; Admission Note System v6.9<br>本系統含病患資料，請輸入通行密碼進入。</p>
 
       <input type="password" id="passcodeInput" placeholder="請輸入密碼" autocomplete="current-password" autofocus>
       <div id="lockError"></div>
@@ -457,7 +457,7 @@
       <div class="brand">
         <div class="brand-icon"><i class="fa-solid fa-notes-medical"></i></div>
         <div class="brand-title">
-          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.8</span></h1>
+          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.9</span></h1>
           <p>Admission Note × Structured Exam Reports × 中文語音轉英文</p>
         </div>
       </div>
@@ -3560,22 +3560,46 @@
      這顆按鈕用目前版本重新產生，並把紀錄指到新檔，免得為了驗證格式重打一份病歷。 */
   function regenerateDocs(noteId, btn) {
     if (!noteId) { showToast('這筆紀錄沒有病歷編號。', 'var(--warn)'); return; }
-    var old = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    // 若這筆紀錄還有中文，先問清楚要不要一併翻譯 —— 翻譯會改寫紀錄本身，不能默默進行。
+    var r = null;
+    for (var i = 0; i < loadedRecords.length; i++) {
+      if (String(loadedRecords[i].noteId) === String(noteId)) { r = loadedRecords[i]; break; }
+    }
+    var zh = r && (hasCJK(r.chiefComplaint) || hasCJK(r.presentIllness));
+    if (zh) {
+      openModal('這筆紀錄還有中文',
+        '<p>正式病歷除表頭與醫師簽名外應為英文，但這筆紀錄存的內容仍有中文。</p>' +
+        '<p style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i> ' +
+        '選擇翻譯會用機器翻譯改寫<b>紀錄本身</b>（不只這次的文件），' +
+        '翻完請務必開文件校閱醫學用語。</p>',
+        '<button class="btn btn-secondary" onclick="doRegenerate(\'' + escapeHtml(noteId) + '\', false)">維持原文</button>' +
+        '<button class="btn btn-primary" onclick="doRegenerate(\'' + escapeHtml(noteId) + '\', true)">' +
+        '<i class="fa-solid fa-language"></i> 一併翻成英文</button>');
+      return;
+    }
+    doRegenerate(noteId, false, btn);
+  }
+
+  function doRegenerate(noteId, translate, btn) {
+    closeModal();
+    var old = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; }
     showToast('正在用目前版本重新產生 ' + noteId + ' 的文件…', 'var(--primary)');
-    server('regenerateAdmissionNoteDoc', noteId).then(function (res) {
+    var restore = function () {
+      if (!btn) return;
       btn.disabled = false;
       btn.innerHTML = old;
+    };
+    server('regenerateAdmissionNoteDoc', noteId, !!translate).then(function (res) {
+      restore();
       if (res && res.status === 'success') {
-        showToast('✅ ' + noteId + ' 已重新產生，請重新下載。', 'var(--ok)');
+        showToast('✅ ' + (res.message || (noteId + ' 已重新產生')) + ' 請重新下載。', 'var(--ok)');
         loadDashboardData();
       } else {
         showToast('❌ ' + ((res && res.message) || '重新產生失敗'), 'var(--danger)');
       }
     }).catch(function (err) {
-      btn.disabled = false;
-      btn.innerHTML = old;
+      restore();
       if (err && err.message === 'AUTH_REQUIRED') return;
       showToast('❌ 重新產生失敗，請稍後再試。', 'var(--danger)');
     });
