@@ -1,5 +1,5 @@
 /**
- * Clinical Documentation & Admission Note System — v6.5
+ * Clinical Documentation & Admission Note System — v6.6
  * 2026 Google Spark x Google Apps Script Cloud Engine
  *
  * Master Log        : Google Sheets (Master_AdmissionNotes / Master_Exams + per-type tabs)
@@ -891,6 +891,98 @@ function getRecentAdmissionNotes(token, limit) {
     return { status: 'success', records: records };
   } catch (err) {
     return { status: 'error', message: err.toString() };
+  }
+}
+
+/**
+ * Rebuild an existing note's Doc / PDF / Word using the CURRENT formatting code,
+ * then point the log row at the new files.
+ *
+ * Why this exists: the download links stored on a row are files that were rendered
+ * at save time, so they never pick up later formatting fixes. Without this, checking
+ * a format change means retyping a whole note — the draft is deliberately cleared on
+ * a successful save so the next patient's form starts empty.
+ *
+ * ⚠️ Regeneration is LOSSY for three fields the log does not store separately:
+ *   - personalHistory  → falls back to the logged socialHistory
+ *   - labsReport / studiesReport → only the combined labsImaging column exists,
+ *     so everything lands under Laboratory Data
+ *   - gender → taken from ageGender
+ * The original files are NOT deleted; the row is repointed at the new ones.
+ */
+function regenerateAdmissionNoteDoc(token, noteId) {
+  var gate = authFail_(token);
+  if (gate) return gate;
+
+  try {
+    if (!noteId) return { status: 'error', message: '缺少病歷編號。' };
+    var ss = getSpreadsheet();
+    var sheet = ss.getSheetByName('Master_AdmissionNotes');
+    if (!sheet) return { status: 'error', message: '找不到 Master_AdmissionNotes 工作表。' };
+
+    var data = sheet.getDataRange().getValues();
+    var rowIndex = -1;
+    for (var i = 1; i < data.length; i++) {
+      if (String(data[i][0]) === String(noteId)) { rowIndex = i; break; }
+    }
+    if (rowIndex < 0) return { status: 'error', message: '找不到病歷編號 ' + noteId + '。' };
+
+    var row = data[rowIndex];
+
+    // Column 12 stores "PMH: <pastHistory> | Allergy: <allergies>" — split it back.
+    var pmhCell = String(row[11] || '');
+    var pastHistory = pmhCell, allergies = '';
+    var sepAt = pmhCell.indexOf(' | Allergy: ');
+    if (sepAt >= 0) {
+      pastHistory = pmhCell.slice(0, sepAt);
+      allergies = pmhCell.slice(sepAt + ' | Allergy: '.length);
+    }
+    pastHistory = pastHistory.replace(/^PMH:\s*/, '');
+
+    var problemList = [];
+    try { problemList = JSON.parse(row[25] || '[]') || []; } catch (e) { problemList = []; }
+
+    var record = {
+      patientId: row[3], patientName: row[4], ageGender: row[5], gender: row[5],
+      wardBed: row[6], doctorName: row[7], department: row[8],
+      examDate: row[2] ? Utilities.formatDate(new Date(row[2]), TZ, 'yyyy-MM-dd') : '',
+      chiefComplaint: row[9],
+      presentIllness: row[10],
+      pastHistory: pastHistory,
+      allergies: allergies,
+      physicalExam: row[12],
+      impression: row[13],
+      plan: row[14],
+      surgicalHistory: row[18],
+      medications: row[19],
+      familyHistory: row[20],
+      socialHistory: row[21],
+      reviewOfSystems: row[22],
+      vitalSigns: row[23],
+      labsReport: row[24],
+      studiesReport: '',
+      problemList: problemList,
+      nationalId: row[26],
+      birthDate: row[27],
+      hospitalizationHistory: row[28]
+    };
+
+    var links = createAdmissionNoteDocReport(record, noteId, new Date());
+
+    // Columns 16-18 (1-based) are docUrl / pdfUrl / docxUrl.
+    sheet.getRange(rowIndex + 1, 16, 1, 3)
+      .setValues([[links.docUrl, links.pdfUrl, links.docxUrl]]);
+
+    return {
+      status: 'success',
+      noteId: noteId,
+      docUrl: links.docUrl,
+      pdfUrl: links.pdfUrl,
+      docxUrl: links.docxUrl,
+      message: '已用目前版本重新產生 ' + noteId + ' 的文件。'
+    };
+  } catch (err) {
+    return { status: 'error', message: '重新產生失敗：' + err.toString() };
   }
 }
 

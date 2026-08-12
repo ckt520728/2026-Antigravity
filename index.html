@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臨床醫療紀錄與報告系統 v6.5 | Clinical Documentation System</title>
+  <title>臨床醫療紀錄與報告系統 v6.6 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -429,7 +429,7 @@
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h1>臨床醫療紀錄與報告系統</h1>
-      <p class="sub">Clinical Documentation &amp; Admission Note System v6.5<br>本系統含病患資料，請輸入通行密碼進入。</p>
+      <p class="sub">Clinical Documentation &amp; Admission Note System v6.6<br>本系統含病患資料，請輸入通行密碼進入。</p>
 
       <input type="password" id="passcodeInput" placeholder="請輸入密碼" autocomplete="current-password" autofocus>
       <div id="lockError"></div>
@@ -457,7 +457,7 @@
       <div class="brand">
         <div class="brand-icon"><i class="fa-solid fa-notes-medical"></i></div>
         <div class="brand-title">
-          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.5</span></h1>
+          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v6.6</span></h1>
           <p>Admission Note × Structured Exam Reports × 中文語音轉英文</p>
         </div>
       </div>
@@ -3545,7 +3545,38 @@
       '<a href="' + (r.docUrl || '#') + '" target="_blank" class="btn btn-doc" style="padding:4px 8px; font-size:11px;" title="Google Doc"><i class="fa-solid fa-file-lines"></i></a>' +
       '<a href="' + (r.pdfUrl || '#') + '" target="_blank" class="btn btn-pdf" style="padding:4px 8px; font-size:11px;" title="PDF"><i class="fa-solid fa-file-pdf"></i></a>' +
       '<a href="' + (r.docxUrl || '#') + '" target="_blank" class="btn btn-word" style="padding:4px 8px; font-size:11px;" title="Word"><i class="fa-solid fa-file-word"></i></a>' +
+      (dashTab === 'admission'
+        ? '<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" ' +
+          'title="用目前版本重新產生 Doc / PDF / Word" ' +
+          'onclick="regenerateDocs(\'' + escapeHtml(String(r.noteId || '')) + '\', this)">' +
+          '<i class="fa-solid fa-rotate"></i></button>'
+        : '') +
       '</div>';
+  }
+
+  /* 下載連結指向的是「當初存檔時」產生的檔案，不會自動套用之後的格式修正。
+     這顆按鈕用目前版本重新產生，並把紀錄指到新檔，免得為了驗證格式重打一份病歷。 */
+  function regenerateDocs(noteId, btn) {
+    if (!noteId) { showToast('這筆紀錄沒有病歷編號。', 'var(--warn)'); return; }
+    var old = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    showToast('正在用目前版本重新產生 ' + noteId + ' 的文件…', 'var(--primary)');
+    server('regenerateAdmissionNoteDoc', noteId).then(function (res) {
+      btn.disabled = false;
+      btn.innerHTML = old;
+      if (res && res.status === 'success') {
+        showToast('✅ ' + noteId + ' 已重新產生，請重新下載。', 'var(--ok)');
+        loadDashboardData();
+      } else {
+        showToast('❌ ' + ((res && res.message) || '重新產生失敗'), 'var(--danger)');
+      }
+    }).catch(function (err) {
+      btn.disabled = false;
+      btn.innerHTML = old;
+      if (err && err.message === 'AUTH_REQUIRED') return;
+      showToast('❌ 重新產生失敗，請稍後再試。', 'var(--danger)');
+    });
   }
 
   function renderExamTable(records) {
