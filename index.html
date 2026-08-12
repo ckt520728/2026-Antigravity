@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臨床醫療紀錄與報告系統 v7.0 | Clinical Documentation System</title>
+  <title>臨床醫療紀錄與報告系統 v7.1 | Clinical Documentation System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -429,7 +429,7 @@
     <div class="lock-card">
       <div class="lock-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h1>臨床醫療紀錄與報告系統</h1>
-      <p class="sub">Clinical Documentation &amp; Admission Note System v7.0<br>本系統含病患資料，請輸入通行密碼進入。</p>
+      <p class="sub">Clinical Documentation &amp; Admission Note System v7.1<br>本系統含病患資料，請輸入通行密碼進入。</p>
 
       <input type="password" id="passcodeInput" placeholder="請輸入密碼" autocomplete="current-password" autofocus>
       <div id="lockError"></div>
@@ -457,7 +457,7 @@
       <div class="brand">
         <div class="brand-icon"><i class="fa-solid fa-notes-medical"></i></div>
         <div class="brand-title">
-          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v7.0</span></h1>
+          <h1>臨床醫療紀錄與報告系統 <span style="font-size:12px; color:var(--text-muted); font-weight:500;">v7.1</span></h1>
           <p>Admission Note × Structured Exam Reports × 中文語音轉英文</p>
         </div>
       </div>
@@ -3700,19 +3700,19 @@
       '<a href="' + (r.docUrl || '#') + '" target="_blank" class="btn btn-doc" style="padding:4px 8px; font-size:11px;" title="Google Doc"><i class="fa-solid fa-file-lines"></i></a>' +
       '<a href="' + (r.pdfUrl || '#') + '" target="_blank" class="btn btn-pdf" style="padding:4px 8px; font-size:11px;" title="PDF"><i class="fa-solid fa-file-pdf"></i></a>' +
       '<a href="' + (r.docxUrl || '#') + '" target="_blank" class="btn btn-word" style="padding:4px 8px; font-size:11px;" title="Word"><i class="fa-solid fa-file-word"></i></a>' +
-      (dashTab !== 'exam'
-        ? '<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" ' +
-          'title="用目前版本重新產生 Doc / PDF / Word" ' +
-          'onclick="regenerateDocs(\'' + escapeHtml(String(r.noteId || '')) + '\', this)">' +
-          '<i class="fa-solid fa-rotate"></i></button>'
-        : '') +
+      '<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" ' +
+      'title="用目前版本重新產生 Doc / PDF / Word" ' +
+      'onclick="regenerateDocs(\'' + escapeHtml(String(r.noteId || r.examId || '')) + '\', this)">' +
+      '<i class="fa-solid fa-rotate"></i></button>' +
       '</div>';
   }
 
   /* 下載連結指向的是「當初存檔時」產生的檔案，不會自動套用之後的格式修正。
      這顆按鈕用目前版本重新產生，並把紀錄指到新檔，免得為了驗證格式重打一份病歷。 */
   function regenerateDocs(noteId, btn) {
-    if (!noteId) { showToast('這筆紀錄沒有病歷編號。', 'var(--warn)'); return; }
+    if (!noteId) { showToast('這筆紀錄沒有編號。', 'var(--warn)'); return; }
+    // 檢查報告走另一支後端函式，且不需要翻譯流程：所見與結論本來就由範本產生英文。
+    if (dashTab === 'exam') { doRegenerate(noteId, false, btn); return; }
     // 若這筆紀錄還有中文，先問清楚要不要一併翻譯 —— 翻譯會改寫紀錄本身，不能默默進行。
     var r = null;
     for (var i = 0; i < loadedRecords.length; i++) {
@@ -3743,7 +3743,12 @@
       btn.disabled = false;
       btn.innerHTML = old;
     };
-    server('regenerateAdmissionNoteDoc', noteId, !!translate).then(function (res) {
+    // 檢查報告與住院病歷存在不同工作表，重新產生的後端函式也不同。
+    // 翻譯選項只有住院病歷有，所以檢查報告這邊不傳第二個參數。
+    var call = dashTab === 'exam'
+      ? server('regenerateExamDoc', noteId)
+      : server('regenerateAdmissionNoteDoc', noteId, !!translate);
+    call.then(function (res) {
       restore();
       if (res && res.status === 'success') {
         showToast('✅ ' + (res.message || (noteId + ' 已重新產生')) + ' 請重新下載。', 'var(--ok)');

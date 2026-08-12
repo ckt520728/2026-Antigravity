@@ -1162,6 +1162,71 @@ function getRecentAdmissionNotes(token, limit) {
 }
 
 /**
+ * Rebuild an existing EXAM report's Doc / PDF / Word using the CURRENT
+ * formatting code, then point the log row at the new files.
+ *
+ * Same reason as regenerateAdmissionNoteDoc below: the stored links are files
+ * rendered at save time, so a later layout change never reaches them. Without
+ * this, seeing an old exam in the new hospital-form layout means retyping it.
+ *
+ * ⚠️ Regeneration is LOSSY for rows saved before the hospital-form layout
+ * added columns 20-28. Those rows have no birth date, age, sex, payer status,
+ * department, exam time, patient source, requesting unit or licence number, so
+ * the report prints those header slots blank — exactly as the paper form is
+ * left blank — rather than inventing values. Everything from columns 1-19
+ * carries over intact. The original files are NOT deleted; the row is
+ * repointed at the new ones.
+ *
+ * No translate option, unlike the admission note: exam findings are composed in
+ * English by the templates, so there is no bilingual record to clean up.
+ *
+ * @param {string} token session token
+ * @param {string} examId the 檢查編號 in column 1
+ */
+function regenerateExamDoc(token, examId) {
+  var gate = authFail_(token);
+  if (gate) return gate;
+
+  try {
+    if (!examId) return { status: 'error', message: '缺少檢查編號。' };
+    var ss = getSpreadsheet();
+    var sheet = ss.getSheetByName('Master_Exams');
+    if (!sheet) return { status: 'error', message: '找不到 Master_Exams 工作表。' };
+
+    var data = sheet.getDataRange().getValues();
+    var rowIndex = -1;
+    for (var i = 1; i < data.length; i++) {
+      if (String(data[i][0]) === String(examId)) { rowIndex = i; break; }
+    }
+    if (rowIndex < 0) return { status: 'error', message: '找不到檢查編號 ' + examId + '。' };
+
+    // mapExamRow_ already reads every column this needs — including examDate and
+    // the header columns that are absent on pre-layout-change rows, which come
+    // back as ''.
+    var row = data[rowIndex];
+    var links = createGoogleDocReport(mapExamRow_(row), examId, new Date());
+
+    // Columns 12-14 (1-based) are docUrl / pdfUrl / docxUrl.
+    sheet.getRange(rowIndex + 1, 12, 1, 3)
+      .setValues([[links.docUrl, links.pdfUrl, links.docxUrl]]);
+
+    var missingHeader = !row[19] && !row[21] && !row[23];
+    return {
+      status: 'success',
+      examId: examId,
+      docUrl: links.docUrl,
+      pdfUrl: links.pdfUrl,
+      docxUrl: links.docxUrl,
+      message: '已用目前版本重新產生 ' + examId + ' 的文件。' +
+        (missingHeader ? '（這筆是舊格式紀錄，表頭的生日／性別／科別等欄位當初沒有存，會留空）' : '')
+    };
+  } catch (err) {
+    logDiagnostic_('regenerateExamDoc', err);
+    return { status: 'error', message: '重新產生失敗：' + err.toString() };
+  }
+}
+
+/**
  * Rebuild an existing note's Doc / PDF / Word using the CURRENT formatting code,
  * then point the log row at the new files.
  *
