@@ -535,7 +535,7 @@
           </div>
           <div class="form-group">
             <label for="admBirthDate"><i class="fa-solid fa-cake-candles"></i> 生日 (Birth Date)</label>
-            <input type="text" id="admBirthDate" placeholder="例如：0420221（民國）或 1953/02/21">
+            <input type="text" id="admBirthDate" placeholder="例如：0400101（民國）或 1951/01/01">
           </div>
           <div class="form-group">
             <label for="admGender"><i class="fa-solid fa-venus-mars"></i> 性別 (Sex)</label>
@@ -1022,7 +1022,7 @@
           </div>
           <div class="form-group">
             <label for="examBirthDate"><i class="fa-solid fa-cake-candles"></i> 生日 (Birth Date)</label>
-            <input type="text" id="examBirthDate" placeholder="例如：0420221（民國）或 1953/02/21" oninput="syncExamAge()">
+            <input type="text" id="examBirthDate" placeholder="例如：0400101（民國）或 1951/01/01" oninput="syncExamAge()">
           </div>
           <div class="form-group">
             <label for="examAge"><i class="fa-solid fa-hourglass-half"></i> 年齡 (Age)</label>
@@ -3394,8 +3394,8 @@
   function markExamAgeManual() { examAgeManual = true; }
 
   /**
-   * Age in years from a birth date written either 民國 (0420221 / 042/02/21) or
-   * Western (1953-02-21 / 1953/02/21). Returns '' when the text cannot be parsed
+   * Age in years from a birth date written either 民國 (0400101 / 040/01/01) or
+   * Western (1951-01-01 / 1951/01/01). Returns '' when the text cannot be parsed
    * — the box is then left for the doctor rather than filled with a guess.
    */
   function ageFromBirth(birth, onDate) {

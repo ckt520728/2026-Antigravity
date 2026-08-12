@@ -512,8 +512,8 @@ function toRocSlash_(value) {
 }
 
 /**
- * Birth date as the form prints it: 民國042/02/21.
- * Accepts 0420221, 042/02/21 or 1953-02-21. Anything else is passed through
+ * Birth date as the form prints it: 民國040/01/01.
+ * Accepts 0400101, 040/01/01 or 1951-01-01. Anything else is passed through
  * unchanged rather than guessed at — a wrong birth date is worse than a raw one.
  */
 function toRocBirth_(value) {
@@ -1452,8 +1452,8 @@ function runSelfTest() {
     var cases = [
       [toRocSlash_('2026-08-13'), '115/08/13'],
       [toRocSlash_('115/03/04'), '115/03/04'],
-      [toRocBirth_('0420221'), '民國042/02/21'],
-      [toRocBirth_('1953-02-21'), '民國042/02/21'],
+      [toRocBirth_('0400101'), '民國040/01/01'],
+      [toRocBirth_('1951-01-01'), '民國040/01/01'],
       [toRocBirth_('unparseable'), 'unparseable'],
       [String(dispWidth_('王小明')), '6'],
       [padTo_('ab', 5) + '|', 'ab   |']
@@ -1486,7 +1486,7 @@ function runSelfTest() {
       technique: 'self test', comparison: 'none', symptoms: 'self test',
       diagnosis: 'self test', findings: 'line1\nline2', impression: 'self test',
       recommendation: 'self test',
-      birthDate: '0420221', patientAge: '73', gender: 'Male',
+      birthDate: '0400101', patientAge: '65', gender: 'Male',
       payerStatus: 'NHI (健保)', department: 'Cardiology (心臟內科)', examTime: '09:47',
       patientSource: 'Inpatient (住院)', requestingUnit: 'Internal Medicine',
       licenseNo: 'SELFTEST-000376'
