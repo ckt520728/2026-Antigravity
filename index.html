@@ -2911,9 +2911,11 @@
         '</ul>' +
         '<p style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i> ' +
         '自動翻譯為一般用途工具，非醫療專用，翻完請務必逐項校閱後再儲存。</p>',
+        '<button class="btn btn-secondary" onclick="closeModal(); showToast(\'⚠️ 這份病歷尚未儲存。\', \'var(--warn)\');">取消</button>' +
         '<button class="btn btn-secondary" onclick="saveAnyway()">仍要儲存</button>' +
         '<button class="btn btn-primary" onclick="translateAllToEnglish()">' +
         '<i class="fa-solid fa-language"></i> 全部翻成英文</button>');
+      showToast('⚠️ 尚未儲存 — 有欄位仍是中文，請先處理。', 'var(--warn)');
       return;
     }
     _forceSaveWithChinese = false;
