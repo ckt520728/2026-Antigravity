@@ -1,5 +1,5 @@
 /**
- * Clinical Documentation & Admission Note System — v6.6
+ * Clinical Documentation & Admission Note System — v6.7
  * 2026 Google Spark x Google Apps Script Cloud Engine
  *
  * Master Log        : Google Sheets (Master_AdmissionNotes / Master_Exams + per-type tabs)
