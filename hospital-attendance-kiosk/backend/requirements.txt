@@ -1,0 +1,32 @@
+# 醫院員工出勤系統 — 後端相依套件
+# 目標 Python 3.12；最低 3.11（程式使用 StrEnum 與 datetime.UTC）。
+# 本清單已於 CPython 3.11.15 完整安裝並通過測試。
+
+# --- Web framework ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# --- Database ---
+sqlalchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.3
+
+# --- Settings / validation ---
+pydantic==2.10.4
+pydantic-settings==2.7.0
+
+# --- Identity: WebAuthn platform authenticator (kiosk Windows Hello) ---
+# 僅處理簽章驗證，絕不接收原始生物特徵 (CLAUDE.md R1)
+webauthn==2.5.2
+pyjwt[crypto]==2.10.1
+
+# --- Reporting: Excel / Word / 統計圖 (CLAUDE.md §9) ---
+openpyxl==3.1.5
+python-docx==1.1.2
+matplotlib==3.10.0
+
+# --- Testing ---
+pytest==8.3.4
+pytest-asyncio==0.25.0
+httpx==0.28.1

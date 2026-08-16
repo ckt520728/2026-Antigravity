@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Design System Tokens (Dark & Light Theme)
+   Reference: Clinical Documentation & Attendance System v7.3
+   ========================================================================== */
+
+:root,
+html[data-theme="dark"] {
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  --card-bg: rgba(30, 41, 59, 0.78);
+  --panel-inner: rgba(15, 23, 42, 0.55);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-hover-border: rgba(99, 102, 241, 0.5);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-soft: #cbd5e1;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-soft: #818cf8;
+  --primary-light: rgba(99, 102, 241, 0.18);
+  --input-bg: rgba(15, 23, 42, 0.75);
+  --input-border: rgba(148, 163, 184, 0.25);
+  --chip-bg: rgba(255, 255, 255, 0.06);
+  --chip-border: rgba(255, 255, 255, 0.12);
+  --pre-bg: rgba(2, 6, 23, 0.65);
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  
+  --doctor: #38bdf8;
+  --doctor-light: rgba(56, 189, 248, 0.16);
+  --doctor-border: rgba(56, 189, 248, 0.4);
+
+  --excel-color: #10b981;
+  --excel-light: rgba(16, 185, 129, 0.15);
+  --excel-border: rgba(16, 185, 129, 0.4);
+
+  --word-color: #3b82f6;
+  --word-light: rgba(59, 130, 246, 0.15);
+  --word-border: rgba(59, 130, 246, 0.4);
+}
+
+html[data-theme="light"] {
+  --bg-gradient: linear-gradient(135deg, #eef2ff 0%, #f8fafc 45%, #eef2ff 100%);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --panel-inner: rgba(241, 245, 249, 0.9);
+  --card-border: rgba(15, 23, 42, 0.10);
+  --card-hover-border: rgba(79, 70, 229, 0.45);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-soft: #334155;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-soft: #6366f1;
+  --primary-light: rgba(79, 70, 229, 0.12);
+  --input-bg: #ffffff;
+  --input-border: rgba(15, 23, 42, 0.18);
+  --chip-bg: rgba(15, 23, 42, 0.04);
+  --chip-border: rgba(15, 23, 42, 0.12);
+  --pre-bg: #ffffff;
+  --shadow-premium: 0 10px 20px -8px rgba(15, 23, 42, 0.18), 0 4px 8px -4px rgba(15, 23, 42, 0.12);
+
+  --doctor: #0284c7;
+  --doctor-light: rgba(2, 132, 199, 0.12);
+  --doctor-border: rgba(2, 132, 199, 0.35);
+
+  --excel-color: #059669;
+  --excel-light: rgba(5, 150, 105, 0.12);
+  --excel-border: rgba(5, 150, 105, 0.35);
+
+  --word-color: #2563eb;
+  --word-light: rgba(37, 99, 235, 0.12);
+  --word-border: rgba(37, 99, 235, 0.35);
+}
+
+:root {
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  
+  --success: #10b981;
+  --success-light: rgba(16, 185, 129, 0.15);
+  --success-border: rgba(16, 185, 129, 0.4);
+
+  --danger: #ef4444;
+  --danger-light: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.4);
+
+  --warning: #f59e0b;
+  --warning-light: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.4);
+
+  --info: #06b6d4;
+  --info-light: rgba(6, 182, 212, 0.15);
+  --info-border: rgba(6, 182, 212, 0.4);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.7);
+}
