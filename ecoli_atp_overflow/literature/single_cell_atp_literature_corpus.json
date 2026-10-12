@@ -1,0 +1,128 @@
+{
+  "task_id": "task-1-single-cell-atp-dynamics",
+  "topic": "大腸桿菌單細胞 ATP 動態監測技術與能量異質性 (Single-cell ATP Dynamics in E. coli)",
+  "curated_date": "2026-10-12",
+  "total_publications": 10,
+  "literature_corpus": [
+    {
+      "id": "LIT-001",
+      "authors": "Hideyuki Yaginuma, Shinnosuke Kawai, Kazuhito V. Tabata, Keisuke Tomiyama, Akira Kakizuka, Tamiki Komatsuzaki, Hiroyuki Noji, Hiromi Imamura",
+      "year": 2014,
+      "title": "Diversity in ATP concentrations in a single bacterial cell population revealed by quantitative single-cell imaging",
+      "journal": "Scientific Reports",
+      "volume_issue_pages": "4: 6522",
+      "pmid": "25283594",
+      "doi": "10.1038/srep06522",
+      "category": "Biosensor Development & Single-Cell Quantification",
+      "core_findings": "開發基於環狀排列黃綠色螢光蛋白 (cpFP) 與枯草芽孢桿菌 FoF1-ATP 合成酶 ε 次單元的無 FRET 激發比率型生物感測器 QUEEN-2m 與 QUEEN-7m。首次在單細胞層級精確測定大腸桿菌細胞質絕對 ATP 濃度（生長對數期均值約 1.5 - 2.5 mM，富營養培養基中達 3.5 - 4.5 mM），揭示細胞間存在顯著的 ATP 濃度變異 (CV ~ 15-20%)，並證明在葡萄糖飢餓或解偶聯劑處理下 ATP 濃度呈現非同步的隨機衰退與雙峰分佈。"
+    },
+    {
+      "id": "LIT-002",
+      "authors": "Hiromi Imamura, Kim P. Huynh Nhat, Hiroko Togawa, Kenta Saito, Ryota Iino, Yasuyuki Kato-Yamada, Takeharu Nagai, Hiroyuki Noji",
+      "year": 2009,
+      "title": "Visualization of ATP levels inside single living cells with fluorescence resonance energy transfer-based genetically encoded indicators",
+      "journal": "Proceedings of the National Academy of Sciences USA (PNAS)",
+      "volume_issue_pages": "106(37): 15651-15656",
+      "pmid": "19720993",
+      "doi": "10.1073/pnas.0904764106",
+      "category": "Biosensor Foundation (FRET-based)",
+      "core_findings": "創製首個基於 FRET 原理之基因編碼 ATP 感測器 ATeam 系列（利用嗜熱芽孢桿菌 PS3 之 FoF1-ATP 合成酶 ε 次單元連接 mseCFP 與 cp173Venus）。AT1.03 在 37°C 下之解離常數 Kd 約 3.3 mM，動態範圍達 2.1 倍。奠定了活細胞內部單細胞 ATP 即時動態顯微鏡成像之生物物理學基礎與蛋白工程學範式。"
+    },
+    {
+      "id": "LIT-003",
+      "authors": "Mathew Tantama, Juan Ramón Martínez-François, Rebecca Mongeon, Gary Yellen",
+      "year": 2013,
+      "title": "Imaging energy status in live cells with a fluorescent biosensor of the intracellular ATP-to-ADP ratio",
+      "journal": "Nature Communications",
+      "volume_issue_pages": "4: 2550",
+      "pmid": "24096541",
+      "doi": "10.1038/ncomms3550",
+      "category": "Biosensor (Energy Charge / ATP:ADP Ratio)",
+      "core_findings": "工程化改造詹氏甲烷球菌 (M. jannaschii) 之 GlnK1 蛋白質並嵌合 cpYFP，開發高靈敏度 ATP:ADP 比值感測器 PercevalHR。該感測器對 ATP 的親和力為微摩爾級 (Kd ~ 1-2 uM)，但受到 ADP 競爭性抑制，動態響應範圍覆蓋 ATP:ADP 比值 0.1 至 40。指出 PercevalHR 對 pH 高度敏感 (pKa ~ 7.4)，需共表達紅光 pHRed 感測器進行雙色 ratiometric 校正以消除細胞質酸化假陽性。"
+    },
+    {
+      "id": "LIT-004",
+      "authors": "Ping Wang, Lydia Robert, James Pelletier, Wei Lien Dang, Francois Taddei, Andrew Wright, Suckjoon Jun",
+      "year": 2010,
+      "title": "Robust growth of Escherichia coli",
+      "journal": "Current Biology",
+      "volume_issue_pages": "20(12): 1099-1103",
+      "pmid": "20537537",
+      "doi": "10.1016/j.cub.2010.04.045",
+      "category": "Microfluidic Platform Technology (Mother Machine)",
+      "core_findings": "發明 Mother Machine 微流體晶片。透過將單一母細胞禁錮在垂直於主營養流道的死端微通道（寬深約 1.2 um）底部，連續供應新鮮恆定培養基並沖走溢出的子細胞，實現了單一大腸桿菌細胞譜系超過 200 個世代的超高時空解析度成像。建立了在完全恆定微環境下單細胞伸長率、分裂尺寸與代際變異之定量分析框架，徹底解決了群體培養中代謝物積累與營養梯度問題。"
+    },
+    {
+      "id": "LIT-005",
+      "authors": "Tobias Bergmiller, Anna M. C. Andersson, Kathrin Tomasek, Enrique Balleza, Daniel J. Kiviet, Robert Hauschild, Gašper Tkačik, Călin C. Guet",
+      "year": 2017,
+      "title": "Biased partitioning of the multidrug efflux pump AcrAB-TolC underlies long-lived phenotypic heterogeneity",
+      "journal": "Science",
+      "volume_issue_pages": "356(6335): 311-315",
+      "pmid": "28428424",
+      "doi": "10.1126/science.aaf4762",
+      "category": "Phenotypic Heterogeneity & Energy-Dependent Efflux",
+      "core_findings": "利用微流體時序成像揭示大腸桿菌多藥外排泵 AcrAB-TolC 在單細胞分裂時呈現不對稱（偏倚）分配。高外排泵細胞具備顯著增強的抗生素耐受性，但維持 AcrAB-TolC 的高活性外排需消耗大量質子驅動力與細胞能量（ATP 代謝偶聯）。這種能量分配異質性與蛋白不對稱分配相互作用，構成了細菌群體中長期存在的表型耐藥性與能量狀態分化。"
+    },
+    {
+      "id": "LIT-006",
+      "authors": "Shikhar Manuse, Ying Shan, Santiago J. Canas-Duarte, Sarthak Bakshi, Chun-Chen Sun, Thomas Moriarty, Allison Brown Gandt, Kim Lewis, Johan Paulsson",
+      "year": 2021,
+      "title": "Bacterial persisters are a stochastically formed subpopulation of low-energy cells",
+      "journal": "PLoS Biology",
+      "volume_issue_pages": "19(4): e3001194",
+      "pmid": "33872303",
+      "doi": "10.1371/journal.pbio.3001194",
+      "category": "Energy Heterogeneity & Persister Mechanism",
+      "core_findings": "結合微流體時間推移顯微鏡與單細胞 ATP 螢光感測器，證明大腸桿菌持留細胞 (Persisters) 是由隨機產生的「低能量細胞亞群」所構成。持留菌並非傳統認為單純由毒素-抗毒素 (TA) 系統決定，而是由能量生成代謝網絡（TCA、糖解酵素）隨機波動引起 ATP 濃度崩塌至臨界閾值以下，導致轉錄/轉譯停滯與抗生素靶點失活，從而耐受氨苄青黴素與環丙沙星。"
+    },
+    {
+      "id": "LIT-007",
+      "authors": "Ying Shan, Allison Brown Gandt, Sarah E. Rowe, Jessica P. Deisinger, Brian P. Conlon, Kim Lewis",
+      "year": 2017,
+      "title": "ATP-Dependent Persister Formation in Escherichia coli",
+      "journal": "mBio",
+      "volume_issue_pages": "8(1): e02267-16",
+      "pmid": "28174313",
+      "doi": "10.1128/mBio.02267-16",
+      "category": "Metabolic Energy & Persister Formation",
+      "core_findings": "證實大腸桿菌細胞質 ATP 濃度的單細胞波動是持留菌形成的主控開關。透過 16S rRNA 啟動子 (rrnB P1) 活性與細胞內 ATP 水平嚴格偶聯的機制，人為降低細胞 ATP 濃度可顯著上調持留菌頻率。當培養基碳源枯竭時，ATP 枯竭引發 (p)ppGpp 嚴格反應與代謝全面下調，確立了 ATP 作為調控休眠與表型耐受的中央能量節點。"
+    },
+    {
+      "id": "LIT-008",
+      "authors": "Daniel J. Kiviet, Philippe Nghe, Noreen Walker, Sarah Boulineau, Vanda Sunderlikova, Sander J. Tans",
+      "year": 2014,
+      "title": "Stochasticity of metabolism and growth at the single-cell level",
+      "journal": "Nature",
+      "volume_issue_pages": "514(7522): 376-379",
+      "pmid": "25186725",
+      "doi": "10.1038/nature13582",
+      "category": "Single-Cell Metabolism & Growth Noise",
+      "core_findings": "使用單細胞顯微鏡與微流體系統定量測定大腸桿菌酵素表現波動與個體生長速率之間的動態偶聯。研究發現代謝酵素的表現噪聲直接傳遞至生長速率波动（相關時間尺度約為數個世代），並解析了內在噪聲（酵素生成與催化）與外在噪聲（全細胞代謝狀態、核糖體與 ATP 可用性）在單細胞生長波動中的相對貢獻。"
+    },
+    {
+      "id": "LIT-009",
+      "authors": "Jakub Leszek Radzikowski, Silke Vedelaar, David Siegel, Álvaro Dario Ortega, Alexander Schmidt, Matthias Heinemann",
+      "year": 2016,
+      "title": "Bacterial persistence is an active sigma^S stress response to metabolic flux limitation",
+      "journal": "Molecular Systems Biology",
+      "volume_issue_pages": "12(9): 882",
+      "pmid": "27655400",
+      "doi": "10.1252/msb.20166998",
+      "category": "Metabolic Flux Limitation & Stress Response",
+      "core_findings": "推翻持留細胞純粹為被動休眠狀態的舊假說，證實持留菌形成是代謝通量受限引發之主動 σ^S (RpoS) 應激反應程序。在營養匱乏前夕，細胞感測到代謝通量崩跌與 ATP/能量供給不足，主動活化維持能量程序與自我保護酶系，表明維持能量在飢餓與逆境轉換期並未歸零，而是被重新編程以維持基本生存所需。"
+    },
+    {
+      "id": "LIT-010",
+      "authors": "Sattar Taheri-Araghi, Serena Bradde, John T. Sauls, Norbert S. Hill, Petra Anne Levin, Johan Paulsson, Massimo Vergassola, Suckjoon Jun",
+      "year": 2015,
+      "title": "Cell-Size Control and Homeostasis in Bacteria",
+      "journal": "Current Biology",
+      "volume_issue_pages": "25(3): 385-391",
+      "pmid": "25619934",
+      "doi": "10.1016/j.cub.2014.12.009",
+      "category": "Cell Size Homeostasis & Single-Cell Dynamics",
+      "core_findings": "在 Mother Machine 中進行數十萬次單細胞大腸桿菌分裂追蹤，確立了細菌細胞大小控制遵循「加成模型 (Adder model)」：細胞在每次分裂週期中增加固定的體積增量 (ΔL)，而非達到固定的關鍵尺寸。該恆定增量直接反映了單位時間內核糖體合成與 ATP 驅動之生物質累積通量的精準物理自穩機制。"
+    }
+  ]
+}

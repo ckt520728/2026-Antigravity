@@ -1,0 +1,223 @@
+{
+  "metadata": {
+    "task_id": "task-2-overflow-metabolism-proteomics",
+    "topic": "Overflow Metabolism & Proteome Allocation in Escherichia coli",
+    "created_at": "2026-10-12T11:20:00Z",
+    "curator": "Jev Engineering Phase 2 Medium Executor (Proteome Economics & Microbial Systems Biology Specialist)",
+    "total_studies": 10
+  },
+  "studies": [
+    {
+      "pmid": "26632588",
+      "doi": "10.1038/nature15765",
+      "title": "Overflow metabolism in Escherichia coli results from efficient proteome allocation",
+      "authors": [
+        "Basan M",
+        "Hui S",
+        "Okano H",
+        "Zhang Z",
+        "Shen Y",
+        "Williamson JR",
+        "Hwa T"
+      ],
+      "journal": "Nature",
+      "year": 2015,
+      "category": "Foundational Proteome Economics",
+      "methodology": "Quantitative targeted proteomics, continuous culture chemostat & batch titration with translation-inhibiting antibiotics, coarse-grained constrained proteome allocation model.",
+      "key_findings": {
+        "cost_difference": "Respiratory energy generation demands a substantially larger proteome investment per unit ATP produced compared to fermentation. Fermentation (acetate excretion) has lower ATP yield per glucose but 2- to 3-fold higher proteome efficiency (higher effective kcat and lower molecular weight).",
+        "critical_growth_rate": "When growth rate exceeds a critical threshold (lambda_c ~ 0.7 h^-1), the proteome budget fraction allocated to ribosomes (phi_R) must expand linearly with growth rate, compelling the cell to adopt the proteome-thrifty fermentation sector (phi_F) to minimize total metabolic proteome demand.",
+        "experimental_validation": "Artificially forcing protein overexpression or inhibiting translation with chloramphenicol forced earlier onset of acetate excretion at lower growth rates, directly verifying proteome allocation theory over competing models."
+      },
+      "clinical_and_biotech_conclusion": "Proved that overflow metabolism (bacterial Crabtree/Warburg effect) is an optimal economic proteome allocation strategy rather than an enzymatic defect or metabolic bottleneck."
+    },
+    {
+      "pmid": "19888218",
+      "doi": "10.1038/msb.2009.82",
+      "title": "Shifts in growth strategies reflect tradeoffs in cellular economics",
+      "authors": [
+        "Molenaar D",
+        "van Berlo R",
+        "de Ridder D",
+        "Teusink B"
+      ],
+      "journal": "Mol Syst Biol",
+      "year": 2009,
+      "category": "Membrane Real Estate & Self-Fabricator Models",
+      "methodology": "Mathematical self-fabricating cell model incorporating cell geometry, membrane surface area-to-volume constraints, and enzyme kinetics.",
+      "key_findings": {
+        "membrane_constraint": "Respiratory chain complexes (NADH dehydrogenases, terminal quinol oxidases, ATP synthase) reside within the inner cytoplasmic membrane, which has a finite surface area.",
+        "crowding_tradeoff": "As growth rate accelerates, the necessary membrane transporter and respiratory complexes exceed physical membrane surface availability, driving reliance on soluble cytoplasmic fermentation enzymes that do not consume membrane real estate."
+      },
+      "clinical_and_biotech_conclusion": "Provided the theoretical foundation for the 'membrane real estate hypothesis', establishing that surface-to-volume scaling and membrane protein crowding are fundamental biophysical constraints in microbial growth transitions."
+    },
+    {
+      "pmid": "28864700",
+      "doi": "10.1016/j.cels.2017.06.005",
+      "title": "Why Do Fast-Growing Bacteria Enter Overflow Metabolism? Testing the Membrane Real Estate Hypothesis",
+      "authors": [
+        "Szenk M",
+        "Dill KA",
+        "de Graff AMR"
+      ],
+      "journal": "Cell Syst",
+      "year": 2017,
+      "category": "Biophysical Membrane Space Evaluation",
+      "methodology": "Integrated quantitative structural proteomics, electron microscopy surface area measurements, and metabolic flux analysis of E. coli inner membrane complexes.",
+      "key_findings": {
+        "surface_budgeting": "Calculated the exact membrane footprint (nm^2 per enzyme complex) of respiratory chain enzymes versus nutrient transport systems across varying growth rates.",
+        "hypothesis_refinement": "Demonstrated that while the inner membrane reaches substantial protein packing densities at high growth rates, cytoplasmic proteome crowding and enzyme volume allocation act synergistically with membrane area limits."
+      },
+      "clinical_and_biotech_conclusion": "Demonstrated that spatial crowding in both 2D membrane and 3D cytosolic compartments jointly dictate the thermodynamic optimality of the acetate excretion switch."
+    },
+    {
+      "pmid": "21097934",
+      "doi": "10.1126/science.1192588",
+      "title": "Interdependence of Cell Growth and Gene Expression: Origins and Consequences",
+      "authors": [
+        "Scott M",
+        "Gunderson CW",
+        "Mateescu EM",
+        "Zhang Z",
+        "Hwa T"
+      ],
+      "journal": "Science",
+      "year": 2010,
+      "category": "Phenomenological Bacterial Growth Laws",
+      "methodology": "Steady-state growth rate manipulation via diverse carbon/nitrogen sources and translation inhibition titration, coupled with absolute RNA/protein quantification.",
+      "key_findings": {
+        "linear_partitioning": "Established coarse-grained proteome partitioning laws: the proteome is partitioned into ribosomal sector (phi_R), catabolic/metabolic sector (phi_C), and an invariant core housekeeping sector (phi_Q ~ 45-50%).",
+        "ribosomal_law": "phi_R = phi_R0 + lambda / kappa_t, where phi_R0 is the inactive/basal ribosome fraction, lambda is growth rate, and kappa_t is translation elongation efficiency.",
+        "growth_tradeoff": "Any increase in unnecessary protein synthesis or increase in ribosomal sector directly cannibalizes metabolic proteome fraction (phi_C = 1 - phi_Q - phi_R), decreasing growth capacity."
+      },
+      "clinical_and_biotech_conclusion": "Formulated the foundational linear proteome allocation laws that govern all subsequent quantitative models of microbial overflow metabolism and synthetic circuit burden."
+    },
+    {
+      "pmid": "23925119",
+      "doi": "10.1038/nature12446",
+      "title": "Coordination of bacterial proteome with metabolism by cyclic AMP signalling",
+      "authors": [
+        "You C",
+        "Okano H",
+        "Hui S",
+        "Zhang Z",
+        "Kim M",
+        "Gunderson CW",
+        "Wang YP",
+        "Stülke J",
+        "Hwa T"
+      ],
+      "journal": "Nature",
+      "year": 2013,
+      "category": "Signaling & Carbon Catabolite Repression",
+      "methodology": "Mass spectrometry quantitative proteomics, flux balance measurements, genetic titration of cAMP and Crp activity.",
+      "key_findings": {
+        "flux_sensor": "cAMP synthesis by adenylate cyclase (CyaA) is directly gated by the glycolytic influx through the phosphotransferase system (PTS), acting as a physiological flux-sensor rather than merely an intracellular sugar sensor.",
+        "crp_circuitry": "Crp-cAMP dynamically throttles the catabolic proteome sector (phi_C). When glucose uptake is maximal, low cAMP silences respiration and non-glucose catabolism, permitting overflow acetate production.",
+        "coarse_grained_control": "Revealed that the simple phenomenological Crp-cAMP regulatory circuit coordinates proteome allocation to maintain Pareto-optimal growth."
+      },
+      "clinical_and_biotech_conclusion": "Bridged coarse-grained biophysical growth laws with precise molecular transcription factor signaling networks in E. coli."
+    },
+    {
+      "pmid": "15755952",
+      "doi": "10.1128/MMBR.69.1.12-50.2005",
+      "title": "The acetate switch",
+      "authors": [
+        "Wolfe AJ"
+      ],
+      "journal": "Microbiol Mol Biol Rev",
+      "year": 2005,
+      "category": "Foundational Biochemistry & Metabolic Switch",
+      "methodology": "Exhaustive biochemical, thermodynamic, and regulatory review of bacterial acetate metabolism.",
+      "key_findings": {
+        "pathway_duality": "Dissected the dual pathways of acetate metabolism: the reversible, high-capacity, low-affinity Pta-AckA pathway (phosphotransacetylase-acetate kinase, producing 1 ATP via substrate-level phosphorylation) versus the high-affinity, irreversible, ATP-consuming Acs pathway (acetyl-CoA synthetase, consuming 1 ATP -> AMP + PPi).",
+        "switch_mechanism": "The 'Acetate Switch' occurs at the transition from exponential growth to stationary phase when extracellular glucose is exhausted, prompting cells to scavenge the acetate they previously excreted.",
+        "acetyl_phosphate_signaling": "Identified acetyl-phosphate (Ac-P) as an energetic metabolic intermediate and direct chemical donor for global non-enzymatic lysine acetylation and response regulator auto-phosphorylation (OmpR, PhoB)."
+      },
+      "clinical_and_biotech_conclusion": "Established the classic conceptual framework of the bacterial acetate switch governing carbon flow, energy generation, and post-translational acetylation signaling."
+    },
+    {
+      "pmid": "21122111",
+      "doi": "10.1186/1752-0509-4-166",
+      "title": "Systems biology approach reveals that overflow metabolism of acetate in Escherichia coli is triggered by carbon catabolite repression of acetyl-CoA synthetase",
+      "authors": [
+        "Valgepea K",
+        "Adamberg K",
+        "Nahku R",
+        "Lahtvee PJ",
+        "Arike L",
+        "Vilu R"
+      ],
+      "journal": "BMC Syst Biol",
+      "year": 2010,
+      "category": "Multi-Omics Systems Biology",
+      "methodology": "A-stat continuous acceleration chemostat cultures, quantitative transcriptomics, 2D-PAGE proteomics, and 13C-metabolic flux analysis.",
+      "key_findings": {
+        "futile_cycle_prevention": "Acs is tightly repressed during fast growth by Crp-cAMP catabolite repression to prevent a wasteful ATP-depleting futile cycle between Pta-AckA and Acs.",
+        "acetate_overflow_onset": "Demonstrated that overflow metabolism initiates when the uptake capacity of the TCA cycle is saturated, combined with complete repression of Acs, forcing net unidirectional flux through Pta-AckA into the culture broth."
+      },
+      "clinical_and_biotech_conclusion": "Provided empirical multi-omic confirmation that transcriptional carbon catabolite repression enforces unidirectional acetate secretion during rapid growth."
+    },
+    {
+      "pmid": "25712329",
+      "doi": "10.1039/c4mb00721b",
+      "title": "Proteome reallocation in Escherichia coli with increasing specific growth rate",
+      "authors": [
+        "Peebo K",
+        "Valgepea K",
+        "Maser A",
+        "Nahku R",
+        "Adamberg K",
+        "Vilu R"
+      ],
+      "journal": "Mol Biosyst",
+      "year": 2015,
+      "category": "Quantitative Proteome Reallocation",
+      "methodology": "Absolute quantitative LC-MS/MS SWATH-proteomics across 8 steady-state chemostat dilution rates (growth rates 0.11 to 0.49 h^-1).",
+      "key_findings": {
+        "downregulation_of_respiration": "With increasing growth rate, the cellular mass fraction of TCA cycle enzymes and respiratory chain complexes decreases significantly per gram of cell dry weight, while glycolytic and ribosomal proteins increase monotonically.",
+        "reserve_capacity": "Cells maintain excess metabolic enzymatic reserve capacity at low growth rates for environmental adaptation, but purge this reserve to favor translation machinery at high growth rates."
+      },
+      "clinical_and_biotech_conclusion": "Delivered high-resolution absolute protein copy number data validating the systematic reallocation of the proteome away from respiration toward fermentation and translation."
+    },
+    {
+      "pmid": "22556256",
+      "doi": "10.1126/science.1216882",
+      "title": "Multidimensional optimality of microbial metabolism",
+      "authors": [
+        "Schuetz R",
+        "Zamboni N",
+        "Zampieri M",
+        "Heinemann M",
+        "Sauer U"
+      ],
+      "journal": "Science",
+      "year": 2012,
+      "category": "Multi-Objective Flux Economics",
+      "methodology": "13C-metabolic flux analysis across diverse nutrient conditions evaluated against multi-objective Pareto optimality surfaces.",
+      "key_findings": {
+        "pareto_tradeoff": "E. coli metabolism operates along a Pareto front trading off two conflicting physiological objectives: maximizing ATP yield per mole carbon vs maximizing biomass yield per unit total enzyme investment.",
+        "switch_to_overflow": "At high growth rates, the evolutionary fitness landscape heavily favors minimizing total enzyme investment (proteome mass), which selects for low-yield, high-efficiency overflow pathways."
+      },
+      "clinical_and_biotech_conclusion": "Placed overflow metabolism within evolutionary multi-objective optimization theory, demonstrating that acetate secretion is mathematically optimal on a Pareto surface."
+    },
+    {
+      "pmid": "16971006",
+      "doi": "10.1016/j.tibtech.2006.09.001",
+      "title": "Overcoming acetate in Escherichia coli recombinant protein fermentations",
+      "authors": [
+        "Eiteman MA",
+        "Altman E"
+      ],
+      "journal": "Trends Biotechnol",
+      "year": 2006,
+      "category": "Bioprocess Engineering & Physiological Toxicity",
+      "methodology": "Review of industrial bioprocess constraints, toxicological mechanism of acetate, and genetic knockout engineering strategies (e.g., pta, ackA, pykA, pykF knockouts).",
+      "key_findings": {
+        "toxic_mechanism": "Protonated extracellular acetic acid (pKa = 4.75) diffuses freely across the cell membrane into the neutral cytoplasm (pH ~ 7.5-7.8), dissociating into acetate anion and H+, dissipating the proton motive force (PMF, transmembrane delta-pH) and uncoupling oxidative phosphorylation.",
+        "growth_inhibition": "Intracellular accumulation of acetate inhibits methionine biosynthesis (homoserine transsuccinylase) and disrupts protein folding, severely limiting cell density and recombinant protein titer."
+      },
+      "clinical_and_biotech_conclusion": "Established the bioprocess foundation detailing the detrimental consequences of acetate accumulation in industrial biotechnology, underscoring the necessity of controlling overflow metabolism."
+    }
+  ]
+}

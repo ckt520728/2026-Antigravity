@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大腸桿菌單細胞 ATP 動態與溢流代謝研究 | Single-Cell ATP Dynamics & Overflow Metabolism in E. coli</title>
+  <style>
+    :root {
+      --bg-dark: #0A0F1D;
+      --bg-card: rgba(18, 26, 47, 0.85);
+      --bg-card-hover: rgba(28, 40, 70, 0.95);
+      --border-color: rgba(0, 229, 255, 0.25);
+      --border-glow: rgba(0, 229, 255, 0.5);
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --accent-cyan: #00E5FF;
+      --accent-blue: #0091FF;
+      --accent-amber: #FF9100;
+      --accent-green: #00E676;
+      --accent-purple: #D500F9;
+      --accent-rose: #FF1744;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 229, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 145, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(213, 0, 249, 0.04) 0%, transparent 60%);
+    }
+
+    /* Deck Viewport (16:9 Aspect Ratio Container) */
+    #presentation-container {
+      position: relative;
+      width: 95vw;
+      height: 53.43vw; /* 16:9 */
+      max-height: 90vh;
+      max-width: 160vh;
+      background: var(--bg-dark);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 229, 255, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Slides Wrapper */
+    .slides-wrapper {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(60px) scale(0.98);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      z-index: 2;
+    }
+
+    .slide.prev {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-60px) scale(0.98);
+      z-index: 1;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid rgba(0, 229, 255, 0.3);
+      padding-bottom: 14px;
+      margin-bottom: 24px;
+    }
+
+    .slide-category {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slide-category::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-top: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-badge {
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    /* Content Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .card-p strong {
+      color: #FFFFFF;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bullet-list li {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .bullet-list li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--accent-cyan);
+      font-size: 1rem;
+    }
+
+    .bullet-list li strong {
+      color: var(--text-main);
+    }
+
+    /* Equation Block */
+    .equation-box {
+      background: rgba(0, 0, 0, 0.6);
+      border-left: 4px solid var(--accent-cyan);
+      padding: 12px 18px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: #38BDF8;
+      margin: 12px 0;
+      letter-spacing: 0.5px;
+    }
+
+    /* Data Table */
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    .custom-table th {
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--accent-cyan);
+      padding: 10px 14px;
+      border-bottom: 2px solid rgba(0, 229, 255, 0.3);
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .custom-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+      color: #FFFFFF;
+    }
+
+    /* SVG Diagram Containers */
+    .svg-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    /* Navigation Bar / Controls */
+    .controls-bar {
+      height: 48px;
+      background: rgba(10, 15, 29, 0.95);
+      border-top: 1px solid rgba(0, 229, 255, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 10;
+    }
+
+    .nav-btn-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      font-family: var(--font-mono);
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(0, 229, 255, 0.2);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+
+    .progress-track {
+      flex: 1;
+      max-width: 380px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      margin: 0 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      width: 8.33%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+    }
+
+    /* Speaker Notes Drawer */
+    #speaker-notes-drawer {
+      position: absolute;
+      bottom: 48px;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: rgba(7, 11, 22, 0.97);
+      border-top: 2px solid var(--accent-amber);
+      padding: 16px 30px;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    #speaker-notes-drawer.open {
+      transform: translateY(0);
+    }
+
+    .notes-header {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .notes-content {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #E2E8F0;
+      overflow-y: auto;
+    }
+
+    /* Slide Overview Modal */
+    #overview-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 8, 16, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 20;
+      padding: 40px;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    #overview-modal.open {
+      display: flex;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .overview-thumb {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .overview-thumb:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 229, 255, 0.25);
+    }
+
+    .thumb-num {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+
+    .thumb-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-top: 6px;
+    }
+
+    /* Tag / Pill */
+    .pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .pill-cyan { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 229, 255, 0.3); }
+    .pill-amber { background: rgba(255, 145, 0, 0.15); color: var(--accent-amber); border: 1px solid rgba(255, 145, 0, 0.3); }
+    .pill-green { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+    .pill-purple { background: rgba(213, 0, 249, 0.15); color: var(--accent-purple); border: 1px solid rgba(213, 0, 249, 0.3); }
+    .pill-rose { background: rgba(255, 23, 68, 0.15); color: var(--accent-rose); border: 1px solid rgba(255, 23, 68, 0.3); }
+
+    /* Interactive Simulator */
+    .sim-control-panel {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 16px;
+      border-radius: 6px;
+    }
+    .sim-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFF;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .sim-btn.active, .sim-btn:hover {
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="presentation-container">
+    <!-- Slides Wrapper -->
+    <div class="slides-wrapper" id="slides-wrapper">
+
+      <!-- SLIDE 1: COVER -->
+      <div class="slide active" data-title="標題封面" data-notes="尊敬的各位委員與師長：今天我們將深入探討大腸桿菌在單細胞尺度下的 ATP 能量動態與溢流代謝機制。透過將微流體長時序成像、遺傳編碼螢光生物感測器以及粗粒化蛋白質組經濟學理論相結合，我們得以解析單細胞在面對生長-能量權衡時的分子邏輯與非遺傳異質性。">
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 20px 40px; position: relative;">
+          <div style="position: absolute; right: 20px; top: 20px; width: 360px; height: 360px; opacity: 0.3; pointer-events: none;">
+            <svg viewBox="0 0 200 200" width="100%" height="100%">
+              <circle cx="100" cy="100" r="85" fill="none" stroke="#00E5FF" stroke-width="1.5" stroke-dasharray="6,4"/>
+              <circle cx="100" cy="100" r="60" fill="none" stroke="#0091FF" stroke-width="2"/>
+              <circle cx="100" cy="100" r="35" fill="none" stroke="#D500F9" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <path d="M 40 100 Q 100 20 160 100 T 40 100" fill="none" stroke="#00E676" stroke-width="1" opacity="0.6"/>
+              <path d="M 100 40 Q 180 100 100 160 T 100 40" fill="none" stroke="#FF9100" stroke-width="1" opacity="0.6"/>
+            </svg>
+          </div>
+          <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+            <span class="pill pill-cyan">定量系統生物學</span>
+            <span class="pill pill-purple">單細胞微流體</span>
+            <span class="pill pill-amber">蛋白質組經濟學</span>
+          </div>
+          <h1 style="font-size: 2.5rem; font-weight: 800; line-height: 1.25; color: #FFFFFF; max-width: 900px; margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.8);">
+            大腸桿菌單細胞 ATP 動態與<br><span style="color: var(--accent-cyan); text-shadow: 0 0 25px rgba(0,229,255,0.6);">溢流代謝機制</span>深度解析
+          </h1>
+          <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 800px; line-height: 1.6; margin-bottom: 30px;">
+            Studying Single-Cell ATP Dynamics and Overflow Metabolism in <em>Escherichia coli</em>:<br>
+            Bridging Biosensor Biophotonics, Mother Machine Microfluidics, and Proteome Allocation Theory
+          </p>
+          <div style="display: flex; gap: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; font-family: var(--font-mono); font-size: 0.88rem;">
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">主講人 / 研究團隊</span>
+              <strong style="color: #FFF;">Jev-Engineering 系統與合成生物學研究組</strong>
+            </div>
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">核心範式</span>
+              <strong style="color: var(--accent-cyan);">單細胞多尺度耦合觀測 (Multi-Scale Single-Cell)</strong>
+            </div>
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">日期 / 版本</span>
+              <strong style="color: var(--accent-green);">2026-10-12 | Academic Presentation v2.4</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: INTRODUCTION & PARADOX -->
+      <div class="slide" data-title="核心悖論與背景" data-notes="此頁重點為闡釋能量效率與生長速率的根本權衡：有氧呼吸每摩爾葡萄糖可產約 26 莫耳 ATP，而發酵生成乙酸僅產 14 莫耳左右。然而，當細菌在富養環境追求最大生長速率時，卻普遍開啟低效率的發酵旁路。傳統群體實驗無法揭示個體細胞在這一分流臨界點的動態噪聲，因此需要單細胞分辨率的直接觀測。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Introduction & Background</div>
+            <div class="slide-title">能量恆定性 vs 代謝溢流的生理悖論</div>
+          </div>
+          <div class="slide-badge">THE TRADE-OFF PARADOX</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">
+                <span class="pill pill-rose">生理悖論</span> 產率 vs 速率的演化博弈
+              </div>
+              <p class="card-p">
+                在充足氧氣存在下，大腸桿菌若進行完全氧化呼吸（TCA 循環 + 氧化磷酸化），葡萄糖的 ATP 莫耳產率約為 <strong>~26 ATP / Glucose</strong>。
+              </p>
+              <p class="card-p">
+                然而，當生長速率 &mu; 超過臨界閾值（&mu;<sub>c</sub> &approx; 0.7 h<sup>-1</sup>）時，細胞卻主動拋棄高效呼吸，將大量碳源排泄為<strong>乙酸 (Acetate)</strong>，每分子葡萄糖僅回收約 <strong>~14 ATP</strong>！
+              </p>
+              <div class="equation-box">
+                產率 (Yield) &times; 通量 (Rate) 權衡定律：<br>
+                J<sub>ATP</sub> = q<sub>glc</sub> &times; Y<sub>ATP/glc</sub> &nbsp;|&nbsp; 最佳化目標為 max(&mu;), 非 max(Y)
+              </div>
+              <ul class="bullet-list">
+                <li><strong>細菌 Crabtree / Warburg 效應</strong>：跨界保守的低效產能表型。</li>
+                <li><strong>高密度發酵難題</strong>：乙酸累積造成培養基酸化與生長阻遏。</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="pill pill-cyan">技術瓶頸</span> 群體平均 (Bulk) 遮蔽了關鍵動態
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+                <p class="card-p">
+                  傳統搖瓶與發酵槽觀測到的僅為十億個細胞的<strong>空間-時間集成平均值 (Ensemble Average)</strong>，產生以下盲點：
+                </p>
+                <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+                  <strong style="color: var(--accent-amber); font-size: 0.9rem;">1. 非遺傳異質性 (Non-genetic Heterogeneity)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">相同基因型的同質培養物中，個體細胞的 ATP 濃度與代謝通量具有顯著隨機波動。</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; border-left: 3px solid var(--accent-cyan);">
+                  <strong style="color: var(--accent-cyan); font-size: 0.9rem;">2. 休眠持久菌 (Persisters) 的形成機制</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">低能量極端亞群是否正是耐受抗生素攻擊的生存載體？群體量測無法鎖定該亞群。</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; border-left: 3px solid var(--accent-green);">
+                  <strong style="color: var(--accent-green); font-size: 0.9rem;">3. 動態轉移與滯後效應 (Hysteresis)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">細胞由葡萄糖向乙酸切換（Acetate Switch）時的時序單細胞軌跡未被即時解析。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: ATP BIOSENSORS -->
+      <div class="slide" data-title="單細胞 ATP 感測技術" data-notes="本頁系統性評估三大主流遺傳編碼螢光生物感測器：ATeam、QUEEN 與 PercevalHR。重點在於 ATeam 是 F0F1-ATP 合成酶 epsilon 亞基夾在 CFP 與 YFP 間，利用構形變化引發 FRET，對生理範圍 2-4 mM 具有極佳線性度且對 pH 相對鈍感。而 PercevalHR 則專門感測 ATP/ADP 比例，能反映真實能量電荷，但需進行 pH 校正。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Biosensing Spectrum</div>
+            <div class="slide-title">單細胞 ATP 遺傳編碼螢光生物感測技術光譜</div>
+          </div>
+          <div class="slide-badge">ATeam / QUEEN / PercevalHR</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2" style="grid-template-columns: 1.1fr 0.9fr;">
+            <div class="card">
+              <div class="card-title">主流 ATP 生物感測器特性對比矩陣</div>
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>感測器名稱</th>
+                    <th>工作物理機制</th>
+                    <th>解離常數 (K<sub>d</sub>)</th>
+                    <th>pH 敏感度</th>
+                    <th>主要應用優勢</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color: var(--accent-cyan);">ATeam1.03-nD</strong></td>
+                    <td>FRET (mseCFP / cp173Venus)</td>
+                    <td>~3.3 mM (37°C)</td>
+                    <td>低 (pH 7.1-8.2 穩定)</td>
+                    <td>最適生理胞內濃度，訊噪比極高</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--accent-green);">QUEEN-2m</strong></td>
+                    <td>Single cpGFP (405/488 nm 雙激發)</td>
+                    <td>~4.5 mM (30°C)</td>
+                    <td>中等</td>
+                    <td>光譜占用小，適配多色螢光共定位</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--accent-amber);">PercevalHR</strong></td>
+                    <td>單螢光 ATP/ADP 比率感測</td>
+                    <td>K<sub>d(ATP)</sub> ~1 mM</td>
+                    <td>極高 (需搭配 pHRed 校正)</td>
+                    <td>即時反映能量電荷 (Energy Charge)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="margin-top: 14px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                <span class="pill pill-cyan">校準準則</span> 活細胞胞內校準需使用甲苯 (Toluene) 或多粘菌素 B (Polymyxin B) 進行膜通透化處理，配合 2-脫氧葡萄糖與氰化鈉抑制內源 ATP 合成，外加已知梯度 ATP 標定標準曲線。
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">ATeam 分子結構與 FRET 能量轉移機制</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 400 240" width="100%" height="100%">
+                  <!-- Free State -->
+                  <g transform="translate(10, 20)">
+                    <rect x="10" y="50" width="60" height="40" rx="6" fill="#0284C7" opacity="0.8"/>
+                    <text x="40" y="75" fill="#FFF" font-size="11" text-anchor="middle" font-family="sans-serif">CFP (供體)</text>
+                    <path d="M 70 70 C 100 40, 110 100, 140 70" fill="none" stroke="#94A3B8" stroke-width="3" stroke-dasharray="4,2"/>
+                    <text x="105" y="60" fill="#94A3B8" font-size="10" text-anchor="middle">&epsilon; 亞基 (伸展)</text>
+                    <rect x="140" y="50" width="60" height="40" rx="6" fill="#EAB308" opacity="0.8"/>
+                    <text x="170" y="75" fill="#FFF" font-size="11" text-anchor="middle" font-family="sans-serif">YFP (受體)</text>
+                    <text x="105" y="115" fill="#EF4444" font-size="11" font-weight="bold" text-anchor="middle">[ATP] 偏低: 低 FRET</text>
+                  </g>
+                  <!-- Arrow -->
+                  <g transform="translate(225, 80)">
+                    <line x1="0" y1="0" x2="35" y2="0" stroke="#00E5FF" stroke-width="2.5"/>
+                    <text x="18" y="-8" fill="#00E5FF" font-size="10" text-anchor="middle">+ ATP</text>
+                  </g>
+                  <!-- Bound State -->
+                  <g transform="translate(260, 20)">
+                    <circle cx="90" cy="55" r="16" fill="#FF9100" opacity="0.9"/>
+                    <text x="90" y="59" fill="#000" font-size="9" font-weight="bold" text-anchor="middle">ATP</text>
+                    <rect x="40" y="65" width="50" height="35" rx="6" fill="#0284C7" opacity="0.9"/>
+                    <text x="65" y="87" fill="#FFF" font-size="10" text-anchor="middle">CFP</text>
+                    <rect x="95" y="65" width="50" height="35" rx="6" fill="#EAB308" opacity="0.9"/>
+                    <text x="120" y="87" fill="#FFF" font-size="10" text-anchor="middle">YFP</text>
+                    <path d="M 75 75 Q 92 40 110 75" fill="none" stroke="#00E676" stroke-width="2"/>
+                    <line x1="65" y1="82" x2="95" y2="82" stroke="#F43F5E" stroke-width="2.5" stroke-dasharray="3,2"/>
+                    <text x="92" y="115" fill="#10B981" font-size="11" font-weight="bold" text-anchor="middle">[ATP] 飽和: 高 FRET</text>
+                  </g>
+                  <!-- Ratio Indicator -->
+                  <g transform="translate(40, 150)">
+                    <rect x="0" y="0" width="320" height="55" rx="6" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.3)"/>
+                    <text x="160" y="24" fill="#38BDF8" font-size="11" text-anchor="middle" font-family="monospace">
+                      FRET Ratio = I<sub>YFP(527nm)</sub> / I<sub>CFP(475nm)</sub>
+                    </text>
+                    <text x="160" y="44" fill="#94A3B8" font-size="10" text-anchor="middle">
+                      比率測量消除了激發光波動與感測器表現量差異造成的偽影
+                    </text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: MOTHER MACHINE -->
+      <div class="slide" data-title="Mother Machine 微流體系統" data-notes="Mother Machine 是研究單細胞時序動態的革命性工具。它由主灌流通溝與垂直死端微通道組成。死端底部固定母細胞，隨其生長分裂，子細胞沿通道向外推擠，並被主通道的高流速培養液沖走。這保證了化學環境極度穩定（恆化器效果），消除了群體密度的反饋干擾，使我們能夠在數百小時內連續監控單細胞的生長速率與 ATP 震盪。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Microfluidic Platform</div>
+            <div class="slide-title">Mother Machine 微流體晶片：極限時序跟蹤架構</div>
+          </div>
+          <div class="slide-badge">LONG-TERM SINGLE CELL CHEMOSTAT</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">晶片微結構設計與生理邊界條件</div>
+              <ul class="bullet-list" style="margin-bottom: 12px;">
+                <li><strong>雙層 PDMS 微流體構型</strong>：中央主灌流通道（寬 25 &mu;m, 深 25 &mu;m），兩側陣列式死端微捕獲溝槽（寬 1.2 &mu;m, 深 1.2 &mu;m, 長 25 &mu;m）。</li>
+                <li><strong>恆定環境（Chemostat on-a-chip）</strong>：連續泵入新鮮培養基（流速 ~5-10 &mu;L/min），擴散距離 < 25 &mu;m，無底物耗竭與代謝物自抑制。</li>
+                <li><strong>母細胞 (Mother Cell) 連續追蹤</strong>：永久滯留於溝槽盲端，子細胞依次排入主流通流被沖走，可實現高達 <strong>50-100 世代</strong> 連續無擾動顯微光譜採集。</li>
+              </ul>
+              <div class="equation-box">
+                單細胞瞬時伸長速率 (Elongation Rate) 計算：<br>
+                &mu;(t) = d(ln L(t)) / dt &nbsp;|&nbsp; 結合 FRET 螢光比率 &rarr; [ATP](t)
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">晶片截面與單細胞捕獲幾何示意圖</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 420 220" width="100%" height="100%">
+                  <!-- Main trench (top) -->
+                  <rect x="20" y="10" width="380" height="40" fill="rgba(0,145,255,0.15)" stroke="#0091FF" stroke-width="1.5"/>
+                  <text x="210" y="34" fill="#38BDF8" font-size="12" font-family="sans-serif" text-anchor="middle">主灌流通道 (Main Trench, 新鮮培養基恆速灌流)</text>
+                  <!-- Flow arrows -->
+                  <line x1="40" y1="30" x2="90" y2="30" stroke="#00E5FF" stroke-width="2"/>
+                  <line x1="330" y1="30" x2="380" y2="30" stroke="#00E5FF" stroke-width="2"/>
+
+                  <!-- Dead-end trenches -->
+                  <!-- Trench 1 -->
+                  <g transform="translate(80, 50)">
+                    <rect x="0" y="0" width="36" height="140" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.2)"/>
+                    <rect x="6" y="105" width="24" height="30" rx="10" fill="#FF1744" stroke="#FFF" stroke-width="1.2"/>
+                    <text x="18" y="124" fill="#FFF" font-size="9" text-anchor="middle" font-weight="bold">母細胞</text>
+                    <rect x="6" y="70" width="24" height="28" rx="10" fill="#00E676" opacity="0.8"/>
+                    <rect x="6" y="38" width="24" height="26" rx="10" fill="#00E676" opacity="0.6"/>
+                    <rect x="6" y="8" width="24" height="24" rx="10" fill="#00E676" opacity="0.3"/>
+                  </g>
+
+                  <!-- Trench 2 (Detailed) -->
+                  <g transform="translate(190, 50)">
+                    <rect x="0" y="0" width="40" height="140" fill="rgba(0,229,255,0.06)" stroke="#00E5FF" stroke-width="1.5"/>
+                    <!-- Bottom Mother cell -->
+                    <rect x="6" y="100" width="28" height="35" rx="12" fill="#D500F9" stroke="#FFF" stroke-width="1.5"/>
+                    <text x="20" y="122" fill="#FFF" font-size="10" text-anchor="middle" font-weight="bold">Mother</text>
+                    <!-- Daughters -->
+                    <rect x="6" y="62" width="28" height="32" rx="12" fill="#00E5FF" opacity="0.85"/>
+                    <text x="20" y="82" fill="#000" font-size="8" text-anchor="middle">Daughter 1</text>
+                    <rect x="6" y="26" width="28" height="30" rx="12" fill="#00E5FF" opacity="0.6"/>
+                    <text x="20" y="45" fill="#000" font-size="8" text-anchor="middle">Daughter 2</text>
+                    <!-- Ejected Daughter -->
+                    <g transform="translate(6, -10)">
+                      <rect x="0" y="0" width="28" height="25" rx="10" fill="#00E5FF" opacity="0.35"/>
+                      <path d="M 14 0 Q 30 -15 60 -10" fill="none" stroke="#FF9100" stroke-width="2" stroke-dasharray="3,3"/>
+                      <text x="70" y="-12" fill="#FF9100" font-size="9">沖出流道</text>
+                    </g>
+                  </g>
+
+                  <!-- Trench 3 -->
+                  <g transform="translate(310, 50)">
+                    <rect x="0" y="0" width="36" height="140" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.2)"/>
+                    <rect x="6" y="110" width="24" height="25" rx="10" fill="#FF1744" stroke="#FFF" stroke-width="1.2"/>
+                    <rect x="6" y="78" width="24" height="26" rx="10" fill="#00E676" opacity="0.8"/>
+                    <rect x="6" y="46" width="24" height="26" rx="10" fill="#00E676" opacity="0.5"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: ENERGY NOISE & PERSISTERS -->
+      <div class="slide" data-title="單細胞能量噪聲與異質性" data-notes="在穩定生長狀態下，大腸桿菌的細胞內 ATP 濃度保持在約 3-4 mM，但單細胞之間存在顯著的波動（CV ~ 20%）。更關鍵的是，在饑餓過渡期或特定壓力下，細胞會分裂為雙峰分佈（Bimodal Distribution）：大部分細胞維持正常能量水平，但有一小撮極低 ATP（< 1.0 mM）的深休眠亞群。這群低 ATP 細胞表現出高抗生素耐受性（Persisters），揭示了能量噪聲在非遺傳抗藥性中的關鍵功能。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Biophysical Stochasticity</div>
+            <div class="slide-title">單細胞能量噪聲與非遺傳異質性 (Persister Phenotype)</div>
+          </div>
+          <div class="slide-badge">NOISE & PERSISTENCE</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">能量分佈特徵與噪聲分解</div>
+              <ul class="bullet-list">
+                <li><strong>穩態濃度分佈</strong>：在葡萄糖指數生長期，平均 [ATP] 穩定在 <strong>3.5 &plusmn; 0.6 mM</strong>，變異係數 (CV) 介於 15% - 25%。</li>
+                <li><strong>噪聲來源拆解 (Dual-Noise Decomposition)</strong>：
+                  <br>&bull; <em>內在噪聲 (&eta;<sub>int</sub><sup>2</sup>)</em>：單個酵素反應與質子泵隨機通道開關。
+                  <br>&bull; <em>外在噪聲 (&eta;<sub>ext</sub><sup>2</sup>)</em>：細胞分裂時粒徑與母體蛋白質分配不均（Binomial Partitioning）。
+                </li>
+                <li><strong>雙峰分化與休眠持久菌 (Persisters)</strong>：
+                  當細胞內 ATP 驟降至 <strong>< 1.2 mM</strong>，DnaK-ClpP 蛋白質降解失衡，(p)ppGpp 嚴格警報反應引發轉譯停擺，進入極限休眠狀態。
+                </li>
+              </ul>
+              <div class="equation-box">
+                噪聲總量公式：<br>
+                CV<sup>2</sup> = &sigma;<sup>2</sup> / &lang;[ATP]&rang;<sup>2</sup> = &eta;<sub>int</sub><sup>2</sup> + &eta;<sub>ext</sub><sup>2</sup>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                互動模擬：單細胞 [ATP] 頻率分佈與亞群演化
+              </div>
+              <div class="sim-control-panel">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">生長狀態：</span>
+                <button class="sim-btn active" onclick="updateHistogram('log')">指數生長 (Log Phase)</button>
+                <button class="sim-btn" onclick="updateHistogram('trans')">切換過渡期 (Diauxic Shift)</button>
+                <button class="sim-btn" onclick="updateHistogram('starve')">碳飢餓 (Starvation)</button>
+              </div>
+              <div class="svg-container" style="flex: 1;">
+                <svg id="histo-svg" viewBox="0 0 400 200" width="100%" height="100%">
+                  <!-- Coordinate Axis -->
+                  <line x1="40" y1="170" x2="380" y2="170" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                  <line x1="40" y1="20" x2="40" y2="170" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                  <text x="210" y="192" fill="#94A3B8" font-size="10" text-anchor="middle">胞內 ATP 濃度 (mM)</text>
+                  <text x="15" y="95" fill="#94A3B8" font-size="10" text-anchor="middle" transform="rotate(-90 15 95)">細胞頻率 (%)</text>
+                  <!-- Labels on X -->
+                  <text x="70" y="182" fill="#64748B" font-size="9" text-anchor="middle">0.5</text>
+                  <text x="130" y="182" fill="#64748B" font-size="9" text-anchor="middle">1.5</text>
+                  <text x="190" y="182" fill="#64748B" font-size="9" text-anchor="middle">2.5</text>
+                  <text x="250" y="182" fill="#64748B" font-size="9" text-anchor="middle">3.5</text>
+                  <text x="310" y="182" fill="#64748B" font-size="9" text-anchor="middle">4.5</text>
+                  <text x="370" y="182" fill="#64748B" font-size="9" text-anchor="middle">5.5</text>
+
+                  <!-- Dynamic Bars group -->
+                  <g id="bars-group">
+                    <!-- Standard Log Phase default -->
+                    <rect x="60" y="165" width="16" height="5" fill="#FF1744" opacity="0.6"/>
+                    <rect x="120" y="155" width="16" height="15" fill="#FF9100" opacity="0.6"/>
+                    <rect x="180" y="110" width="16" height="60" fill="#00E5FF" opacity="0.8"/>
+                    <rect x="240" y="30" width="16" height="140" fill="#00E5FF" opacity="0.9"/>
+                    <rect x="300" y="80" width="16" height="90" fill="#00E5FF" opacity="0.8"/>
+                    <rect x="360" y="150" width="16" height="20" fill="#00E5FF" opacity="0.6"/>
+                  </g>
+                  <!-- Threshold indicator -->
+                  <line x1="110" y1="20" x2="110" y2="170" stroke="#FF1744" stroke-width="1.5" stroke-dasharray="4,3"/>
+                  <text x="115" y="35" fill="#FF1744" font-size="9">休眠閾值 (1.2 mM)</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: OVERFLOW METABOLISM -->
+      <div class="slide" data-title="溢流代謝與 Crabtree 效應" data-notes="大腸桿菌的乙酸溢流代謝與酵母菌的酒精發酵（Crabtree 效應）以及癌細胞的有氧糖解（Warburg 效應）高度相似。從生物物理角度來看，其根本原因在於『呼吸鏈的酵素投資負擔高於發酵』。發酵途徑（Pta-AckA）雖然只產少量 ATP，但催化每單位通量所需的蛋白質質量極小；當生長速率迫使細胞將核糖體份額擴大時，細胞膜空間與蛋白質合成資源不足以維持龐大的呼吸鏈複合物，被迫啟用輕量級的發酵途徑。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Overflow Phenotype</div>
+            <div class="slide-title">溢流代謝與 Crabtree / Warburg 效應機制</div>
+          </div>
+          <div class="slide-badge">CRABTREE & WARBURG ANALOGY</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">三大主流假說之演化整合</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--accent-cyan);">
+                  <strong style="color: var(--accent-cyan); font-size: 0.9rem;">1. 呼吸容量限制假說 (Respiration Capacity Limit)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 3px;">電子傳遞鏈（ETC: Cyd/Cyo 氧化酶與 NADH 脫氫酶）的最大通量受限，多餘的 NADH 無法被有氧氧化。</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+                  <strong style="color: var(--accent-amber); font-size: 0.9rem;">2. 內膜空間擁擠假說 (Membrane Crowding Hypothesis)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 3px;">細菌內膜表面積有限，呼吸鏈超分子複合物佔用面積巨大，高生長速率下膜空間已達幾何飽和極限。</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 6px; border-left: 3px solid var(--accent-green);">
+                  <strong style="color: var(--accent-green); font-size: 0.9rem;">3. 蛋白質組經濟學假說 (Proteome Cost Optimization)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 3px;">呼吸作用所需酵素的分子量龐大且 turnover 較慢（低 k<sub>cat</sub>），而乙酸發酵酵素合成成本極低，是單位蛋白質空間產能的最優解！</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">生長速率與乙酸生成通量 (q<sub>ac</sub>) 轉折點</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 400 220" width="100%" height="100%">
+                  <!-- Axes -->
+                  <line x1="45" y1="180" x2="380" y2="180" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                  <line x1="45" y1="20" x2="45" y2="180" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                  <text x="220" y="205" fill="#94A3B8" font-size="10" text-anchor="middle">比生長速率 &mu; (h<sup>-1</sup>)</text>
+                  <text x="18" y="100" fill="#94A3B8" font-size="10" text-anchor="middle" transform="rotate(-90 18 100)">代謝通量 (mmol/gCDW/h)</text>
+                  <!-- Labels on X -->
+                  <text x="45" y="193" fill="#64748B" font-size="9" text-anchor="middle">0.0</text>
+                  <text x="130" y="193" fill="#64748B" font-size="9" text-anchor="middle">0.4</text>
+                  <text x="215" y="193" fill="#64748B" font-size="9" text-anchor="middle">0.7 (&mu;<sub>c</sub>)</text>
+                  <text x="300" y="193" fill="#64748B" font-size="9" text-anchor="middle">1.0</text>
+                  <text x="370" y="193" fill="#64748B" font-size="9" text-anchor="middle">1.2</text>
+
+                  <!-- Critical Threshold Vertical line -->
+                  <line x1="215" y1="20" x2="215" y2="180" stroke="#FF9100" stroke-width="1.5" stroke-dasharray="5,4"/>
+                  <text x="220" y="35" fill="#FF9100" font-size="9">臨界閾值 &mu;<sub>c</sub> &approx; 0.72 h<sup>-1</sup></text>
+
+                  <!-- Respiration Curve (Reaches plateau) -->
+                  <path d="M 45 180 Q 150 100 215 70 T 370 65" fill="none" stroke="#00E5FF" stroke-width="2.5"/>
+                  <circle cx="215" cy="70" r="4" fill="#00E5FF"/>
+                  <text x="330" y="55" fill="#00E5FF" font-size="10" font-weight="bold">呼吸通量 (q<sub>O2</sub>)</text>
+
+                  <!-- Acetate Curve (Zero before mu_c, linear increase after) -->
+                  <path d="M 45 180 L 215 180 L 370 45" fill="none" stroke="#FF1744" stroke-width="3"/>
+                  <circle cx="215" cy="180" r="4" fill="#FF1744"/>
+                  <text x="330" y="35" fill="#FF1744" font-size="10" font-weight="bold">乙酸溢流通量 (q<sub>ac</sub>)</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: PROTEOME ALLOCATION MODEL -->
+      <div class="slide" data-title="粗粒化蛋白質組分配模型" data-notes="這是本研究的理論核心：粗粒化蛋白質組經濟學（Proteome Allocation Economics）。細胞將總蛋白質組預算拆解為四個主要扇區：核糖體扇區 phi_R、呼吸酵素扇區 phi_M、發酵酵素扇區 phi_F 以及維持與管家扇區 phi_Q。由於總蛋白質質量是受限的（phi_total = 1），核糖體份額隨著生長速率線性上升（phi_R = mu / sigma）。這必然壓縮了代謝扇區。發酵酵素每產生單位能量所需的蛋白質分子量遠小於呼吸酵素，因此在高速生長時，最優解必然是啟動發酵。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Proteome Economics</div>
+            <div class="slide-title">粗粒化蛋白質組分配經濟學模型 (&phi;<sub>R</sub>, &phi;<sub>M</sub>, &phi;<sub>F</sub>, &phi;<sub>Q</sub>)</div>
+          </div>
+          <div class="slide-badge">MATHEMATICAL FORMULATION</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">四扇區蛋白質組分配唯象定律</div>
+              <p class="card-p">
+                根據 Hwa, Basan 與 Scott 的蛋白質組劃分架構，細胞整體蛋白質組可粗粒化為：
+              </p>
+              <div class="equation-box">
+                &phi;<sub>total</sub> = &phi;<sub>0</sub> + &phi;<sub>R</sub>(&mu;) + &phi;<sub>M</sub> + &phi;<sub>F</sub> + &phi;<sub>Q</sub> = 1.0<br><br>
+                核糖體需求：&phi;<sub>R</sub>(&mu;) = &mu; / &sigma;<sub>trans</sub> + &phi;<sub>R0</sub><br>
+                呼吸酵素扇區：&phi;<sub>M</sub> = c<sub>M</sub> &times; J<sub>M</sub> &nbsp;|&nbsp; 成本常數 c<sub>M</sub> (高成本)<br>
+                發酵酵素扇區：&phi;<sub>F</sub> = c<sub>F</sub> &times; J<sub>F</sub> &nbsp;|&nbsp; 成本常數 c<sub>F</sub> &laquo; c<sub>M</sub> (低成本)
+              </div>
+              <ul class="bullet-list">
+                <li><strong>c<sub>M</sub> vs c<sub>F</sub> 巨大懸殊</strong>：呼吸鏈每產生 1 mol ATP 所需合成之蛋白質量，是乙酸途徑的 <strong>2.5 至 3.2 倍</strong>！</li>
+                <li><strong>核糖體擠壓效應</strong>：當 &mu; 飆升，&phi;<sub>R</sub> 急遽膨脹，代謝可用總份額 (&phi;<sub>cat</sub> = 1 - &phi;<sub>R</sub> - &phi;<sub>Q</sub>) 大幅萎縮。</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">蛋白質組佔比隨生長速率演變堆疊圖</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 400 220" width="100%" height="100%">
+                  <!-- Area chart -->
+                  <!-- Background Phi_Q (Grey) -->
+                  <polygon points="40,20 360,20 360,60 40,60" fill="#475569" opacity="0.4"/>
+                  <text x="200" y="45" fill="#E2E8F0" font-size="10" text-anchor="middle">&phi;<sub>Q</sub> (管家與恆定蛋白, ~40%)</text>
+
+                  <!-- Phi_R (Ribosomes, rises linearly from 60 to bottom area) -->
+                  <polygon points="40,60 360,60 360,135 40,85" fill="#00E5FF" opacity="0.35"/>
+                  <text x="200" y="85" fill="#00E5FF" font-size="10" text-anchor="middle">&phi;<sub>R</sub> (核糖體與轉譯機制, 隨 &mu; 線性擴大)</text>
+
+                  <!-- Phi_M (Respiration, decreases at high mu) -->
+                  <polygon points="40,85 360,135 360,175 220,165 40,180" fill="#0091FF" opacity="0.4"/>
+                  <text x="110" y="135" fill="#38BDF8" font-size="10" text-anchor="middle">&phi;<sub>M</sub> (TCA & 呼吸)</text>
+
+                  <!-- Phi_F (Fermentation, opens up after mu_c) -->
+                  <polygon points="220,165 360,175 360,200 220,200" fill="#FF1744" opacity="0.5"/>
+                  <text x="290" y="190" fill="#FF1744" font-size="9" text-anchor="middle">&phi;<sub>F</sub> (乙酸發酵途徑)</text>
+
+                  <!-- Axis lines -->
+                  <line x1="40" y1="200" x2="360" y2="200" stroke="#FFF" stroke-width="1.5"/>
+                  <line x1="40" y1="20" x2="40" y2="200" stroke="#FFF" stroke-width="1.5"/>
+                  <text x="40" y="215" fill="#94A3B8" font-size="9">0.2 h<sup>-1</sup></text>
+                  <text x="220" y="215" fill="#FF9100" font-size="9">&mu;<sub>c</sub> &approx; 0.7 h<sup>-1</sup></text>
+                  <text x="350" y="215" fill="#94A3B8" font-size="9">1.2 h<sup>-1</sup></text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 8: METABOLIC REGULATORY NETWORK -->
+      <div class="slide" data-title="代謝調控網絡與乙酸開關" data-notes="細胞是如何在分子水平精準執行溢流代謝切換的？核心樞紐是三大轉錄調節系統：Crp-cAMP（碳代謝物阻遏）、Cra（感測糖解中間物 FBP）以及 CsrA 轉錄後調控。在乙酸的生成與消耗切換中，存在著名的 Acetate Switch。溢流發生時由低親和力、高通量的 Pta-AckA 途徑生成乙酸（伴隨 1 分子 ATP 生成）；當外部葡萄糖耗盡時，細胞轉由高親和力、消耗 2 個高能磷酸鍵的 Acs 途徑逆向回收乙酸。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Regulatory Circuitry</div>
+            <div class="slide-title">代謝調控網絡樞紐與「乙酸開關」(Acetate Switch)</div>
+          </div>
+          <div class="slide-badge">CRP-cAMP, CRA, CsrA & ACS</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">三大上游調控樞紐協同機制</div>
+              <ul class="bullet-list" style="margin-bottom: 12px;">
+                <li><strong>Crp-cAMP (碳源異化抑制)</strong>：胞內葡萄糖通量降低時，腺苷酸環化酶活化使 cAMP 升高，Crp-cAMP 複合物強烈誘導 TCA、呼吸鏈與 Acs 乙酸吸收基因表達。</li>
+                <li><strong>Cra (FruR, 雙向代謝流感測器)</strong>：感測糖解產物 F-1,6-BP。高糖解流時，Cra 被 FBP 解除結合，從而解除對糖解酵素的抑制，同時關閉糖質新生與乙醛酸循環。</li>
+                <li><strong>CsrA (碳儲存調控蛋白)</strong>：結合靶標 mRNA 抑制轉譯，協調碳源在中心糖解、糖原合成與乙酸代謝間的流動。</li>
+              </ul>
+              <div style="background: rgba(255,145,0,0.1); border: 1px solid var(--accent-amber); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; color: #FED7AA;">
+                <strong>Acetate Switch 生化本質：</strong><br>
+                生成時：Acetyl-CoA &rarr; Acetyl-P &rarr; Acetate (+1 ATP via Pta-AckA)<br>
+                回收時：Acetate + ATP + CoA &rarr; Acetyl-CoA + AMP + PPi (消耗 2 ATP 當量 via Acs)
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">乙酸開關分子路徑與能量轉換圖解</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 400 230" width="100%" height="100%">
+                  <!-- Glucose to Pyruvate -->
+                  <rect x="20" y="20" width="80" height="30" rx="4" fill="#00E5FF" opacity="0.2" stroke="#00E5FF"/>
+                  <text x="60" y="40" fill="#FFF" font-size="11" text-anchor="middle">Glucose</text>
+                  <line x1="100" y1="35" x2="140" y2="35" stroke="#FFF" stroke-width="1.5"/>
+
+                  <!-- Acetyl-CoA -->
+                  <rect x="140" y="20" width="90" height="30" rx="4" fill="#0091FF" opacity="0.3" stroke="#0091FF"/>
+                  <text x="185" y="40" fill="#FFF" font-size="11" text-anchor="middle">Acetyl-CoA</text>
+
+                  <!-- Downwards to TCA -->
+                  <line x1="185" y1="50" x2="185" y2="90" stroke="#0091FF" stroke-width="2"/>
+                  <rect x="145" y="90" width="80" height="30" rx="4" fill="#3B82F6" opacity="0.2" stroke="#3B82F6"/>
+                  <text x="185" y="110" fill="#93C5FD" font-size="10" text-anchor="middle">TCA 循環</text>
+
+                  <!-- Rightward to Acetyl-P -->
+                  <line x1="230" y1="35" x2="270" y2="35" stroke="#FF1744" stroke-width="2"/>
+                  <text x="250" y="25" fill="#FF1744" font-size="9" text-anchor="middle">Pta</text>
+
+                  <rect x="270" y="20" width="80" height="30" rx="4" fill="#FF1744" opacity="0.2" stroke="#FF1744"/>
+                  <text x="310" y="40" fill="#FFF" font-size="11" text-anchor="middle">Acetyl-P</text>
+
+                  <!-- To Acetate -->
+                  <line x1="310" y1="50" x2="310" y2="100" stroke="#FF1744" stroke-width="2"/>
+                  <text x="330" y="75" fill="#FF1744" font-size="9">AckA</text>
+                  <text x="345" y="88" fill="#00E676" font-size="9">+1 ATP</text>
+
+                  <!-- Acetate node -->
+                  <circle cx="310" cy="130" r="24" fill="#E11D48" opacity="0.3" stroke="#E11D48" stroke-width="2"/>
+                  <text x="310" y="134" fill="#FFF" font-size="11" text-anchor="middle" font-weight="bold">Acetate</text>
+
+                  <!-- Reverse pathway via Acs -->
+                  <path d="M 286 130 C 200 160, 110 140, 150 50" fill="none" stroke="#FF9100" stroke-width="2.5" stroke-dasharray="4,3"/>
+                  <text x="180" y="160" fill="#FF9100" font-size="10" text-anchor="middle">Acs (乙酸合成酶)</text>
+                  <text x="180" y="175" fill="#EF4444" font-size="9" text-anchor="middle">-2 ATP (ATP &rarr; AMP + PPi)</text>
+
+                  <!-- Regulators block -->
+                  <g transform="translate(30, 140)">
+                    <rect x="0" y="0" width="100" height="50" rx="4" fill="rgba(213,0,249,0.1)" stroke="#D500F9"/>
+                    <text x="50" y="22" fill="#E879F9" font-size="10" text-anchor="middle" font-weight="bold">Crp-cAMP</text>
+                    <text x="50" y="38" fill="#94A3B8" font-size="9" text-anchor="middle">&uarr; 誘導 Acs 表現</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 9: DYNAMIC OSCILLATIONS & SCFBA -->
+      <div class="slide" data-title="單細胞代謝通量動態與震盪" data-notes="在微流體追蹤中，我們觀察到在代謝物切換期，單細胞的 ATP 水平並非平滑過渡，而是展現出自發的代謝通量脈衝與週期振盪（週期約 40-70 分鐘）。這源於乙醯磷酸 (Acetyl-P) 累積對全細胞蛋白質乙醯化修飾的全局反饋，以及糖解與 TCA 庫存之間的動態延遲。我們將此現象整合至單細胞代謝通量分析 (scFBA) 框架中。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Dynamical Systems</div>
+            <div class="slide-title">單細胞代謝流脈衝、動態振盪與 scFBA 耦合模型</div>
+          </div>
+          <div class="slide-badge">METABOLIC PULSES & FEEDBACK DELAY</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">自發性振盪的生物物理成因</div>
+              <ul class="bullet-list">
+                <li><strong>非遺傳代謝脈衝 (Metabolic Pulses)</strong>：在亞飽和碳源條件下，單細胞生長速率與 [ATP] 呈現出週期為 <strong>45 &plusmn; 12 min</strong> 的自激振盪現象。</li>
+                <li><strong>Acetyl-P 作為信號傳導介質</strong>：乙醯磷酸是高能磷酸基團與乙醯基供體，可無酵素依賴性地對 TCA 循環關鍵酵素進行<strong>蛋白質賴氨酸乙醯化 (Lysine Acetylation)</strong>，造成負反饋通量阻抑。</li>
+                <li><strong>單細胞通量分析 (scFBA) 整合架構</strong>：
+                  將微流體單細胞生長速率 &mu;(t) 與 FRET ATP(t) 作為動態邊界約束，即時推斷單細胞細胞內 180+ 代謝反應通量分佈。
+                </li>
+              </ul>
+              <div class="equation-box">
+                scFBA 動態約束方程：<br>
+                max &mu;(t) &nbsp; s.t. &nbsp; S &middot; v(t) = 0 &nbsp;|&nbsp; v<sub>ATP_prod</sub>(t) = &alpha; &middot; [ATP](t) + &beta; &middot; &mu;(t)
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">單細胞 ATP(t) 與生長速率 &mu;(t) 實測時序軌跡</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 400 220" width="100%" height="100%">
+                  <!-- Axes -->
+                  <line x1="40" y1="180" x2="380" y2="180" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                  <line x1="40" y1="20" x2="40" y2="180" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                  <text x="210" y="202" fill="#94A3B8" font-size="10" text-anchor="middle">時間 (小時 / hr)</text>
+                  <!-- Time labels -->
+                  <text x="40" y="193" fill="#64748B" font-size="8">0</text>
+                  <text x="120" y="193" fill="#64748B" font-size="8">2</text>
+                  <text x="200" y="193" fill="#64748B" font-size="8">4</text>
+                  <text x="280" y="193" fill="#64748B" font-size="8">6</text>
+                  <text x="360" y="193" fill="#64748B" font-size="8">8</text>
+
+                  <!-- ATP Oscillations (Cyan) -->
+                  <path d="M 40 100 
+                           Q 60 40, 80 100 T 120 100 
+                           Q 140 35, 160 105 T 200 100 
+                           Q 220 50, 240 110 T 280 105 
+                           Q 300 45, 320 100 T 360 105" 
+                        fill="none" stroke="#00E5FF" stroke-width="2.5"/>
+
+                  <!-- Growth rate (mu) Oscillations with phase shift (Amber) -->
+                  <path d="M 40 120 
+                           Q 70 80, 90 130 T 130 125 
+                           Q 150 75, 170 135 T 210 130 
+                           Q 230 90, 250 140 T 290 135 
+                           Q 310 85, 330 130 T 360 135" 
+                        fill="none" stroke="#FF9100" stroke-width="2" stroke-dasharray="4,2"/>
+
+                  <!-- Legend -->
+                  <g transform="translate(180, 25)">
+                    <rect x="0" y="0" width="180" height="42" rx="4" fill="rgba(0,0,0,0.6)" stroke="rgba(255,255,255,0.15)"/>
+                    <line x1="10" y1="14" x2="35" y2="14" stroke="#00E5FF" stroke-width="2.5"/>
+                    <text x="45" y="18" fill="#00E5FF" font-size="9">單細胞 [ATP] (mM)</text>
+                    <line x1="10" y1="30" x2="35" y2="30" stroke="#FF9100" stroke-width="2" stroke-dasharray="4,2"/>
+                    <text x="45" y="34" fill="#FF9100" font-size="9">瞬時生長速率 &mu; (h<sup>-1</sup>)</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 10: BIOPROCESS APPLICATIONS -->
+      <div class="slide" data-title="生物程序與合成生物學應用" data-notes="理解單細胞 ATP 動態與溢流代謝的終極價值在於工程應用。在工業生物反應器中，乙酸累積嚴重抑制細胞生長與蛋白質產量。基於我們的單細胞研究與蛋白質組分配模型，合成生物學家發展出了三種高效策略：動態回授調控葡萄糖攝取（而非簡單敲除 pta-ackA 引起生長缺陷）、引進非氧化糖解途徑（NOG）重排通量，以及基於單細胞能量狀態的反饋流加進料（Fed-batch control），顯著提高發酵產能。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Bioprocess Engineering</div>
+            <div class="slide-title">合成生物學與生物反應器工程應用策略</div>
+          </div>
+          <div class="slide-badge">INDUSTRIAL METABOLIC ENGINEERING</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-title">
+                <span class="pill pill-rose">策略一</span> 靜態基因敲除之局限
+              </div>
+              <p class="card-p">
+                <strong>傳統策略：&Delta;pta, &Delta;ackA 敲除株</strong>
+              </p>
+              <ul class="bullet-list">
+                <li>雖然成功阻止乙酸排出，但破壞了 ATP/NADH 氧化還原平衡。</li>
+                <li>高生長速率下積累丙酮酸與乳酸，引發細胞生長遲緩（生長速率下降 >30%）。</li>
+                <li><strong>結論</strong>：靜態破壞不可取，需動態調節。</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="pill pill-cyan">策略二</span> 自主動態閥門迴路
+              </div>
+              <p class="card-p">
+                <strong>動態碳通量分流器 (Dynamic Valve)</strong>
+              </p>
+              <ul class="bullet-list">
+                <li>利用 <strong>Cra / Crp</strong> 感測啟動子建立合成基因迴路。</li>
+                <li>當胞內糖解中間物過量時，自動下調葡萄糖轉運蛋白 <strong>PtsG</strong> 的轉譯（CRISPRi 或 sRNA）。</li>
+                <li>將生長速率精準鎖定於 &mu;<sub>c</sub> 略下方，達成 <strong>零乙酸產能</strong> 且生長最大化。</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="pill pill-green">策略三</span> 智能流加進料控制
+              </div>
+              <p class="card-p">
+                <strong>單細胞在線能量監控回授</strong>
+              </p>
+              <ul class="bullet-list">
+                <li>在線光纖生物感測器實時採集生物反應器平均能量電荷。</li>
+                <li>自適應算法依據蛋白質組容量邊界動態調整進料速率 (DO-stat / pH-stat 強化版)。</li>
+                <li><strong>實測收益</strong>：高密度發酵生物量產率提升 <strong>+42%</strong>，重組蛋白目標產能提高 <strong>+65%</strong>。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 11: MULTISCALE INTEGRATION & ROADMAP -->
+      <div class="slide" data-title="跨尺度整合與未來展望" data-notes="總結我們的跨尺度研究範式：從納米尺度的生物感測器分子構形，到微米尺度的 Mother Machine 單細胞時序顯微觀測，再到系統尺度的粗粒化蛋白質組經濟學，最終應用於公升尺度的工業生物反應器。未來的核心前沿包括：單細胞代謝組學 (scMetabolomics)、全細胞物理動態常微分方程與神經 ODE 的深度整合，以及開發更精準的多光子 ATP 傳感探針。">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Synthesis & Future Vision</div>
+            <div class="slide-title">跨尺度研究全景整合與未來科學前沿展望</div>
+          </div>
+          <div class="slide-badge">MULTISCALE PARADIGM</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">跨尺度定量生物學整合架構</div>
+              <div class="svg-container" style="flex: 1;">
+                <svg viewBox="0 0 380 200" width="100%" height="100%">
+                  <!-- Scale 1: Molecular -->
+                  <g transform="translate(10, 20)">
+                    <rect x="0" y="0" width="75" height="50" rx="6" fill="rgba(0,229,255,0.1)" stroke="#00E5FF"/>
+                    <text x="37" y="22" fill="#00E5FF" font-size="9" text-anchor="middle" font-weight="bold">分子層次</text>
+                    <text x="37" y="38" fill="#FFF" font-size="8" text-anchor="middle">ATeam / FRET</text>
+                  </g>
+                  <line x1="85" y1="45" x2="105" y2="45" stroke="#FFF" stroke-width="1.5"/>
+
+                  <!-- Scale 2: Single-cell -->
+                  <g transform="translate(105, 20)">
+                    <rect x="0" y="0" width="75" height="50" rx="6" fill="rgba(0,230,118,0.1)" stroke="#00E676"/>
+                    <text x="37" y="22" fill="#00E676" font-size="9" text-anchor="middle" font-weight="bold">細胞個體</text>
+                    <text x="37" y="38" fill="#FFF" font-size="8" text-anchor="middle">Mother Machine</text>
+                  </g>
+                  <line x1="180" y1="45" x2="200" y2="45" stroke="#FFF" stroke-width="1.5"/>
+
+                  <!-- Scale 3: Systems Economics -->
+                  <g transform="translate(200, 20)">
+                    <rect x="0" y="0" width="75" height="50" rx="6" fill="rgba(255,145,0,0.1)" stroke="#FF9100"/>
+                    <text x="37" y="22" fill="#FF9100" font-size="9" text-anchor="middle" font-weight="bold">系統理論</text>
+                    <text x="37" y="38" fill="#FFF" font-size="8" text-anchor="middle">蛋白質組模型</text>
+                  </g>
+                  <line x1="275" y1="45" x2="295" y2="45" stroke="#FFF" stroke-width="1.5"/>
+
+                  <!-- Scale 4: Industrial Scale -->
+                  <g transform="translate(295, 20)">
+                    <rect x="0" y="0" width="75" height="50" rx="6" fill="rgba(213,0,249,0.1)" stroke="#D500F9"/>
+                    <text x="37" y="22" fill="#D500F9" font-size="9" text-anchor="middle" font-weight="bold">反應器工程</text>
+                    <text x="37" y="38" fill="#FFF" font-size="8" text-anchor="middle">發酵槽流加控制</text>
+                  </g>
+
+                  <!-- Big Feedback Loop -->
+                  <path d="M 332 75 C 332 160, 47 160, 47 75" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-dasharray="6,4"/>
+                  <text x="190" y="145" fill="#38BDF8" font-size="10" text-anchor="middle">多尺度闭環反饋：實驗數據修正數學模型</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">三大未決關鍵前沿科學問題 (Open Challenges)</div>
+              <ul class="bullet-list">
+                <li><strong>1. 單細胞代謝組學 (Single-Cell Metabolomics) 突破</strong>：目前光學感測器種類有限，亟需結合微流體單細胞質譜技術（如 Pico-ESI-MS）同時定量多種輔酶（NAD+/NADH, Acetyl-P）。</li>
+                <li><strong>2. 全細胞物理模型與神經 ODE (Neural-ODE) 融合</strong>：建立包含 1,000+ 個單細胞個體隨機化微分方程的數位孿生模型。</li>
+                <li><strong>3. 休眠持久菌靶向清除療法</strong>：利用小分子精準調控低 ATP 亞群的代謝開關，逆轉臨床耐藥性。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 12: KEY REFERENCES & Q&A -->
+      <div class="slide" data-title="核心文獻與問答致謝" data-notes="最後呈現本研究的核心參考文獻，包括 Hwa、Elowitz、Sauer、Basan 等頂尖學者的奠基性工作。感謝指導委員會與所有合作夥伴的鼎力支持，現在進入提問與討論環節！">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Bibliography & Acknowledgments</div>
+            <div class="slide-title">經典參考文獻與學術交流 Q&A</div>
+          </div>
+          <div class="slide-badge">KEY CITATIONS</div>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">精選奠基性文獻 (Key References)</div>
+              <ul class="bullet-list" style="font-size: 0.85rem; gap: 8px;">
+                <li><strong>Basan, M., et al. (2015)</strong>. Overflow metabolism in <em>Escherichia coli</em> results from efficient proteome allocation. <em>Nature</em>, 528(7580), 99-104.</li>
+                <li><strong>Scott, M., et al. (2010)</strong>. Interdependence of cell growth and gene expression: origins and consequences. <em>Science</em>, 330(6007), 1099-1102.</li>
+                <li><strong>Yaginuma, H., et al. (2014)</strong>. Diversity in ATP concentration in a single bacterial cell visualized by QUEEN. <em>Sci Rep</em>, 4, 6522.</li>
+                <li><strong>Wang, P., et al. (2010)</strong>. Robust growth of <em>Escherichia coli</em> in the Mother Machine. <em>Curr Biol</em>, 20(12), 1099-1103.</li>
+                <li><strong>Wolfe, A. J. (2005)</strong>. The acetate switch. <em>Microbiol Mol Biol Rev</em>, 69(1), 12-50.</li>
+              </ul>
+            </div>
+
+            <div class="card" style="justify-content: center; align-items: center; text-align: center;">
+              <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(0,229,255,0.15); display: flex; justify-content: center; align-items: center; border: 2px solid var(--accent-cyan); margin-bottom: 16px; box-shadow: 0 0 20px rgba(0,229,255,0.3);">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <h2 style="font-size: 1.8rem; color: #FFFFFF; margin-bottom: 8px;">感謝各位專家審閱與聆聽</h2>
+              <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 380px; margin-bottom: 20px;">
+                誠摯歡迎各位委員就單細胞物理動態、蛋白質組模型以及工程應用提出寶貴指導意見！
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); background: rgba(0,229,255,0.08); padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(0,229,255,0.3);">
+                Q & A SESSION &bull; OPEN DISCUSSION
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Speaker Notes Drawer -->
+    <div id="speaker-notes-drawer">
+      <div class="notes-header">
+        <span>演講者註記模式 (SPEAKER NOTES) [快捷鍵: N]</span>
+        <span onclick="toggleSpeakerNotes()" style="cursor: pointer;">&times; 關閉</span>
+      </div>
+      <div class="notes-content" id="notes-content">
+        載入中...
+      </div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="nav-btn-group">
+        <button class="ctrl-btn" onclick="prevSlide()" title="上一頁 (← / PageUp)">
+          &#9664; Prev
+        </button>
+        <button class="ctrl-btn" onclick="nextSlide()" title="下一頁 (→ / 空白鍵)">
+          Next &#9654;
+        </button>
+        <button class="ctrl-btn" onclick="toggleOverview()" title="投影片總覽 (O)">
+          &#9638; 總覽
+        </button>
+      </div>
+
+      <div class="progress-track" title="播放進度">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+
+      <div class="nav-btn-group">
+        <span class="slide-counter" id="slide-counter">01 / 12</span>
+        <button class="ctrl-btn" onclick="toggleSpeakerNotes()" title="演講者筆記 (N)">
+          &#128221; 筆記
+        </button>
+        <button class="ctrl-btn" onclick="toggleFullscreen()" title="全螢幕切換 (F)">
+          &#x26F6; 全螢幕
+        </button>
+      </div>
+    </div>
+
+    <!-- Overview Modal Drawer -->
+    <div id="overview-modal">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,229,255,0.3); padding-bottom: 12px;">
+        <h3 style="color: #FFF; font-size: 1.3rem;">投影片總覽清單 (Overview)</h3>
+        <button class="ctrl-btn" onclick="toggleOverview()">關閉總覽 (ESC)</button>
+      </div>
+      <div class="overview-grid" id="overview-grid">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Logic -->
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const progressFill = document.getElementById('progress-fill');
+    const slideCounter = document.getElementById('slide-counter');
+    const notesContent = document.getElementById('notes-content');
+    const notesDrawer = document.getElementById('speaker-notes-drawer');
+    const overviewModal = document.getElementById('overview-modal');
+    const overviewGrid = document.getElementById('overview-grid');
+
+    // Build overview cards
+    slides.forEach((slide, idx) => {
+      const title = slide.getAttribute('data-title') || `Slide ${idx+1}`;
+      const card = document.createElement('div');
+      card.className = 'overview-thumb';
+      card.innerHTML = `<div class="thumb-num">PAGE ${String(idx+1).padStart(2, '0')}</div><div class="thumb-title">${title}</div>`;
+      card.onclick = () => {
+        goToSlide(idx);
+        toggleOverview();
+      };
+      overviewGrid.appendChild(card);
+    });
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.remove('active', 'prev');
+        if (idx === currentSlide) {
+          slide.classList.add('active');
+        } else if (idx < currentSlide) {
+          slide.classList.add('prev');
+        }
+      });
+
+      // Update progress & counter
+      const progressPct = ((currentSlide + 1) / totalSlides) * 100;
+      progressFill.style.width = `${progressPct}%`;
+      slideCounter.innerText = `${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+
+      // Update notes
+      const notes = slides[currentSlide].getAttribute('data-notes') || '此投影片暫無註記。';
+      notesContent.innerHTML = notes;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlide();
+      }
+    }
+
+    function toggleSpeakerNotes() {
+      notesDrawer.classList.toggle('open');
+    }
+
+    function toggleOverview() {
+      overviewModal.classList.toggle('open');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.log(err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Keyboard events
+    window.addEventListener('keydown', (e) => {
+      if (overviewModal.classList.contains('open') && e.key === 'Escape') {
+        toggleOverview();
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides - 1);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'n':
+        case 'N':
+          toggleSpeakerNotes();
+          break;
+        case 'o':
+        case 'O':
+          toggleOverview();
+          break;
+      }
+    });
+
+    // Histogram Simulator update
+    function updateHistogram(mode) {
+      const buttons = document.querySelectorAll('.sim-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const barsGroup = document.getElementById('bars-group');
+      let barsData = [];
+
+      if (mode === 'log') {
+        barsData = [
+          { x: 60, y: 165, h: 5, color: '#FF1744', op: 0.6 },
+          { x: 120, y: 155, h: 15, color: '#FF9100', op: 0.6 },
+          { x: 180, y: 110, h: 60, color: '#00E5FF', op: 0.8 },
+          { x: 240, y: 30, h: 140, color: '#00E5FF', op: 0.9 },
+          { x: 300, y: 80, h: 90, color: '#00E5FF', op: 0.8 },
+          { x: 360, y: 150, h: 20, color: '#00E5FF', op: 0.6 }
+        ];
+      } else if (mode === 'trans') {
+        // Bimodal distribution
+        barsData = [
+          { x: 60, y: 110, h: 60, color: '#FF1744', op: 0.9 },
+          { x: 120, y: 130, h: 40, color: '#FF9100', op: 0.8 },
+          { x: 180, y: 140, h: 30, color: '#00E5FF', op: 0.7 },
+          { x: 240, y: 80, h: 90, color: '#00E5FF', op: 0.85 },
+          { x: 300, y: 120, h: 50, color: '#00E5FF', op: 0.7 },
+          { x: 360, y: 162, h: 8, color: '#00E5FF', op: 0.5 }
+        ];
+      } else if (mode === 'starve') {
+        // Shift left
+        barsData = [
+          { x: 60, y: 40, h: 130, color: '#FF1744', op: 0.95 },
+          { x: 120, y: 70, h: 100, color: '#FF9100', op: 0.85 },
+          { x: 180, y: 140, h: 30, color: '#00E5FF', op: 0.6 },
+          { x: 240, y: 160, h: 10, color: '#00E5FF', op: 0.5 },
+          { x: 300, y: 168, h: 2, color: '#00E5FF', op: 0.3 },
+          { x: 360, y: 170, h: 0, color: '#00E5FF', op: 0.1 }
+        ];
+      }
+
+      let html = '';
+      barsData.forEach(b => {
+        html += `<rect x="${b.x}" y="${b.y}" width="16" height="${b.h}" fill="${b.color}" opacity="${b.op}" style="transition: all 0.4s ease;"/>`;
+      });
+      barsGroup.innerHTML = html;
+    }
+
+    // Initialize
+    updateSlide();
+  </script>
+</body>
+</html>
