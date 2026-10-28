@@ -235,9 +235,11 @@ def test_toolgate() -> None:
 
 def test_routing() -> None:
     reg = Registry.load()
-    check("registry loads every model", len(reg.models), 9)
-    for tier in ("high", "medium", "low"):
+    check("registry loads every model", len(reg.models), 10)
+    for tier in ("high", "medium"):
         check(f"tier {tier} has candidates", len(reg.candidates(tier)), 3)
+    check("tier low has candidates", len(reg.candidates("low")), 4)
+    check("kimi-k3 on opencode platform", reg.get("kimi-k3").platform, "opencode")
     check("customer_data narrows to one platform",
           [m.platform for m in reg.candidates("high", data_class="customer_data")], ["anthropic"])
     check("no platform may see secrets", reg.candidates("high", data_class="secrets"), [])

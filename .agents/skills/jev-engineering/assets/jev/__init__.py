@@ -95,12 +95,20 @@ from .workflow import (
     PlannerRequest, PlannerResult, TaskSpec, WorkerRequest, WorkerResult,
     WorkflowStop, plan_phase, execute_phase,
 )
+from .swarm import (
+    SwarmConfig, SwarmTask, SwarmResult, SwarmBatchReport,
+    execute_kimi_swarm, single_pass_batch_verify, run_two_phase_pipeline,
+    load_queue_tasks, save_task_spec,
+)
 
 __all__ = [
-    # 兩階段規劃與執行
+    # 兩階段規劃與執行及 Kimi-k3 蜂群
     "Allocation", "ExecutionContext", "ExecutionPlan", "ExecutionReport", "Limits",
     "PlannerRequest", "PlannerResult", "TaskSpec", "WorkerRequest", "WorkerResult",
     "WorkflowStop", "plan_phase", "execute_phase",
+    "SwarmConfig", "SwarmTask", "SwarmResult", "SwarmBatchReport",
+    "execute_kimi_swarm", "single_pass_batch_verify", "run_two_phase_pipeline",
+    "load_queue_tasks", "save_task_spec",
     # primitives
     "Choice",
     "Score",
@@ -175,4 +183,4 @@ __all__ = [
     "debiased_pairwise",
 ]
 
-__version__ = "1.2.0"
+__version__ = "2.1.0"

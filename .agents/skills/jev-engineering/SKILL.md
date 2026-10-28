@@ -1,20 +1,20 @@
 ---
 name: jev-engineering
-description: 將 agent 工作分為 high 規劃決策與 medium/low 實際執行兩階段，以 Jev 信心 gate 分配算力。適用於模型路由、八類工具能力 gate、guardrails、triage、reranking、eval、bulk labelling、control loop 與成本稽核。
+description: 將 agent 工作分為 Phase 1 high (Opus/Astra/Sol) 規劃決策與 Phase 2 (Kimi-k3 300 平行蜂群 / OpenCode) 實際執行兩階段，以 Jev 信心 gate 分配算力。適用於模型路由、八類工具能力 gate、guardrails、triage、reranking、eval、bulk labelling、control loop 與成本稽核。
 ---
 
 # JEV Engineering
 
-預設採用兩階段：**Phase 1 用 high agent 思考、決策及分配算力；Phase 2 用 medium/low agent 撰寫與執行。** Jev 保留為兩階段共用的結構化決策層。
+預設採用兩階段：**Phase 1 用 high agent (Claude Opus 5.5, GPT-6 Astra, Sol-high) 思考、決策及分配算力（嚴格零生成）；Phase 2 用 Kimi-k3 300 平行蜂群 (OpenCode Go) 或 medium/low agent 撰寫與執行。** Jev 保留為兩階段共用的結構化決策層，透過 queue 規格落盤、零 KV Cache 負擔與 Jev Single-Pass 批次驗收達成兩階段無延遲接軌。
 
 ```
-[G] generation   -> Phase 2：medium/low executor
+[G] generation   -> Phase 2：Kimi-k3 300 平行蜂群 (OpenCode) / medium/low executor
 [D] decision     -> a System One decision model (Jev), typed answer + calibrated probability
 [C] exact rule   -> code: loop caps, spend caps, file existence, blocklists, math, dates
 ```
 
 完整交接欄位、Python adapter、plugin 操作與失敗處理見
-[18-two-phase-workflow.md](references/18-two-phase-workflow.md)。只使用既有決策 primitive 時，不必為每次 `decide()` 再啟動兩個 agent。
+[18-two-phase-workflow.md](references/18-two-phase-workflow.md) 與 [19-kimi-k3-swarm-execution.md](references/19-kimi-k3-swarm-execution.md)。只使用既有決策 primitive 時，不必為每次 `decide()` 再啟動兩個 agent。
 
 ## Phase 1：規劃與配置
 
@@ -31,7 +31,7 @@ description: 將 agent 工作分為 high 規劃決策與 medium/low 實際執行
 4. 用獨立測試、讀回或事先定義的驗收確認結果，不能只相信 executor 自稱完成。
 5. 失敗只回傳 task ID、成品參照與精簡錯誤，退回 Phase 1；不自動重試或啟動 high 生成。記錄已完成的副作用，重新規劃時不能盲目重做。
 
-Claude Code plugin 提供 `jev-planner`（opus、唯讀）、`jev-executor-medium`（sonnet）與 `jev-executor-low`（haiku），由主控依配置派工。其他宿主使用相同角色與 API 契約。宿主若無法選擇／派發不同模型，輸出待交接規格並回報未執行，不得以 high 代做後宣稱節省。
+Claude Code plugin 提供 `jev-planner`（opus、唯讀）、`jev-executor-medium`（sonnet）、`jev-executor-low`（haiku）與 `jev-executor-kimi-swarm`（支援 OpenCode Go 及 300 並發蜂群），由主控依配置派工。其他宿主使用相同角色與 API 契約。宿主若無法選擇／派發不同模型，輸出待交接規格並回報未執行，不得以 high 代做後宣稱節省。
 
 八類能力是 `toolgate.CAPABILITIES` 的 `read`、`local_write`、`destructive`、`network_egress`、`process_spawn`、`credential_access`、`spend`、`other`，與下方九種應用 playbook 不同。它們全部保留；Phase 1 只能盤點未來所需能力，不會執行那些動作。hard rules 優先，gate 故障 fail to ask，`other` 不自動核准，外部行為仍需人工決定。
 
@@ -120,6 +120,7 @@ Two generation calls. Eleven decisions. Two hard rules. In a default stack all t
 | Ask | Playbook |
 |---|---|
 | 兩階段規劃、分配、實際執行 | `references/18-two-phase-workflow.md` |
+| Kimi-k3 300 平行蜂群執行與無延遲接軌 | `references/19-kimi-k3-swarm-execution.md` |
 | Route the prompt to a proper model | `references/01-model-routing.md` |
 | Screen for injection, abuse, off-policy input | `references/02-guardrails.md` |
 | Classify and gate tool calls cheaply | `references/03-tool-gating.md` |
@@ -142,6 +143,7 @@ Cross-cutting: `10-threshold-tuning.md` (calibration protocol) · `11-economics.
 | Module | What it gives you |
 |---|---|
 | `workflow` | `plan_phase()`、`execute_phase()`：high 規劃、medium/low 執行、精簡交接、預算與獨立驗收 |
+| `swarm` | `SwarmConfig`、`execute_kimi_swarm()`、`single_pass_batch_verify()`、`run_two_phase_pipeline()`：300 蜂群平行執行、OpenCode Go 支援、Single-Pass 批次驗收 |
 | `client`, `types` | `decide(state, questions)` over a pluggable provider; `Choice` / `Score` / `Noul` with the seven rules enforced as validation |
 | `gate` | `gate()` with four exits, `cascade()`, per-action thresholds |
 | `routing` | `models.json` registry, `route_task()`, `worth_switching()`, `self_route()` |

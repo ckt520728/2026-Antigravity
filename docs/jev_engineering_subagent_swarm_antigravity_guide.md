@@ -45,6 +45,7 @@
 | 角色名稱 (TypeName) | 權限模式 | 推薦模型層級 (Tier) | 核心任務與職責 |
 | :--- | :--- | :--- | :--- |
 | **`jev-planner`** | 唯讀 (Read-only) | High (`pro` / inherit) | 需求剖析、依賴拓撲分析、制定包含 `task_id`、`objective`、`inputs`、`outputs`、`acceptance` 的 JSON 規格。不持有檔案寫入工具。 |
+| **jev-executor-kimi-swarm** | 寫入與執行 (Full Write) | Low (kimi-k3 / OpenCode) | **v2.1 新增**：支援 OpenCode Go 高達 300 個平行子代理人，透過 ./queue/ 規格無對話上下文膨脹平行執行，由 Jev Single-Pass 批次驗收。 |
 | **`jev-executor-medium`** | 寫入與執行 (Full Write) | Medium (`flash`) | 承接具體多步驟任務（如執行 Python 分析腳本、生成特定模組代碼、撰寫章節），並進行自我驗收。 |
 | **`jev-executor-low`** | 寫入與執行 (Full Write) | Low (`flash_lite`) | 承接快速、輕量之單元任務（資料抽取、格式轉換、BibTeX 整理、摘要微調），極速且成本極低。 |
 

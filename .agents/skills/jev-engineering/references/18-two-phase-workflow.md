@@ -1,14 +1,14 @@
 # 18 — 兩階段規劃與執行
 
-v1.2 預設採 **high 規劃、medium/low 產出**。這是使用者要求的新執行政策；原有 Jev 的 Choice、Score、Noul 與八類工具能力全部保留。不是把 Jev 改成生成模型。
+v2.1 升級：預設採 **Phase 1 high 規劃決策、Phase 2 Kimi-k3 300 平行蜂群 (OpenCode) 或 medium/low 產出**。原有 Jev 的 Choice、Score、Noul 與八類工具能力全部保留。Phase 1 專注純決策與算力配置，不得執行寫作或生成任務；Phase 2 透過蜂群並發與 Single-Pass 批次驗收消除延遲。細節見 [19-kimi-k3-swarm-execution.md](19-kimi-k3-swarm-execution.md)。
 
 ## 角色與邊界
 
 | 階段 | 執行者 | 可以做 | 交接 |
 |---|---|---|---|
-| Phase 1 | high planner + Jev 決策層 | 讀取必要來源、拆任務、決定策略、分配算力 | 結構化任務規格 |
-| Phase 2 | medium/low executor + Jev gate | 寫作、程式修改、工具操作、測試 | 成品參照、檢查證據、實際用量 |
-| 驗收 | 宿主驗證程式或 medium/low reviewer | 檢查規格與成品是否相符 | completed 或 replan |
+| Phase 1 | high planner (Opus 5.5 / GPT-6 Astra / Sol-high) + Jev 決策層 | 讀取必要來源、拆任務、決定策略、分配算力 (8 類工具能力盤點) | 結構化任務規格 (`./queue/{task_id}.json`) |
+| Phase 2 | Kimi-k3 300 蜂群 (OpenCode) 或 medium/low executor + Jev gate | 寫作、程式修改、工具操作、測試 | 成品參照、檢查證據、實際用量 |
+| 驗收 | Jev Single-Pass 批次驗收器或獨立 verifier | 檢查規格與成品是否相符 | completed 或 requeue |
 
 第一階段可以回傳任務規格這類控制資料，但不能產生文章草稿、程式碼、patch 或預先寫好的答案。`objective` 是工作要求，`acceptance` 是可驗證條件，不能用來藏成品。planner 的唯讀工具限制由宿主設定；Python callback 不是 sandbox，不能阻止惡意 callback 自行寫檔。
 
@@ -87,13 +87,14 @@ Phase 2 執行前重新檢查所有模型配置。每個 worker 只收到自己�
 
 ## Claude Code plugin
 
-根目錄 `agents/` 提供三個角色：
+根目錄 `agents/` 提供四個角色：
 
 | 名稱 | 模型 alias | 工具 |
 |---|---|---|
 | `jev-planner` | `opus` | Read、Glob、Grep |
 | `jev-executor-medium` | `sonnet` | Read、Glob、Grep、Write、Edit、Bash |
 | `jev-executor-low` | `haiku` | Read、Glob、Grep、Write、Edit、Bash |
+| `jev-executor-kimi-swarm` | `haiku` | Read、Glob、Grep、Write、Edit、Bash |
 
 使用方式：要求主控「用 jev-engineering 處理此任務，先用 jev-planner 只規劃，再把交接任務分派給 medium／low executor」。skill 的主控負責連接 Jev、預算、交接與驗收；角色檔本身不會自動執行 Python。讀取副本／安裝後須啟動新 session，使宿主載入新角色。
 
