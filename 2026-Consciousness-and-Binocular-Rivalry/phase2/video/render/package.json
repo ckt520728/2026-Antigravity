@@ -1,0 +1,16 @@
+{
+  "name": "consciousness-rivalry-explainer-video",
+  "version": "1.0.0",
+  "description": "Remotion render pipeline for 2026 Consciousness and Binocular Rivalry explainer video (zh-TW)",
+  "scripts": {
+    "start": "remotion preview src/index.ts",
+    "build": "remotion render src/index.ts ExplainerVideo out/explainer_zh_tw.mp4 --codec=h264",
+    "generate-tts": "node scripts/generate_tts.js"
+  },
+  "dependencies": {
+    "remotion": "^4.0.0",
+    "@remotion/cli": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

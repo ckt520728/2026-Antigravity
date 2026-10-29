@@ -1,0 +1,772 @@
+[
+ {
+  "id": "F01",
+  "claim_en": "Hesse et al. 2026 was posted as bioRxiv v1 on 2026-10-16 and is NOT peer reviewed.",
+  "claim_zh_tw": "Hesse 等人 2026 於 2026-10-16 以 bioRxiv v1 預印本發表，尚未經同儕審查。",
+  "value": "2026-10-16",
+  "unit": "date",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md header; https://www.biorxiv.org/content/10.64898/2026.10.15.759299v1",
+  "status": "verified",
+  "notes": "inv#1. Preprint status must be stated in all content."
+ },
+ {
+  "id": "F02",
+  "claim_en": "Title: 'Rapid alternation of conscious and suppressed stimulus representations in the primate brain'.",
+  "claim_zh_tw": "題名：'Rapid alternation of conscious and suppressed stimulus representations in the primate brain'。",
+  "value": "title string",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md header",
+  "status": "verified",
+  "notes": "inv#3 verified title (the note's different title is F04)."
+ },
+ {
+  "id": "F03",
+  "claim_en": "Authors: Hesse, Lanfranchi, McGrory, Shi, Engel, Tsao; Hesse is first author.",
+  "claim_zh_tw": "作者：Hesse、Lanfranchi、McGrory、Shi、Engel、Tsao；Hesse 為第一作者。",
+  "value": "6",
+  "unit": "authors",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md header",
+  "status": "verified",
+  "notes": "inv#2 (first author and author list). Check PDF before publish."
+ },
+ {
+  "id": "F04",
+  "claim_en": "The video note's title 'A temporal multiplexing mechanism for conscious perception' is not the title of the preprint.",
+  "claim_zh_tw": "影片筆記所載題名 'A temporal multiplexing mechanism for conscious perception' 並非該預印本題名。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/01_notes_inventory.md claim 3 vs research/raw/web_biorxiv_hesse2026_fulltext.md header",
+  "status": "contradicted",
+  "notes": "inv#3. Do not cite the video-note title."
+ },
+ {
+  "id": "F05",
+  "claim_en": "DOI 10.64898/2026.10.15.759299.",
+  "claim_zh_tw": "DOI 為 10.64898/2026.10.15.759299。",
+  "value": "10.64898/2026.10.15.759299",
+  "unit": "DOI",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md header",
+  "status": "verified",
+  "notes": "Confirm the DOI resolves before publish."
+ },
+ {
+  "id": "F06",
+  "claim_en": "Affiliations in full text: UC Berkeley, Caltech BBE, Princeton Neuroscience Institute, HHMI (Tsao).",
+  "claim_zh_tw": "全文所列單位：UC Berkeley、Caltech BBE、Princeton Neuroscience Institute、HHMI（Tsao）。",
+  "value": "affiliations",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md header",
+  "status": "verified",
+  "notes": "inv#2 (institution part). Astera Institute is not in the full-text affiliation list; see F07. Check PDF before publish."
+ },
+ {
+  "id": "F07",
+  "claim_en": "Tsao is Chief Scientist for Neuro at the Astera Institute.",
+  "claim_zh_tw": "Tsao 為 Astera Institute 神經科學首席科學家。",
+  "value": "role",
+  "unit": "text",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Glitchwire",
+  "status": "secondary_only",
+  "notes": "inv#2 (Astera part). Press-sourced only."
+ },
+ {
+  "id": "F08",
+  "claim_en": "Tatiana Engel (Princeton) did the computational analysis.",
+  "claim_zh_tw": "Tatiana Engel（普林斯頓）負責計算分析。",
+  "value": "role",
+  "unit": "text",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Glitchwire",
+  "status": "secondary_only",
+  "notes": "Press only."
+ },
+ {
+  "id": "F09",
+  "claim_en": "Paradigm is binocular flash suppression (a rivalry variant), not classic free rivalry.",
+  "claim_zh_tw": "實驗範式為雙眼閃光抑制（雙眼競爭的變體），並非典型自由競爭。",
+  "value": "BFS",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "inv#7 (BFS part). Check PDF before publish."
+ },
+ {
+  "id": "F10",
+  "claim_en": "Describing the 2026 experiment simply as 'binocular rivalry' is imprecise.",
+  "claim_zh_tw": "將 2026 實驗簡稱為「雙眼競爭」不夠精確（應為閃光抑制）。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Discrepancy flags; research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "contradicted",
+  "notes": "Related to inv#7. Tsao's own thread says 'during rivalry' (secondary), so loose usage exists; prefer 'binocular flash suppression, a rivalry variant'."
+ },
+ {
+  "id": "F11",
+  "claim_en": "A priming image goes to one eye for 1 or 2 s, then a second image is flashed to the other eye; the flashed image usually dominates.",
+  "claim_zh_tw": "前導刺激圖像先給一眼 1 或 2 秒，再對另一眼閃現第二張圖，閃現圖通常占優勢。",
+  "value": "1 or 2",
+  "unit": "s",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F12",
+  "claim_en": "Experiment 1: priming 2 s, test 4 s, blank 500 ms; 10 faces forming 25 pairs; 7 sessions monkey A + 3 monkey M.",
+  "claim_zh_tw": "實驗一：前導刺激 2 秒、測試 4 秒、空白 500 毫秒；10 張臉組成 25 對；猴 A 7 場、猴 M 3 場。",
+  "value": "2 / 4 / 0.5; 10 faces; 25 pairs",
+  "unit": "s; count",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F13",
+  "claim_en": "Experiment 2: priming 1 s, test 1 s, blank 250 ms; 1500 faces forming 750 pairs; 60-face subset about 20 trials per condition; 5 sessions A + 4 M.",
+  "claim_zh_tw": "實驗二：前導刺激 1 秒、測試 1 秒、空白 250 毫秒；1500 張臉組成 750 對；60 張臉子集每條件約 20 次試驗；猴 A 5 場、猴 M 4 場。",
+  "value": "1 / 1 / 0.25; 1500; 750",
+  "unit": "s; count",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F14",
+  "claim_en": "Stimuli presented dichoptically via red/cyan anaglyph goggles; 7 deg stimuli; 60 x 44 deg LCD.",
+  "claim_zh_tw": "以紅／青色立體眼鏡進行雙眼分視；刺激 7 度；60 × 44 度液晶螢幕。",
+  "value": "7; 60x44",
+  "unit": "deg",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F15",
+  "claim_en": "Two male rhesus macaques (monkey A and M) were recorded.",
+  "claim_zh_tw": "記錄了 2 隻雄性恆河猴（猴 A、猴 M）。",
+  "value": "2",
+  "unit": "monkeys",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "inv#4. Authors list 'only two monkeys' as a limitation. Check PDF before publish."
+ },
+ {
+  "id": "F16",
+  "claim_en": "Neuropixels 1.0 NHP probes with Kilosort3 spike sorting; single and multi-units.",
+  "claim_zh_tw": "使用 Neuropixels 1.0 NHP 探針，Kilosort3 分類尖峰；含單單元與多單元。",
+  "value": "Neuropixels 1.0 NHP",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "inv#5 (Neuropixels part). Single-trial analysis is verified in F29."
+ },
+ {
+  "id": "F17",
+  "claim_en": "Recorded IT face patches ML and AM (fMRI-localized) and PFC patches PO (orbitofrontal) and PVL (ventrolateral).",
+  "claim_zh_tw": "記錄下顳葉臉部斑塊 ML、AM（fMRI 定位）與前額葉斑塊 PO（眶額葉）、PVL（腹外側）。",
+  "value": "4",
+  "unit": "patches",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "inv#6. Fig.1 legend wording: 'lateral orbitofrontal sulcus and infraprincipal dimple'. Check PDF before publish."
+ },
+ {
+  "id": "F18",
+  "claim_en": "3501 visually responsive neurons across sessions.",
+  "claim_zh_tw": "跨場次共 3501 個視覺反應神經元。",
+  "value": "3501",
+  "unit": "neurons",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "inv#5 (thousands of neurons). Press 'thousands' is consistent with this total. Check PDF before publish."
+ },
+ {
+  "id": "F19",
+  "claim_en": "PFC analysis used 661 neurons (300 PCA components; IT used 500).",
+  "claim_zh_tw": "前額葉分析使用 661 個神經元（300 個主成分；IT 為 500）。",
+  "value": "661",
+  "unit": "neurons",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F20",
+  "claim_en": "Example raster shows 429 simultaneously recorded cells.",
+  "claim_zh_tw": "範例放電點陣圖含 429 個同時記錄細胞。",
+  "value": "429",
+  "unit": "cells",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F21",
+  "claim_en": "Tuning-gain analysis used 543 cells.",
+  "claim_zh_tw": "調諧增益分析使用 543 個細胞。",
+  "value": "543",
+  "unit": "cells",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording; research/raw/web_tsao_x_and_press.md Other secondary coverage",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F22",
+  "claim_en": "Session counts: 9 main state analyses; 19 two-state vs one-state; 10 single-trial decoding; 7 of 9 cross-region.",
+  "claim_zh_tw": "場次數：主要狀態分析 9；雙狀態對單狀態 19；單次試驗解碼 10；跨區域 7（共 9 中）。",
+  "value": "9 / 19 / 10 / 7",
+  "unit": "sessions",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Subjects and recording",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F23",
+  "claim_en": "Monkeys made no report; monkey states were inferred from neural activity (LLR + HMM).",
+  "claim_zh_tw": "猴子不作報告；其狀態由神經活動（LLR + HMM）推論。",
+  "value": "no report",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "inv#7 (HMM/LLR part). Check PDF before publish."
+ },
+ {
+  "id": "F24",
+  "claim_en": "In 2026 the monkeys' percept was inferred from eye movements.",
+  "claim_zh_tw": "2026 年猴子的知覺由眼動推論。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm NOTE",
+  "status": "contradicted",
+  "notes": "Eye-movement inference belongs to the 2020 eLife paper; the 2026 text does not describe it. Guard against this mix-up. Per raw summary (visible text does not describe it); check PDF before publish."
+ },
+ {
+  "id": "F25",
+  "claim_en": "Percept validated in 14 human participants by button press; flashed percept reported on 82% of trials.",
+  "claim_zh_tw": "知覺以 14 位人類受試者按鍵驗證；82% 試驗報告看到閃現圖。",
+  "value": "14; 82",
+  "unit": "participants; %",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F26",
+  "claim_en": "Human validation stats: flashed vs primed t(13)=9.4, p=4e-7; window 300-1000 ms after flash; latency 0.86 +/- 0.05 s.",
+  "claim_zh_tw": "人類驗證統計：閃現對前導刺激 t(13)=9.4，p=4e-7；分析窗為閃現後 300–1000 毫秒；報告潛時 0.86 ± 0.05 秒。",
+  "value": "t(13)=9.4; 0.86",
+  "unit": "stat; s",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Paradigm",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F27",
+  "claim_en": "Binocular modulation averaged over neurons is weak: slope 0.23 vs unambiguous (5550 cell-stimulus pairs, p=8e-133).",
+  "claim_zh_tw": "平均雙眼調變微弱：相對無歧義條件斜率 0.23（5550 個細胞—刺激配對，p=8e-133）。",
+  "value": "0.23",
+  "unit": "slope",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F28",
+  "claim_en": "Population alternates between conscious and suppressed micro-epochs about 15 times per second.",
+  "claim_zh_tw": "族群約每秒 15 次在意識與被抑制微時段間交替。",
+  "value": "15",
+  "unit": "per second",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Abstract (paraphrase); research/raw/web_tsao_x_and_press.md Tsao on X",
+  "status": "verified",
+  "notes": "inv#9. Abstract is a paraphrase in raw. Check PDF before publish."
+ },
+ {
+  "id": "F29",
+  "claim_en": "Single-trial analysis (Poisson LLR in 10 ms bins; two-state Poisson HMM) is used to label micro-epochs.",
+  "claim_zh_tw": "以單次試驗分析（10 毫秒時間窗（bin）的 Poisson LLR；雙狀態 Poisson HMM）標記微時段。",
+  "value": "10 (LLR bin); 5 (HMM bin)",
+  "unit": "ms",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT); Discussion Methods/stats",
+  "status": "verified",
+  "notes": "inv#7 (10 ms is a bin width; the video note's '10 ms 時段' should not be read as epoch length). HMM bins are 5 ms. Check PDF before publish."
+ },
+ {
+  "id": "F30",
+  "claim_en": "Likelihood autocorrelation time constant is 67 ms (mean dwell 67 ms, median about 46 ms).",
+  "claim_zh_tw": "概似自相關時間常數為 67 毫秒（平均停留 67 毫秒，中位數約 46 毫秒）。",
+  "value": "67",
+  "unit": "ms",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#9 (about 60 ms). Say 'roughly 60 ms'. Check PDF before publish."
+ },
+ {
+  "id": "F31",
+  "claim_en": "HMM median dwell 64 ms (state 1) and 59 ms (state 2); plateau near 60 ms across bin sizes.",
+  "claim_zh_tw": "HMM 中位停留時間：狀態一 64 毫秒、狀態二 59 毫秒；跨時間窗大小約在 60 毫秒平穩。",
+  "value": "64 / 59",
+  "unit": "ms",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#9. Check PDF before publish."
+ },
+ {
+  "id": "F32",
+  "claim_en": "Alternation is more than an order of magnitude faster than rivalry switches (about 0.5 Hz).",
+  "claim_zh_tw": "交替速度比競爭切換（約 0.5 Hz）快一個數量級以上。",
+  "value": "0.5",
+  "unit": "Hz",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "0.5 Hz is the full-text figure for rivalry. Check PDF before publish."
+ },
+ {
+  "id": "F33",
+  "claim_en": "In state 1, conscious-face explained variance exceeds 80% for some features (priming ceiling above 90%); suppressed face near chance; reversed in state 2.",
+  "claim_zh_tw": "狀態一中，意識臉部的解釋變異在部分特徵超過 80%（前導刺激上限逾 90%）；被抑制臉接近機率水準；狀態二則相反。",
+  "value": "80 / 90",
+  "unit": "% EV",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#12 (reconstruction). The qualifier 'some features' is essential. Check PDF before publish."
+ },
+ {
+  "id": "F34",
+  "claim_en": "The 700 ms time-averaged reconstruction is a blurred superposition of both faces.",
+  "claim_zh_tw": "700 毫秒時間平均重建為兩張臉的模糊疊加。",
+  "value": "700",
+  "unit": "ms",
+  "source_ref": "research/01_notes_inventory.md claim 12",
+  "status": "unverified",
+  "notes": "inv#12. Not in raw full text (which has an averaging-model comparison, F45, not a 700 ms blur)."
+ },
+ {
+  "id": "F35",
+  "claim_en": "Single-trial 10-class decoding (chance 10%): full window 40% conscious / 34% suppressed.",
+  "claim_zh_tw": "單次試驗十類解碼（機率 10%）：整個視窗意識 40%、被抑制 34%。",
+  "value": "40 / 34; chance 10",
+  "unit": "%",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F36",
+  "claim_en": "State-1 decoding: over 61% conscious vs 4% suppressed (t(9)=11.0, p=2e-6); state 2 reversed (t(9)=-13.7, p=3e-7).",
+  "claim_zh_tw": "狀態一解碼：意識逾 61%、被抑制 4%（t(9)=11.0，p=2e-6）；狀態二相反（t(9)=-13.7，p=3e-7）。",
+  "value": "61 vs 4",
+  "unit": "%",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#13 (>60%). This is state-1 accuracy, not overall accuracy. Check PDF before publish."
+ },
+ {
+  "id": "F37",
+  "claim_en": "Held-out neurons: EV t(29)=17.5, p=6e-17; state 1 t(9)=7.6, p=3e-5; state 2 t(9)=-6.5, p=1e-4.",
+  "claim_zh_tw": "留出神經元：EV t(29)=17.5，p=6e-17；狀態一 t(9)=7.6，p=3e-5；狀態二 t(9)=-6.5，p=1e-4。",
+  "value": "t(29)=17.5",
+  "unit": "stat",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F38",
+  "claim_en": "Two-state model beats one-state model in all 19 sessions (t(18)=4.84, p=1e-4).",
+  "claim_zh_tw": "雙狀態模型在全部 19 場次均優於單狀態模型（t(18)=4.84，p=1e-4）。",
+  "value": "19",
+  "unit": "sessions",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F39",
+  "claim_en": "Single-cell tuning gain ratio 1.21 (conscious-in-state-1 vs suppressed-in-state-2), r=0.90.",
+  "claim_zh_tw": "單細胞調諧增益比 1.21（狀態一意識對狀態二被抑制），r=0.90。",
+  "value": "1.21",
+  "unit": "ratio",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#14 (about 21% higher is a derived restatement of 1.21). Check PDF before publish. p-value for this comparison: see F40."
+ },
+ {
+  "id": "F40",
+  "claim_en": "Conscious gain in state 1 vs suppressed gain in state 2: p = 3x10^-40 (mean ratio 1.21, r = 0.90).",
+  "claim_zh_tw": "狀態一意識增益對狀態二被抑制增益的比較：p = 3×10^-40（平均比 1.21，r = 0.90）。",
+  "value": "3e-40",
+  "unit": "p",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT) \"Single-cell gain\" (line restored by orchestrator 2026-10-29; same section also has p = 8x10^-95 and p = 6x10^-60 for within-state gain comparisons)",
+  "status": "verified",
+  "notes": "inv#14 (p-value part). Verified = consistent with the raw model-summary of the bioRxiv page, not verbatim. Check PDF before publish. Cite together with the comparison (conscious vs suppressed gain), not as an effect size; the effect size is the ratio 1.21 (F39). Earlier \"unverified\" status was due to the line being omitted from raw; now corrected."
+ },
+ {
+  "id": "F41",
+  "claim_en": "Mean firing rate is slightly higher in state 2; a linear decoder separates the two states with 66% accuracy.",
+  "claim_zh_tw": "狀態二平均放電率略高；線性解碼器以 66% 準確率區分兩種狀態。",
+  "value": "66",
+  "unit": "%",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#16. Not contradictory with gain 1.21: different measures (feature-tuning gain vs mean rate). Check PDF before publish."
+ },
+ {
+  "id": "F42",
+  "claim_en": "Same neurons switch content; no separate conscious and suppressed populations.",
+  "claim_zh_tw": "同一批神經元切換內容；並無分開的意識與被抑制族群。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F43",
+  "claim_en": "After gain equalization the residual binocular-unambiguous correlation disappears (r=-0.02, p=0.31): averaging explains the weak modulation.",
+  "claim_zh_tw": "增益等化後，雙眼與無歧義條件的殘餘相關消失（r=-0.02，p=0.31）：平均效應可解釋微弱調變。",
+  "value": "-0.02",
+  "unit": "r",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#17 (core). Authors' word is 'explains'; the 'entirely / 30 years' version is F44. Check PDF before publish."
+ },
+ {
+  "id": "F44",
+  "claim_en": "The past 30 years of weak modulation were entirely due to time-averaging cancelling opposite strong signals.",
+  "claim_zh_tw": "過去 30 年的微弱調變「完全」是反向強訊號時間平均抵消所致。",
+  "value": "30",
+  "unit": "years",
+  "source_ref": "research/01_notes_inventory.md claim 17",
+  "status": "contradicted",
+  "notes": "inv#17 (overstated part). Full text supports averaging as an explanation in this dataset, not 'entirely' or '30 years'. Status changed unverified to contradicted (QA #12): raw says averaging \"explains\" the weak modulation, not \"entirely\"/\"30 years\". Per raw summary; check PDF before publish."
+ },
+ {
+  "id": "F45",
+  "claim_en": "Controls: shuffled templates give EV<0; On/Off gain fluctuations do not explain states (kappa about 0); averaging, conscious-only and uncoordinated models each fail at least 3 of 4 tests; real data beat averaging model by dEV 8.2% (p=0.007).",
+  "claim_zh_tw": "對照：打亂模板 EV<0；On/Off 增益波動無法解釋狀態（kappa 約 0）；平均、僅意識、非協調模型各至少未通過 4 項檢定中的 3 項；真實資料勝過平均模型 ΔEV 8.2%（p=0.007）。",
+  "value": "8.2",
+  "unit": "% dEV",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT) Controls",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F46",
+  "claim_en": "Initial reconstruction analysis was circular; authors addressed it with held-out neurons.",
+  "claim_zh_tw": "最初重建分析具循環性；作者以留出神經元處理。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT); Discussion Limitations",
+  "status": "verified",
+  "notes": "Authors state this as a limitation. Check PDF before publish."
+ },
+ {
+  "id": "F47",
+  "claim_en": "ML and AM switching rhythms are weakly coordinated; authors say results 'do not provide strong evidence' for it.",
+  "claim_zh_tw": "ML 與 AM 切換節律協調微弱；作者表示結果「未提供強證據」。",
+  "value": "weak",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#15. Keep the wording hedged."
+ },
+ {
+  "id": "F48",
+  "claim_en": "IT and PFC both alternate between conscious and suppressed content.",
+  "claim_zh_tw": "IT 與 PFC 皆在意識與被抑制內容間交替。",
+  "value": "IT + PFC",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Abstract; Results (PFC); research/raw/web_tsao_x_and_press.md Tsao on X",
+  "status": "verified",
+  "notes": "inv#10 (alternation in both areas). PFC is described as 'qualitatively similar'."
+ },
+ {
+  "id": "F49",
+  "claim_en": "IT and PFC switch synchronously at about 15 Hz (cross-region synchrony).",
+  "claim_zh_tw": "IT 與 PFC 以約 15 Hz 同步切換。",
+  "value": "synchrony",
+  "unit": "text",
+  "source_ref": "research/01_notes_inventory.md claim 10 vs research/raw/web_biorxiv_hesse2026_fulltext.md (cross-region analysis in 7 of 9 sessions, outcome not captured)",
+  "status": "unverified",
+  "notes": "inv#10 (synchrony part). Raw gives no cross-region result; ML-AM coordination is weak (F47). Do not claim synchrony."
+ },
+ {
+  "id": "F50",
+  "claim_en": "PFC reconstruction quality is lower: priming EV below 80%, below 30% for shape features.",
+  "claim_zh_tw": "PFC 重建品質較低：前導刺激 EV 低於 80%，形狀特徵低於 30%。",
+  "value": "<80; <30",
+  "unit": "% EV",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (PFC)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F51",
+  "claim_en": "PFC state 1 tracks the conscious face and state 2 the suppressed face: EV t(29)=14.2, p=1e-14; decoding p=1e-5 (n=30 pairs); held-out halves EV p=3e-4, decoding p=0.03; slopes 0.91 and -0.52.",
+  "claim_zh_tw": "PFC 狀態一追蹤意識臉、狀態二追蹤被抑制臉：EV t(29)=14.2，p=1e-14；解碼 p=1e-5（n=30 對）；留出半數 EV p=3e-4、解碼 p=0.03；斜率 0.91 與 -0.52。",
+  "value": "t(29)=14.2; 0.91 / -0.52",
+  "unit": "stat",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (PFC)",
+  "status": "verified",
+  "notes": "Check PDF before publish."
+ },
+ {
+  "id": "F52",
+  "claim_en": "Authors say the alternation 'may therefore be a broad cortical phenomenon'.",
+  "claim_zh_tw": "作者表示此交替「因此可能是廣泛的皮質現象」。",
+  "value": "n/a",
+  "unit": "quote",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (PFC)",
+  "status": "verified",
+  "notes": "Hedged; generalization is untested. Check PDF before publish."
+ },
+ {
+  "id": "F53",
+  "claim_en": "The suppressed stimulus is not a weak residue; it occupies the same face space in its own epochs.",
+  "claim_zh_tw": "被抑制刺激並非微弱殘餘；在其自身時段占據與意識臉相同的臉空間。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Discussion",
+  "status": "verified",
+  "notes": "Authors' interpretation. Check PDF before publish."
+ },
+ {
+  "id": "F54",
+  "claim_en": "Open question: why do some micro-epochs reach awareness and others do not? Routing to report/action is speculation; switching mechanism unknown.",
+  "claim_zh_tw": "開放問題：為何有些微時段達到意識而其他沒有？路由至報告／行動為推測；切換機制未知。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Discussion; Limitations",
+  "status": "verified",
+  "notes": "Authors' stated limitations. Check PDF before publish."
+ },
+ {
+  "id": "F55",
+  "claim_en": "The Discussion links timing to attentional sampling, theta-phase working-memory access, orbitofrontal alternation, hippocampal theta flickering; it does not cite GNWT/IIT or alpha.",
+  "claim_zh_tw": "討論將時間尺度連結至注意力取樣、theta 相位工作記憶存取、眶額葉交替、海馬迴 theta 閃爍；未明確引用 GNWT／IIT，亦未討論 alpha。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Discussion",
+  "status": "verified",
+  "notes": "Framing the paper as a GNWT-vs-IIT verdict is our interpretation, not the authors'. 15 Hz is not theta (4-8 Hz) (03 s6). Check PDF before publish."
+ },
+ {
+  "id": "F56",
+  "claim_en": "Tsao: 'We have not shown that consciousness has a frame rate.'",
+  "claim_zh_tw": "Tsao：「我們並未證明『意識有影格率』。」",
+  "value": "n/a",
+  "unit": "quote",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Clarification thread (https://x.com/doristsao/status/2111859732806074812)",
+  "status": "secondary_only",
+  "notes": "Truncated snippet via search; only point 1 of four seen; X returned HTTP 402."
+ },
+ {
+  "id": "F57",
+  "claim_en": "'Consciousness has a frame rate' / 'consciousness is a 15-times-a-second flicker'.",
+  "claim_zh_tw": "「意識有影格率」／「意識是每秒 15 次的閃爍」。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Other secondary coverage; Clarification thread",
+  "status": "contradicted",
+  "notes": "Contradicted by the lead author's clarification and by the full-text scope (IT/PFC content alternation only). Do not state."
+ },
+ {
+  "id": "F58",
+  "claim_en": "Consciousness depends on many brain areas; the paper reports only a few select nodes.",
+  "claim_zh_tw": "意識依賴多個腦區；本文僅報告少數選定節點。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Clarification thread (search summary)",
+  "status": "secondary_only",
+  "notes": "Search-summary paraphrase, not a verbatim quote."
+ },
+ {
+  "id": "F59",
+  "claim_en": "Tsao launch thread: findings 'overturn decades of thinking' and show 'a pure correlate of conscious awareness'.",
+  "claim_zh_tw": "Tsao 發文稱發現「推翻數十年的想法」並呈現「意識覺知的純粹相關」。",
+  "value": "n/a",
+  "unit": "quote",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Thread 1 (https://x.com/doristsao/status/2111316522098733078)",
+  "status": "secondary_only",
+  "notes": "Promotional framing; not for neutral factual statements."
+ },
+ {
+  "id": "F60",
+  "claim_en": "Authors say findings 'expose a limitation of searching for NCC within the average activity of specific brain regions'.",
+  "claim_zh_tw": "作者表示研究結果「揭示在特定腦區平均活動中尋找 NCC 的限制」。",
+  "value": "n/a",
+  "unit": "quote",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Glitchwire",
+  "status": "secondary_only",
+  "notes": "Press-reported author statement."
+ },
+ {
+  "id": "F61",
+  "claim_en": "Glitchwire caveats: not peer reviewed; only 2 monkeys; 'timing, not area' framing goes beyond preprint.",
+  "claim_zh_tw": "Glitchwire 提醒：未經同儕審查；僅 2 隻猴；「時機而非腦區」框架超出預印本所示。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_tsao_x_and_press.md Glitchwire",
+  "status": "secondary_only",
+  "notes": "Commentary, not authors' claim."
+ },
+ {
+  "id": "F62",
+  "claim_en": "The first author and Tsao call this the most important breakthrough of their careers.",
+  "claim_zh_tw": "第一作者與曹穎稱此為職涯最重要突破。",
+  "value": "n/a",
+  "unit": "quote",
+  "source_ref": "research/01_notes_inventory.md claim 18",
+  "status": "unverified",
+  "notes": "inv#18. Only in video note, no source; do not cite."
+ },
+ {
+  "id": "F63",
+  "claim_en": "Analyst rating that the evidence is 'moderate to strong'.",
+  "claim_zh_tw": "分析者評分證據「中等至強」。",
+  "value": "moderate-strong",
+  "unit": "rating",
+  "source_ref": "research/01_notes_inventory.md claim 19",
+  "status": "unverified",
+  "notes": "inv#19. Note-writer's subjective rating, not a paper claim; do not cite as fact."
+ },
+ {
+  "id": "F64",
+  "claim_en": "2020 eLife numbers (human 93%, ML 57%, AM 73%) are 2020 results, not 2026.",
+  "claim_zh_tw": "93%（人類）、57%（ML）、73%（AM）為 2020 eLife 的數字，並非 2026 結果。",
+  "value": "93 / 57 / 73",
+  "unit": "%",
+  "source_ref": "research/01_notes_inventory.md claim 20",
+  "status": "unverified",
+  "notes": "inv#20. Numbers are not in the inputs (source unconfirmed), so status is unverified, not contradicted (QA #10). Guardrail kept: if used at all, they are 2020 numbers and must NOT be attributed to 2026 (the 2026 human validation number is 82%, F25). Do not use."
+ },
+ {
+  "id": "F65",
+  "claim_en": "The 2026 research has a 'perception stable period of 700 ms'.",
+  "claim_zh_tw": "2026 研究的「感知穩定期」為 700 毫秒。",
+  "value": "700",
+  "unit": "ms",
+  "source_ref": "research/01_notes_inventory.md claim 8",
+  "status": "unverified",
+  "notes": "inv#8. Not in raw full text; paradigm durations are 1-4 s (F12, F13)."
+ },
+ {
+  "id": "F66",
+  "claim_en": "Conscious micro-epoch signal discriminability returns to the level of stimulus presented alone.",
+  "claim_zh_tw": "意識微時段的信號區分度恢復至單獨呈現之水平。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/01_notes_inventory.md claim 11",
+  "status": "unverified",
+  "notes": "inv#11. Raw gives priming ceiling >90% and state-1 EV >80% for some features, not an 'alone' comparison; do not cite."
+ },
+ {
+  "id": "F67",
+  "claim_en": "State 1 reconstructs the seen face and state 2 the unseen face (about 60 ms states).",
+  "claim_zh_tw": "狀態一重建看見的臉、狀態二重建未看見的臉（約 60 毫秒狀態）。",
+  "value": "~60",
+  "unit": "ms",
+  "source_ref": "research/raw/web_biorxiv_hesse2026_fulltext.md Results (IT)",
+  "status": "verified",
+  "notes": "inv#12 (state part); dwell from F30-F31."
+ },
+ {
+  "id": "F68",
+  "claim_en": "Hesse & Tsao 2020, eLife 9:e58360: no-report paradigm; percept inferred from eye movements; IT face cells track percept; perceived and suppressed stimuli decodable on single trials.",
+  "claim_zh_tw": "Hesse 與 Tsao 2020，eLife 9:e58360：無報告範式；以眼動推論知覺；IT 臉部細胞追蹤知覺；單次試驗可解碼被知覺與被抑制刺激。",
+  "value": "2020",
+  "unit": "year",
+  "source_ref": "research/raw/web_related_papers.md item 1; https://elifesciences.org/articles/58360",
+  "status": "secondary_only",
+  "notes": "Abstract level only: raw file states \"Abstracts and press only\", so secondary_only (same tier as F69; QA #9). Detail beyond abstract unverified."
+ },
+ {
+  "id": "F69",
+  "claim_en": "Shi et al. 2026, Nature, DOI 10.1038/s41586-026-10267-3: face cells switch codes via a concerted population event under 20 ms; faces only.",
+  "claim_zh_tw": "Shi 等人 2026，Nature，DOI 10.1038/s41586-026-10267-3：臉部細胞經一次小於 20 毫秒的族群協同事件切換編碼；僅限臉部。",
+  "value": "<20",
+  "unit": "ms",
+  "source_ref": "research/raw/web_related_papers.md item 2; https://neuroscience.caltech.edu/news/fixed-or-flexible-study-shows-vision-related-neurons-can-rapidly-switch-codes",
+  "status": "secondary_only",
+  "notes": "Caltech news/repository, not the Nature page itself."
+ },
+ {
+  "id": "F70",
+  "claim_en": "Publication date of Shi et al. 2026 is discrepant: Mar 25 2026 (Caltech news) vs May 7 2026 (Caltech repository).",
+  "claim_zh_tw": "Shi 等人 2026 發表日期不一致：2026-03-25（Caltech 新聞）對 2026-05-07（Caltech 典藏）。",
+  "value": "Mar 25 vs May 7",
+  "unit": "date",
+  "source_ref": "research/raw/web_related_papers.md item 2",
+  "status": "unverified",
+  "notes": "Unresolved; check the Nature page. Preprint bioRxiv 2023-12-06 (10.1101/2023.12.06.570341)."
+ },
+ {
+  "id": "F71",
+  "claim_en": "Kingir et al. 2025 bioRxiv: fixation shifts in a no-report rivalry paradigm induce saccade-related perceptual switches.",
+  "claim_zh_tw": "Kingir 等人 2025 bioRxiv：無報告雙眼競爭範式中的注視轉移誘發與眼跳相關的知覺切換。",
+  "value": "2025",
+  "unit": "year",
+  "source_ref": "research/raw/web_related_papers.md item 3; https://www.biorxiv.org/content/10.1101/2025.02.09.637085v1",
+  "status": "secondary_only",
+  "notes": "Title and link only; contents unverified. Preprint."
+ },
+ {
+  "id": "F72",
+  "claim_en": "Cogitate Consortium 2025 (Nature, Apr 30 2025): 256 human participants; fMRI, MEG, iEEG; preregistered.",
+  "claim_zh_tw": "Cogitate Consortium 2025（Nature，2025-04-30）：256 位人類受試者；fMRI、MEG、iEEG；預先註冊。",
+  "value": "256",
+  "unit": "participants",
+  "source_ref": "research/raw/web_related_papers.md item 4; https://idw-online.de/en/news851431",
+  "status": "secondary_only",
+  "notes": "Source is a press report (idw), not the Nature paper."
+ },
+ {
+  "id": "F73",
+  "claim_en": "Cogitate 2025: no sustained posterior synchronization (challenges IIT); lack of ignition at stimulus offset and limited PFC representation of some conscious dimensions (challenges GNWT); neither theory decisively confirmed or refuted.",
+  "claim_zh_tw": "Cogitate 2025：無持續性後部同步（挑戰 IIT）；刺激結束時缺乏點燃且 PFC 對部分意識維度表徵有限（挑戰 GNWT）；兩理論皆未被決定性證實或否證。",
+  "value": "n/a",
+  "unit": "text",
+  "source_ref": "research/raw/web_related_papers.md item 4",
+  "status": "secondary_only",
+  "notes": "Press-report summary."
+ },
+ {
+  "id": "F74",
+  "claim_en": "Rivalry classics (Wheatstone 1838; Levelt 1965; Wolfe 1984; Logothetis & Schall 1989; Leopold & Logothetis 1996; Sheinberg & Logothetis 1997; Blake & Logothetis 2002).",
+  "claim_zh_tw": "雙眼競爭經典文獻（Wheatstone 1838、Levelt 1965、Wolfe 1984、Logothetis & Schall 1989、Leopold & Logothetis 1996、Sheinberg & Logothetis 1997、Blake & Logothetis 2002）。",
+  "value": "7",
+  "unit": "references",
+  "source_ref": "research/03_background_review.md Section 1",
+  "status": "unverified",
+  "notes": "Tagged [KNOWLEDGE]: from memory, not fetched; volumes/pages unverified. Verify before citing."
+ },
+ {
+  "id": "F75",
+  "claim_en": "Tsuchiya et al. 2015, Trends Cogn Sci 19(12):757-770, on no-report paradigms.",
+  "claim_zh_tw": "Tsuchiya 等人 2015，Trends Cogn Sci 19(12):757-770，論無報告範式。",
+  "value": "2015",
+  "unit": "year",
+  "source_ref": "research/03_background_review.md Section 3",
+  "status": "unverified",
+  "notes": "[KNOWLEDGE]; page numbers flagged UNVERIFIED in source."
+ },
+ {
+  "id": "F76",
+  "claim_en": "Tsao Mindscape podcast ep. 284 'Doris Tsao on How the Brain Turns Vision Into the World'.",
+  "claim_zh_tw": "Tsao 於 Mindscape 第 284 集訪談「Doris Tsao on How the Brain Turns Vision Into the World」。",
+  "value": "284",
+  "unit": "episode",
+  "source_ref": "research/raw/web_related_papers.md item 5; https://preposterousuniverse.com/?p=5693",
+  "status": "secondary_only",
+  "notes": "Listing only; contents not checked."
+ },
+ {
+  "id": "F77",
+  "claim_en": "Rhythmic sampling literature: attention samples at about 4 Hz per location (Landau & Fries 2012); perceptual cycles at theta/alpha (VanRullen 2016).",
+  "claim_zh_tw": "節律取樣文獻：注意力於每個位置約 4 Hz 取樣（Landau & Fries 2012）；知覺循環在 theta／alpha（VanRullen 2016）。",
+  "value": "4",
+  "unit": "Hz",
+  "source_ref": "research/03_background_review.md Section 6",
+  "status": "unverified",
+  "notes": "[KNOWLEDGE], not fetched. Different measurement from the 15 Hz content alternation; do not equate."
+ }
+]

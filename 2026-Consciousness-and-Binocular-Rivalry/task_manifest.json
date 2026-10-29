@@ -1,0 +1,316 @@
+{
+  "schema": "jev.task_manifest/1",
+  "project": "2026_Consciousness_Binocular_Rivalry",
+  "planner_model": "claude-opus-5.5",
+  "policy": {
+    "concurrency": 4,
+    "requests_per_minute": 60,
+    "canary_min_group": 3,
+    "breaker_failure_ratio": 0.25,
+    "breaker_min_failures": 2
+  },
+  "limits": {
+    "max_tasks": 16,
+    "planner_output_tokens": 4096,
+    "max_worker_output_tokens": 12000,
+    "max_total_output_tokens": 65536,
+    "max_task_chars": 12000,
+    "max_tool_calls": 12
+  },
+  "usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "usage_complete": false
+  },
+  "tasks": [
+    {
+      "task_id": "P2-00",
+      "objective": "Write the Phase 2 shared brief: audience, tone, key messages, allowed fact ids, forbidden claims, per-deliverable constraints, terminology cheat-sheet. Manual canary: human review required before fan-out.",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "phase2/00_brief/style_refs/Thariq_finding_unknown_README.md"
+      ],
+      "outputs": [
+        "phase2/00_brief/brief.md",
+        "phase2/00_brief/sources.md"
+      ],
+      "acceptance": [
+        "brief.md lists the allowed verified fact ids and the forbidden statements (frame rate claim, 2020 numbers attributed to 2026, GNWT/IIT attributed to authors).",
+        "Defines the binocular flash suppression / binocular rivalry framing and per-deliverable constraints for video, deck, PPTX and blog.",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write"
+      ],
+      "depends_on": [],
+      "max_output_tokens": 6000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    },
+    {
+      "task_id": "P2-V1",
+      "objective": "Write the zh-TW explainer video narration script and shot-by-shot storyboard (target ~240 s; hard range 180-300 s total).",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "phase2/00_brief/brief.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "outputs": [
+        "phase2/video/storyboard/script_zh_tw.md",
+        "phase2/video/storyboard/storyboard.json",
+        "phase2/video/storyboard/sources.md"
+      ],
+      "acceptance": [
+        "Total duration 180-300 s (sum of duration_s), targeting ~240 s.",
+        "storyboard.json shots each have id, duration_s, narration_zh_tw, visual, fact_ids; every fact id exists in the fact sheet with status verified or secondary_only.",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write"
+      ],
+      "depends_on": [
+        "P2-00"
+      ],
+      "max_output_tokens": 8000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    },
+    {
+      "task_id": "P2-V2",
+      "objective": "Build a Remotion project that renders the storyboard into a 1920x1080 30fps zh-TW explainer video with Noto Sans TC subtitles and a zh-TW TTS narration track. TTS engine chosen at P2-V2 kickoff: free/local first (e.g. edge-tts or Windows SAPI); no paid API without human approval. npm install (Remotion) is pre-approved, scoped to phase2/video/render/ only.",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "phase2/00_brief/brief.md",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "phase2/video/storyboard/script_zh_tw.md",
+        "phase2/video/storyboard/storyboard.json"
+      ],
+      "outputs": [
+        "phase2/video/render/",
+        "phase2/video/render/out/explainer_zh_tw.mp4",
+        "phase2/video/render/sources.md"
+      ],
+      "acceptance": [
+        "Output mp4 is 1920x1080 at 30 fps (verify with ffprobe or Remotion metadata) with Noto Sans TC subtitles matching the storyboard narration and a zh-TW TTS narration track.",
+        "Preprint statement appears on screen; duration within 180-300 s.",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn",
+        "network_egress"
+      ],
+      "depends_on": [
+        "P2-V1"
+      ],
+      "max_output_tokens": 10000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    },
+    {
+      "task_id": "P2-H1",
+      "objective": "Build a single-file offline HTML slide deck in English following the soil-html-deck style, with speaker notes citing fact ids.",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "phase2/00_brief/brief.md",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "phase2/00_brief/style_refs/soil-html-deck_SKILL.md"
+      ],
+      "outputs": [
+        "phase2/html_deck/index.html",
+        "phase2/html_deck/sources.md"
+      ],
+      "acceptance": [
+        "12-18 slides; works offline (no external network resources); speaker notes include fact ids.",
+        "Keyboard navigation works and the preprint statement 'bioRxiv preprint, not yet peer reviewed' is on the first or last slide.",
+        "English deck: zh-TW glossary check not applicable (per CLAUDE.md acceptance rules).",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write"
+      ],
+      "depends_on": [
+        "P2-00"
+      ],
+      "max_output_tokens": 10000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    },
+    {
+      "task_id": "P2-P1",
+      "objective": "Build an English PPTX following the soil-deck-pipeline style, with a reproducible build script.",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "phase2/00_brief/brief.md",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "phase2/00_brief/style_refs/soil-deck-pipeline_SKILL.md"
+      ],
+      "outputs": [
+        "phase2/pptx/consciousness_rivalry_en.pptx",
+        "phase2/pptx/build/",
+        "phase2/pptx/sources.md"
+      ],
+      "acceptance": [
+        "PPTX opens without errors and is generated by scripts under phase2/pptx/build/.",
+        "English text states: bioRxiv preprint, not yet peer reviewed; speaker notes cite fact ids.",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "P2-00"
+      ],
+      "max_output_tokens": 10000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    },
+    {
+      "task_id": "P2-B1",
+      "objective": "Write a zh-TW blog post for the personal homepage following the publish-lab-blog style. Do not publish.",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "phase2/00_brief/brief.md",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "phase2/00_brief/style_refs/publish-lab-blog_SKILL.md",
+        "phase2/00_brief/style_refs/publish-lab-blog_PITFALLS.md",
+        "phase2/00_brief/style_refs/personal-blog-post-writing_SKILL.md"
+      ],
+      "outputs": [
+        "phase2/blog/post_zh_tw.md",
+        "phase2/blog/images/",
+        "phase2/blog/sources.md"
+      ],
+      "acceptance": [
+        "Length 2000-3500 字 with valid front-matter per publish-lab-blog; images stored under phase2/blog/images/.",
+        "No publishing, deployment or push is performed.",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write"
+      ],
+      "depends_on": [
+        "P2-00"
+      ],
+      "max_output_tokens": 10000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    },
+    {
+      "task_id": "P2-Q1",
+      "objective": "Cross-artifact QA of video, HTML deck, PPTX and blog: fact ids, status rules, preprint statement, units, terminology consistency.",
+      "inputs": [
+        "research/04_dossier.md",
+        "research/05_glossary.csv",
+        "research/06_fact_sheet.json",
+        "research/06_fact_sheet_README.md",
+        "research/07_analogies_visuals.md",
+        "phase2/00_brief/brief.md",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "phase2/video/storyboard/storyboard.json",
+        "phase2/video/render/out/explainer_zh_tw.mp4",
+        "phase2/html_deck/index.html",
+        "phase2/pptx/consciousness_rivalry_en.pptx",
+        "phase2/blog/post_zh_tw.md",
+        ".claude/skills/verify-with-rubric"
+      ],
+      "outputs": [
+        "phase2/qa/phase2_qa_report.md"
+      ],
+      "acceptance": [
+        "Report lists, per artifact, every fact id used and flags any unverified/contradicted fact, missing preprint statement, or unit/glossary violation with file locations.",
+        "Subjective outputs are scored with verify-with-rubric; verdict pass or fail per artifact.",
+        "Use only facts with status verified in research/06_fact_sheet.json; secondary_only facts must be labeled 初步 (English: preliminary); never use unverified or contradicted facts.",
+        "States clearly: bioRxiv 預印本、尚未經同儕審查 (English deliverable: bioRxiv preprint, not yet peer reviewed).",
+        "Time units written as Hz and ms; terms follow research/05_glossary.csv (zh-TW Taiwan usage).",
+        "A sources.md sits next to the deliverable and maps every cited fact id (e.g. F39) to its use."
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "P2-V2",
+        "P2-H1",
+        "P2-P1",
+        "P2-B1"
+      ],
+      "max_output_tokens": 10000,
+      "model": "kimi-k3",
+      "tier": "medium",
+      "data_class": "public",
+      "confidence": 0.85
+    }
+  ],
+  "sha256": "7f6c6fdbb3f3c482e9599943a45e7e40ed6e0f7b061cb56c65447c676f4ca8f0"
+}

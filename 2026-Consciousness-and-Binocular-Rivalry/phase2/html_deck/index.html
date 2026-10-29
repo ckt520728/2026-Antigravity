@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapid Alternation of Conscious & Suppressed Stimulus Representations — Hesse et al. 2026</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #151d30;
+      --card-border: #23304c;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-red: #f43f5e;
+      --accent-gold: #fbbf24;
+      --accent-emerald: #34d399;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-family);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+    /* Presentation Deck Viewport */
+    .deck-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    /* Top Bar */
+    .deck-header {
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(11, 15, 25, 0.9);
+      z-index: 100;
+    }
+    .deck-title-mini {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+    .deck-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .badge-preprint {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    /* Main Slide Stage */
+    .slide-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide {
+      width: 100%;
+      max-width: 1100px;
+      height: 100%;
+      max-height: 640px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 48px 56px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      animation: slideIn 0.25s ease-out;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: scale(0.985); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .slide-category {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+    .slide-heading {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 24px;
+    }
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .slide-body p {
+      margin-bottom: 16px;
+    }
+    .slide-body strong {
+      color: #f8fafc;
+    }
+    .highlight-box {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 4px solid var(--accent);
+      padding: 18px 24px;
+      border-radius: 0 10px 10px 0;
+      margin: 16px 0;
+      font-size: 1.1rem;
+      color: #e2e8f0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 12px;
+    }
+    .grid-card {
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .grid-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+    .fact-tag {
+      background: #1e293b;
+      color: #38bdf8;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      border: 1px solid #334155;
+    }
+    /* Speaker Notes Drawer */
+    .notes-drawer {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 900px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      z-index: 200;
+      display: none;
+      animation: noteFade 0.2s ease;
+    }
+    .notes-drawer.open {
+      display: block;
+    }
+    @keyframes noteFade {
+      from { opacity: 0; transform: translate(-50%, 15px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    .notes-header {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .notes-content {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    /* Bottom Controls */
+    .deck-controls {
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg);
+      border-top: 1px solid var(--card-border);
+      z-index: 100;
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #1e293b;
+      border-color: var(--accent);
+    }
+    .btn-active {
+      background: var(--accent);
+      color: #082f49;
+      border-color: var(--accent);
+    }
+    .slide-counter {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+    <!-- Top Header -->
+    <header class="deck-header">
+      <div class="deck-title-mini">TSAO LAB 2026 PREPRINT DECK</div>
+      <div class="deck-meta">
+        <span class="badge-preprint">bioRxiv preprint, not yet peer reviewed</span>
+        <span>Hesse et al. (Oct 2026)</span>
+      </div>
+    </header>
+
+    <!-- Slide Stage -->
+    <main class="slide-stage">
+
+      <!-- SLIDE 1: Title -->
+      <div class="slide active" id="slide-1">
+        <div>
+          <div class="slide-category">Visual Neuroscience & Consciousness</div>
+          <h1 class="slide-heading">Rapid Alternation of Conscious & Suppressed Stimulus Representations in the Primate Brain</h1>
+        </div>
+        <div class="slide-body">
+          <p>Key findings, population dynamics, and implications from Doris Tsao's lab preprint.</p>
+          <div class="highlight-box">
+            <strong>Core Insight:</strong> Rather than suppressing unseen stimuli into noise, neural populations in inferotemporal and prefrontal cortex rapidly alternate between conscious and suppressed face representations <strong>~15 times per second</strong> (~60 ms dwell time).
+          </div>
+          <p style="font-size: 0.95rem; margin-top: 8px;">
+            Janis Hesse, S. Lanfranchi, C. McGrory, Y. Shi, T. A. Engel, and Doris Y. Tsao<br>
+            <span style="color: var(--text-muted);">UC Berkeley, Caltech BBE, Princeton, HHMI</span>
+          </p>
+        </div>
+        <div class="slide-footer">
+          <span>bioRxiv preprint (Oct 16, 2026) &bull; DOI: 10.64898/2026.10.15.759299</span>
+          <span class="fact-tag">F01, F02, F03, F05, F06</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: The Mystery -->
+      <div class="slide" id="slide-2">
+        <div>
+          <div class="slide-category">Background & Puzzle</div>
+          <h2 class="slide-heading">The 30-Year Mystery: Where is Consciousness in the Cortex?</h2>
+        </div>
+        <div class="slide-body">
+          <p>For over three decades, neuroscientists used <strong>binocular rivalry</strong> to dissociate constant physical sensory input from alternating conscious perception.</p>
+          <div class="grid-2">
+            <div class="grid-card">
+              <div class="grid-card-title">Classical Expectation</div>
+              <p style="font-size: 0.95rem;">High-level visual areas (such as the inferotemporal cortex, IT) should strongly fire for conscious stimuli and shut down for suppressed ones.</p>
+            </div>
+            <div class="grid-card">
+              <div class="grid-card-title" style="color: var(--accent-red);">The Empirical Puzzle</div>
+              <p style="font-size: 0.95rem;">When averaged over hundreds of milliseconds, the observed modulation was surprisingly weak — showing an average slope of only <strong>0.23</strong>.</p>
+            </div>
+          </div>
+          <p style="margin-top: 16px;">Did the brain discard the suppressed image, or was something fundamental obscured by time averaging?</p>
+        </div>
+        <div class="slide-footer">
+          <span>Time-averaged modulation slope &approx; 0.23</span>
+          <span class="fact-tag">F09, F27</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: The BFS Paradigm -->
+      <div class="slide" id="slide-3">
+        <div>
+          <div class="slide-category">Experimental Paradigm</div>
+          <h2 class="slide-heading">Binocular Flash Suppression (BFS)</h2>
+        </div>
+        <div class="slide-body">
+          <p>The authors employed <strong>binocular flash suppression</strong> (a robust variant of binocular rivalry):</p>
+          <ul style="margin-left: 24px; margin-bottom: 16px; font-size: 1.05rem;">
+            <li style="margin-bottom: 8px;"><strong>Priming stimulus:</strong> One eye views a face stimulus for 1 or 2 seconds.</li>
+            <li style="margin-bottom: 8px;"><strong>Flash stimulus:</strong> A second face is abruptly flashed to the contralateral eye.</li>
+            <li style="margin-bottom: 8px;"><strong>Perceptual outcome:</strong> The flashed image overwhelmingly wins conscious perception (validated in 14 humans at <strong>82% dominance</strong>).</li>
+          </ul>
+          <div class="highlight-box">
+            Stimuli subtended 7&deg; visual angle using red-cyan stereoscopic anaglyph glasses, allowing deterministic control over stimulus timing without motor report confounds.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Human behavioral validation: 82% flash dominance</span>
+          <span class="fact-tag">F09, F11, F12, F13, F14, F25</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Recording Scale -->
+      <div class="slide" id="slide-4">
+        <div>
+          <div class="slide-category">Electrophysiology</div>
+          <h2 class="slide-heading">Massive Neuropixels Recording Across 4 Face Patches</h2>
+        </div>
+        <div class="slide-body">
+          <p>High-density recordings were conducted in two male rhesus macaques using <strong>Neuropixels 1.0 NHP</strong> probes:</p>
+          <div class="grid-2">
+            <div class="grid-card">
+              <div class="grid-card-title">Inferotemporal (IT) Cortex</div>
+              <p style="font-size: 0.95rem;"><strong>Patch ML</strong> (middle lateral, face feature encoding)<br><strong>Patch AM</strong> (anterior medial, viewpoint-invariant identity)</p>
+            </div>
+            <div class="grid-card">
+              <div class="grid-card-title">Prefrontal Cortex (PFC)</div>
+              <p style="font-size: 0.95rem;"><strong>Patch PO</strong> (orbital prefrontal patch)<br><strong>Patch PVL</strong> (ventrolateral prefrontal patch)</p>
+            </div>
+          </div>
+          <p style="margin-top: 16px;">
+            A total of <strong>3,501 visual responsive neurons</strong> were recorded across sessions, with <strong>661 prefrontal neurons</strong> analyzed simultaneously.
+          </p>
+        </div>
+        <div class="slide-footer">
+          <span>2 macaques &bull; 3,501 visual units &bull; 4 patches</span>
+          <span class="fact-tag">F15, F16, F17, F18, F19</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: No-Report Single-Trial Decoding -->
+      <div class="slide" id="slide-5">
+        <div>
+          <div class="slide-category">Analytical Framework</div>
+          <h2 class="slide-heading">No-Report Paradigm & 10 ms Hidden Markov Models</h2>
+        </div>
+        <div class="slide-body">
+          <p>To eliminate motor report confounds, monkeys did not press buttons. Instead, conscious and suppressed states were inferred from single-trial population spiking:</p>
+          <ul style="margin-left: 24px; margin-bottom: 16px; font-size: 1.05rem;">
+            <li style="margin-bottom: 8px;">Spikes were binned in <strong>10 ms sliding time windows</strong> (analysis bin, not state duration).</li>
+            <li style="margin-bottom: 8px;">A <strong>Poisson Log-Likelihood Ratio (LLR)</strong> matched population patterns against unconfounded templates.</li>
+            <li style="margin-bottom: 8px;">A <strong>2-state Hidden Markov Model (HMM)</strong> decoded transitions between states.</li>
+          </ul>
+          <div class="highlight-box">
+            The 2-state switching model outperformed single-state static models in <strong>19 out of 19 sessions</strong>.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>10 ms Poisson LLR + 2-state HMM &bull; 19/19 sessions win</span>
+          <span class="fact-tag">F23, F29, F38</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: The Discovery: 15 Hz Alternation -->
+      <div class="slide" id="slide-6">
+        <div>
+          <div class="slide-category">Primary Finding</div>
+          <h2 class="slide-heading">Populations Rapidly Alternate at ~15 Hz</h2>
+        </div>
+        <div class="slide-body">
+          <p>Within individual trials, population representations did not remain steady:</p>
+          <div class="grid-2">
+            <div class="grid-card">
+              <div class="grid-card-title" style="color: var(--accent);">State 1: Conscious Representation</div>
+              <p style="font-size: 0.95rem;">Represents the perceived face. 10-class single-trial decoding accuracy exceeds <strong>61%</strong> (chance is 10%).</p>
+            </div>
+            <div class="grid-card">
+              <div class="grid-card-title" style="color: var(--accent-red);">State 2: Suppressed Representation</div>
+              <p style="font-size: 0.95rem;">Represents the invisible face. Decodes suppressed face features with high fidelity.</p>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Oscillation Frequency:</strong> Populations alternate between State 1 and State 2 <strong>~15 times per second (~15 Hz)</strong>, with an average dwell time of <strong>~60 ms</strong> (mean 67 ms, median 46&ndash;64 ms).
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Alternation &approx; 15 Hz &bull; Mean dwell time &approx; 67 ms</span>
+          <span class="fact-tag">F28, F30, F31, F36, F67</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: The Suppressed Stimulus -->
+      <div class="slide" id="slide-7">
+        <div>
+          <div class="slide-category">Mechanism</div>
+          <h2 class="slide-heading">The Unseen Face Occupies the Full Face Space</h2>
+        </div>
+        <div class="slide-body">
+          <p>Crucially, the suppressed stimulus is <strong>not</strong> an attenuated or noisy phantom:</p>
+          <ul style="margin-left: 24px; margin-bottom: 16px; font-size: 1.05rem;">
+            <li style="margin-bottom: 8px;"><strong>Full Geometry:</strong> During State 2 epochs, the suppressed face occupies the exact same 50-dimensional feature "face space" as when seen alone.</li>
+            <li style="margin-bottom: 8px;"><strong>Firing Rates:</strong> Overall firing rate in State 2 is actually slightly higher than in State 1.</li>
+            <li style="margin-bottom: 8px;"><strong>Single Population:</strong> The exact same neurons represent both faces in turn; there are not two separate populations.</li>
+          </ul>
+          <div class="highlight-box">
+            High-level visual cortex maintains rich, full-fidelity representations of sensory stimuli even when completely suppressed from subjective awareness.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Same neurons switch content &bull; Suppressed stimulus fully represented</span>
+          <span class="fact-tag">F41, F42, F53</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 8: Effect Size & Tuning Gain -->
+      <div class="slide" id="slide-8">
+        <div>
+          <div class="slide-category">Quantitative Findings</div>
+          <h2 class="slide-heading">Effect Size: 1.21 Tuning Gain Ratio</h2>
+        </div>
+        <div class="slide-body">
+          <p>What distinguishes the conscious representation from the suppressed one at the single-neuron level?</p>
+          <div class="highlight-box">
+            <strong>Tuning Gain:</strong> Neurons exhibit a <strong>1.21 gain ratio</strong> during conscious state micro-epochs relative to suppressed state micro-epochs (gain correlation <em>r</em> = 0.90, comparison <em>p</em> = 3 &times; 10<sup>&minus;40</sup>).
+          </div>
+          <p style="margin-top: 16px;">
+            <strong>Important Scientific Distinction:</strong> The scientific effect size is the <strong>1.21 ratio</strong> (a 21% gain increase), not the extreme <em>p</em>-value (which is a consequence of sample size and gain comparison context).
+          </p>
+        </div>
+        <div class="slide-footer">
+          <span>Effect size: 1.21 gain ratio (r = 0.90, p = 3x10^-40)</span>
+          <span class="fact-tag">F39, F40</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 9: Solving the 30-Year Cancellation Mystery -->
+      <div class="slide" id="slide-9">
+        <div>
+          <div class="slide-category">Theoretical Resolution</div>
+          <h2 class="slide-heading">How Time-Averaging Created the Illusion of Weak Modulation</h2>
+        </div>
+        <div class="slide-body">
+          <p>This 15 Hz multiplexing explains why past studies failed to find strong signals in IT cortex:</p>
+          <div class="grid-2">
+            <div class="grid-card">
+              <div class="grid-card-title" style="color: var(--accent);">Single-Trial Reality</div>
+              <p style="font-size: 0.95rem;">Strong, opposing representations alternate every ~60 ms. When State 1 is active, conscious gain is +21%.</p>
+            </div>
+            <div class="grid-card">
+              <div class="grid-card-title" style="color: var(--accent-red);">Time-Averaged Artifact</div>
+              <p style="font-size: 0.95rem;">Averaging over 500&ndash;700 ms blends the positive and negative epochs together, yielding a flat slope of 0.23.</p>
+            </div>
+          </div>
+          <div class="highlight-box">
+            When micro-epoch gain is equalized, residual correlation vanishes (<em>r</em> = &minus;0.02), confirming that cancellation accounts for the apparent weak modulation in this dataset.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Time-averaging cancellation accounts for weak modulation</span>
+          <span class="fact-tag">F27, F43</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 10: Across Areas: IT and PFC -->
+      <div class="slide" id="slide-10">
+        <div>
+          <div class="slide-category">Cortical Scope</div>
+          <h2 class="slide-heading">Widespread Phenomena: Qualitatively Similar in PFC</h2>
+        </div>
+        <div class="slide-body">
+          <p>Does rapid alternation occur exclusively in visual sensory cortex?</p>
+          <ul style="margin-left: 24px; margin-bottom: 16px; font-size: 1.05rem;">
+            <li style="margin-bottom: 8px;"><strong>Prefrontal Cortex:</strong> Both patch PO and PVL in the prefrontal cortex also exhibit qualitatively similar rapid alternation.</li>
+            <li style="margin-bottom: 8px;"><strong>Coordination:</strong> Switching coordination between IT patches (ML and AM) is weak, indicating local micro-epoch dynamics.</li>
+            <li style="margin-bottom: 8px;"><strong>Reconstruction:</strong> PFC reconstruction fidelity is lower (priming EV &lt; 80%, shape features &lt; 30%), reflecting its abstract encoding.</li>
+          </ul>
+          <div class="highlight-box">
+            The authors suggest that temporal multiplexing may be a <strong>general, widespread cortical mechanism</strong> for information handling.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>PFC shows qualitatively similar alternation &bull; Authors: likely widespread</span>
+          <span class="fact-tag">F47, F48, F50, F52</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 11: Scientific Guardrails -->
+      <div class="slide" id="slide-11">
+        <div>
+          <div class="slide-category">Critical Guardrails</div>
+          <h2 class="slide-heading">What This Research Does NOT Mean</h2>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="grid-card" style="border-color: var(--accent-red);">
+              <div class="grid-card-title" style="color: var(--accent-red);">&cross; "Consciousness Has a Frame Rate"</div>
+              <p style="font-size: 0.95rem;"><strong>Permanently Contradicted:</strong> Doris Tsao explicitly clarified: <em>"We did not prove consciousness has a frame rate."</em> Neural representation alternation does not imply subjective experience is broken into discrete frames.</p>
+            </div>
+            <div class="grid-card" style="border-color: var(--accent-gold);">
+              <div class="grid-card-title" style="color: var(--accent-gold);">&excl; Theoretical Attribution Guardrails</div>
+              <p style="font-size: 0.95rem;">The preprint does not test or cite GNWT or IIT. Connecting this 15 Hz multiplexing to Global Workspace ignition or Integrated Information is external interpretation.</p>
+            </div>
+          </div>
+          <div class="highlight-box" style="margin-top: 16px;">
+            <strong>Frequency Specificity:</strong> 15 Hz is in the low-beta range, not theta (4&ndash;8 Hz) or alpha (8&ndash;12 Hz).
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Tsao clarification (preliminary) &bull; No frame rate claim</span>
+          <span class="fact-tag">F55, F56, F57</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 12: Summary & Open Questions -->
+      <div class="slide" id="slide-12">
+        <div>
+          <div class="slide-category">Summary & Horizons</div>
+          <h2 class="slide-heading">Key Takeaways & Open Scientific Questions</h2>
+        </div>
+        <div class="slide-body">
+          <ul style="margin-left: 24px; margin-bottom: 16px; font-size: 1.05rem;">
+            <li style="margin-bottom: 8px;"><strong>Sensory Richness:</strong> The brain does not suppress unseen visual information; it maintains it within a rapid temporal multiplex.</li>
+            <li style="margin-bottom: 8px;"><strong>15 Hz Multiplexing:</strong> Conscious and suppressed representations trade places ~15 times per second (~60 ms dwell time).</li>
+            <li style="margin-bottom: 8px;"><strong>The Readout Enigma:</strong> Why do only certain micro-epochs break into subjective perception while others remain subconscious?</li>
+          </ul>
+          <div class="highlight-box">
+            <strong>Preprint Notice:</strong> This study is a bioRxiv preprint (Hesse et al., Oct 2026), based on recordings in two male monkeys restricted to face stimuli, and has not yet undergone formal peer review.
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>bioRxiv preprint, not yet peer reviewed &bull; End of Deck</span>
+          <span class="fact-tag">F01, F15, F54</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Speaker Notes Drawer -->
+    <div class="notes-drawer" id="notesDrawer">
+      <div class="notes-header">
+        <span id="notesSlideTitle">Speaker Notes &bull; Slide 1</span>
+        <span style="font-family: monospace; color: var(--accent);" id="notesFactTags">[F01, F02, F03, F05, F06]</span>
+      </div>
+      <div class="notes-content" id="notesContent">
+        Welcome audience. Introduce the paper title and author list. Emphasize that this is Doris Tsao's lab preprint posted October 16, 2026 on bioRxiv, not yet peer reviewed.
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <footer class="deck-controls">
+      <div class="nav-buttons">
+        <button class="btn" onclick="prevSlide()">&larr; Previous</button>
+        <button class="btn btn-active" onclick="nextSlide()">Next &rarr;</button>
+        <button class="btn" id="btnNotes" onclick="toggleNotes()">Toggle Notes (N)</button>
+      </div>
+      <div class="slide-counter" id="slideCounter">Slide 1 / 12</div>
+    </footer>
+  </div>
+
+  <script>
+    const totalSlides = 12;
+    let currentSlide = 1;
+    let notesOpen = false;
+
+    const speakerNotes = {
+      1: {
+        title: "Slide 1: Title & Authors",
+        facts: "[F01, F02, F03, F05, F06]",
+        text: "Welcome audience. Introduce the paper title: 'Rapid alternation of conscious and suppressed stimulus representations in the primate brain'. Authors: Hesse, Lanfranchi, McGrory, Shi, Engel, Tsao. Institutional affiliations: UC Berkeley, Caltech BBE, Princeton, HHMI. Crucially state: this is a bioRxiv preprint, not yet peer reviewed."
+      },
+      2: {
+        title: "Slide 2: Background & The 30-Year Mystery",
+        facts: "[F09, F27]",
+        text: "Explain binocular rivalry and flash suppression basics. Historically, Logothetis et al. (1990s) and subsequent studies found weak average modulation in IT cortex, with an average slope of ~0.23. The consensus struggled with why the neural correlate of consciousness seemed so faint."
+      },
+      3: {
+        title: "Slide 3: BFS Paradigm & Human Validation",
+        facts: "[F09, F11, F12, F13, F14, F25]",
+        text: "Detail the BFS setup: priming face for 1-2s followed by flashed face to opposite eye. Flashed face wins 82% in 14 human participants. Stimuli subtended 7 degrees with red-cyan glasses. Stress that this provides precise temporal gating."
+      },
+      4: {
+        title: "Slide 4: Electrophysiology & Patches",
+        facts: "[F15, F16, F17, F18, F19]",
+        text: "Describe the recording preparation: 2 male rhesus monkeys, Neuropixels 1.0 NHP probes. Recorded across IT face patches ML (middle lateral) and AM (anterior medial), plus PFC patches PO and PVL. Total 3,501 visual responsive units, 661 PFC units."
+      },
+      5: {
+        title: "Slide 5: No-Report HMM Decoding",
+        facts: "[F23, F29, F38]",
+        text: "Explain the analytical breakthrough: monkeys made no active report, removing decision/motor confounds. Authors used 10 ms sliding time bins to compute Poisson LLR, and a 2-state HMM to infer states. 2-state model won in 19/19 sessions."
+      },
+      6: {
+        title: "Slide 6: 15 Hz Alternation Discovery",
+        facts: "[F28, F30, F31, F36, F67]",
+        text: "Deliver the core finding: neural populations alternate between conscious (State 1) and suppressed (State 2) face representations ~15 times per second. Average dwell time is ~60 ms (mean 67 ms, median 46-64 ms). In State 1, decoding of the conscious face is >61% vs 4% for suppressed."
+      },
+      7: {
+        title: "Slide 7: Unseen Stimulus Representation",
+        facts: "[F41, F42, F53]",
+        text: "Emphasize that the suppressed face is NOT destroyed or degraded: it occupies the full 50-D face space during State 2 epochs. The overall firing rate is slightly higher in State 2. The exact same neurons switch between both representations."
+      },
+      8: {
+        title: "Slide 8: Effect Size vs P-Value",
+        facts: "[F39, F40]",
+        text: "Clarify the quantitative effect size: tuning gain ratio is 1.21 (r=0.90), meaning a 21% gain elevation during conscious epochs. Explain that p = 3x10^-40 is a comparison p-value, not an effect size; the 1.21 ratio is the actual effect size."
+      },
+      9: {
+        title: "Slide 9: Time-Averaging Resolution",
+        facts: "[F27, F43]",
+        text: "Explain how this resolves the 30-year dilemma. Past studies averaged over hundreds of ms, blurring the alternating +21% and -21% signals together into an apparent flat slope of 0.23. Equalizing gain removes the residual correlation (r=-0.02)."
+      },
+      10: {
+        title: "Slide 10: Cortical Scope (IT & PFC)",
+        facts: "[F47, F48, F50, F52]",
+        text: "Discuss cross-area dynamics: PFC patches (PO, PVL) show qualitatively similar ~15 Hz alternation. Coordination between ML and AM is weak. Authors hypothesize temporal multiplexing may be a widespread cortical phenomenon."
+      },
+      11: {
+        title: "Slide 11: Scientific Guardrails",
+        facts: "[F55, F56, F57]",
+        text: "Enforce strict guardrails: F57 ('consciousness has a frame rate') is contradicted and false. Tsao clarified they did not prove a frame rate. 15 Hz is not theta or alpha. The preprint does not cite or test GNWT/IIT."
+      },
+      12: {
+        title: "Slide 12: Summary & Open Frontiers",
+        facts: "[F01, F15, F54]",
+        text: "Conclude with big picture and open questions: how downstream circuits read out conscious epochs, mechanism of switching, and remind audience: bioRxiv preprint, not yet peer reviewed, 2 monkeys, faces only."
+      }
+    };
+
+    function updateSlide() {
+      document.querySelectorAll('.slide').forEach((s, idx) => {
+        s.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      document.getElementById('slideCounter').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+      
+      const note = speakerNotes[currentSlide];
+      if (note) {
+        document.getElementById('notesSlideTitle').innerText = note.title;
+        document.getElementById('notesFactTags').innerText = note.facts;
+        document.getElementById('notesContent').innerText = note.text;
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function toggleNotes() {
+      notesOpen = !notesOpen;
+      document.getElementById('notesDrawer').classList.toggle('open', notesOpen);
+      document.getElementById('btnNotes').classList.toggle('btn-active', notesOpen);
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
