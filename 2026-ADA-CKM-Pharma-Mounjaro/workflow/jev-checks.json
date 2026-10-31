@@ -1,0 +1,282 @@
+{
+  "timestamp_utc": "2026-10-31T01:27:20.945027+00:00",
+  "scope": "真正 local scorer／ToolGate＋未接 adapter 的停止邊界；不是 live API 或完整自動生產",
+  "capabilities": [
+    "read",
+    "local_write",
+    "destructive",
+    "network_egress",
+    "process_spawn",
+    "credential_access",
+    "spend",
+    "other"
+  ],
+  "tasks_validated": [
+    "T1",
+    "T2",
+    "T3"
+  ],
+  "local_decision": {
+    "provider": "local",
+    "raw": {
+      "model": "jev-1.13.0",
+      "answers": {
+        "tier_0": {
+          "type": "choice",
+          "choice": "other",
+          "confidence": 0.3,
+          "probabilities": {
+            "low": 0.25,
+            "medium": 0.25,
+            "high": 0.25,
+            "other": 0.25
+          },
+          "raw_confidence": 0.0,
+          "warm": false
+        },
+        "data_0": {
+          "type": "choice",
+          "choice": "public",
+          "confidence": 0.3,
+          "probabilities": {
+            "public": 0.27925622534827,
+            "internal": 0.16937746258934602,
+            "customer_data": 0.16937746258934602,
+            "secrets": 0.27925622534827,
+            "other": 0.10273262412476794
+          },
+          "raw_confidence": 0.038337780576881086,
+          "warm": false
+        },
+        "tier_1": {
+          "type": "choice",
+          "choice": "other",
+          "confidence": 0.3,
+          "probabilities": {
+            "low": 0.25,
+            "medium": 0.25,
+            "high": 0.25,
+            "other": 0.25
+          },
+          "raw_confidence": 0.0,
+          "warm": false
+        },
+        "data_1": {
+          "type": "choice",
+          "choice": "public",
+          "confidence": 0.3,
+          "probabilities": {
+            "public": 0.27925622534827,
+            "internal": 0.16937746258934602,
+            "customer_data": 0.16937746258934602,
+            "secrets": 0.27925622534827,
+            "other": 0.10273262412476794
+          },
+          "raw_confidence": 0.038337780576881086,
+          "warm": false
+        },
+        "tier_2": {
+          "type": "choice",
+          "choice": "other",
+          "confidence": 0.3,
+          "probabilities": {
+            "low": 0.25,
+            "medium": 0.25,
+            "high": 0.25,
+            "other": 0.25
+          },
+          "raw_confidence": 0.0,
+          "warm": false
+        },
+        "data_2": {
+          "type": "choice",
+          "choice": "public",
+          "confidence": 0.3,
+          "probabilities": {
+            "public": 0.27925622534827,
+            "internal": 0.16937746258934602,
+            "customer_data": 0.16937746258934602,
+            "secrets": 0.27925622534827,
+            "other": 0.10273262412476794
+          },
+          "raw_confidence": 0.038337780576881086,
+          "warm": false
+        }
+      },
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      }
+    },
+    "latency_ms": 1.1736999999999997
+  },
+  "routing_ready": false,
+  "toolgate": [
+    {
+      "tool": "Read",
+      "arguments": {
+        "file_path": "D:\\2026 ADA_CKM_Pharma\\2026 GLP-1 RA Monjaro.txt"
+      },
+      "verdict": {
+        "decision": "ask",
+        "capability": "other",
+        "confidence": 0.0,
+        "reason": "gate error, failing to ask: TypeError: expected string or bytes-like object",
+        "reversible": 0.0,
+        "cached": false,
+        "latency_ms": 0.0,
+        "probabilities": {}
+      },
+      "side_effect_executed": false
+    },
+    {
+      "tool": "Write",
+      "arguments": {
+        "file_path": "D:\\2026 ADA_CKM_Pharma\\monjaro\\workflow\\scope-check-only.txt",
+        "content": "僅分類，不寫檔"
+      },
+      "verdict": {
+        "decision": "ask",
+        "capability": "other",
+        "confidence": 0.0,
+        "reason": "gate error, failing to ask: TypeError: expected string or bytes-like object",
+        "reversible": 0.0,
+        "cached": false,
+        "latency_ms": 0.0,
+        "probabilities": {}
+      },
+      "side_effect_executed": false
+    },
+    {
+      "tool": "WebFetch",
+      "arguments": {
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/215866s039lbl.pdf"
+      },
+      "verdict": {
+        "decision": "ask",
+        "capability": "other",
+        "confidence": 0.0,
+        "reason": "gate error, failing to ask: TypeError: expected string or bytes-like object",
+        "reversible": 0.0,
+        "cached": false,
+        "latency_ms": 0.0,
+        "probabilities": {}
+      },
+      "side_effect_executed": false
+    },
+    {
+      "tool": "Bash",
+      "arguments": {
+        "command": "git push --force"
+      },
+      "verdict": {
+        "decision": "deny",
+        "capability": "destructive",
+        "confidence": 1.0,
+        "reason": "blocked by deterministic rule: git push --force",
+        "reversible": 0.0,
+        "cached": false,
+        "latency_ms": 0.0,
+        "probabilities": {}
+      },
+      "side_effect_executed": false
+    }
+  ],
+  "gate_audit": [
+    {
+      "ts": 1793410040.945027,
+      "tool": "Read",
+      "decision": "ask",
+      "capability": "other",
+      "confidence": 0.0,
+      "reversible": 0.0,
+      "cached": false,
+      "probabilities": {},
+      "reason": "gate error, failing to ask: TypeError: expected string or bytes-like object"
+    },
+    {
+      "ts": 1793410040.945027,
+      "tool": "Write",
+      "decision": "ask",
+      "capability": "other",
+      "confidence": 0.0,
+      "reversible": 0.0,
+      "cached": false,
+      "probabilities": {},
+      "reason": "gate error, failing to ask: TypeError: expected string or bytes-like object"
+    },
+    {
+      "ts": 1793410040.945027,
+      "tool": "WebFetch",
+      "decision": "ask",
+      "capability": "other",
+      "confidence": 0.0,
+      "reversible": 0.0,
+      "cached": false,
+      "probabilities": {},
+      "reason": "gate error, failing to ask: TypeError: expected string or bytes-like object"
+    },
+    {
+      "ts": 1793410040.945027,
+      "tool": "Bash",
+      "decision": "deny",
+      "capability": "destructive",
+      "confidence": 1.0,
+      "reversible": 0.0,
+      "cached": false,
+      "probabilities": {},
+      "reason": "blocked by deterministic rule: git push --force"
+    }
+  ],
+  "plan_phase": {
+    "status": "ask",
+    "reason": "未接線：Python 無可驗證 host high model adapter 與實際 token usage；不產生假的 PlannerResult",
+    "planner_model": {
+      "key": "gpt-6-astra",
+      "display": "GPT-6 Astra",
+      "platform": "openai",
+      "tier": "high",
+      "effort": null,
+      "api_id": "gpt-6-astra",
+      "api_id_verified": true,
+      "input_usd_per_mtok": 10.0,
+      "output_usd_per_mtok": 50.0,
+      "price_source": "Li et al. 2026, frozen price panel (Table 5)",
+      "cache_read_multiplier": 0.25,
+      "available": true,
+      "notes": "The paper's strongest comparator. $12.182 per 1,000 judgments, 1.885s median."
+    },
+    "allocations": [],
+    "limits": {
+      "max_tasks": 4,
+      "planner_output_tokens": 4096,
+      "max_worker_output_tokens": 18000,
+      "max_total_output_tokens": 50000,
+      "max_task_chars": 12000,
+      "max_tool_calls": 12
+    },
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "usage_complete": false
+  },
+  "execute_phase": {
+    "status": "ask",
+    "reason": "未接線：Python 無可驗證 host high model adapter 與實際 token usage；不產生假的 PlannerResult",
+    "completed": {},
+    "total_tasks": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "usage_complete": false
+  },
+  "adapter_calls": {
+    "planner_adapter": 1,
+    "executor": 0,
+    "verifier": 0,
+    "tool_runner": 0
+  },
+  "host_dispatch": "T1/T2 由主控明確配置的受限 executor 啟動；先前執行中斷，本輪恢復，產物待主控獨立驗收；不代表 Jev ready。",
+  "usage_limit": "local scorer 自報零 token；不包含 host planner/executor/context/tool 費用，未量測 savings。",
+  "production_dispatched": false,
+  "budget_enforcement": "not_exposed；host TaskSpec 是宣告預算，不是 API 硬限制證據",
+  "upstream_local_incompatibility": "首次以 dict state 呼叫 local provider 產 TypeError expected string or bytes-like object；直接 decide 改傳 JSON string 後可實跑，vendor 未修改。ToolGate 內部仍傳 dict，因此真實 fail-to-ask 原因保留。"
+}

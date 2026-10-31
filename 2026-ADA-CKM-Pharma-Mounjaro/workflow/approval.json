@@ -1,0 +1,19 @@
+{
+  "status": "approved",
+  "approved_at": "2026-10-30",
+  "approved_by": "user",
+  "outline": "monjaro/specs/slide_outline.md",
+  "version": "v0.2-review",
+  "sha256": "2d499d07f1deb4ac92d48c074618e5152b19c322ee44c5c45158957713953b11",
+  "scope": "本機 HTML、可編輯 PowerPoint、paper explainer DOCX、homepage blog 草稿與免費本機 motion 影片製作；不含發布、上傳、付費生成或部署。",
+  "scope_original_corrupted": "???????????? HTML???? PowerPoint?paper explainer ???motion explainer ???? homepage ?? blog ?????????",
+  "approval_evidence": {
+    "user_text": "accept the outline",
+    "timestamp_utc": "2026-10-29T17:05:07.114Z",
+    "session_line": 465,
+    "verified_by": "主控於 2026-10-31 讀回原 session"
+  },
+  "scope_restatement": "本輪使用者 finish goal 授權由主控重述；不將毀損問號猜回歷史原文",
+  "publication_authorized": false,
+  "spend_authorized": false
+}

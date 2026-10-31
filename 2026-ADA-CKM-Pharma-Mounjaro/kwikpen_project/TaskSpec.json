@@ -1,0 +1,21 @@
+{
+  "task_id": "T5_KWIKPEN_NARRATED_LOCAL",
+  "objective": "依 Monjaro-motion-explainer.txt 完成有配音、自訂圖像、操作步驟與六個月追蹤的繁體中文影片",
+  "inputs": ["D:/2026 ADA_CKM_Pharma/monjaro/Monjaro-motion-explainer.txt", "D:/2026 ADA_CKM_Pharma/monjaro/References", "D:/2026 ADA_CKM_Pharma/monjaro/workflow/approval.json", "台灣原廠仿單及 IFU、英國 SmPC、加拿大 IFU"],
+  "outputs": ["mounjaro-kwikpen.mp4", "mounjaro-kwikpen.srt", "index.html", "STORYBOARD.md", "tracking.csv", "SOURCES.md", "QA.md"],
+  "acceptance": ["H.264 與非靜音 AAC 配音", "所有28幕實際截圖可讀", "針尖朝上排氣、皮下注射及五秒計數正確", "SRT 無負時長及重疊", "劑量依仿單且不含拆劑、拼筆或跳劑教學", "保留公開來源、工具與驗收限制"],
+  "capabilities": ["read", "local_write", "network_egress", "process_spawn"],
+  "depends_on": ["T3_APPROVED_OUTLINE_SHA256_2d499d07f1deb4ac92d48c074618e5152b19c322ee44c5c45158957713953b11"],
+  "max_output_tokens": 22000,
+  "execution": {
+    "dispatch": "host 手動配置；非 JEV 自動 routing",
+    "executor": "/root/motion_execution",
+    "configured_model": "gpt-6.1-sol",
+    "configured_reasoning_effort": "medium",
+    "fork_turns": "none",
+    "budget_note": "宣告輸出預算，不表示已驗證 API token cap",
+    "verifier": "主控獨立讀回來源、全幕截圖、字幕及最終影音檔",
+    "automatic_jev": "plan=ask、execute=ask、executor_calls=0；保持原狀",
+    "authorization": "本次使用者明確要求 follow prompt reach /goal，包含配音、本機影片及自訂圖像；2026-10-31 再指示 continue；不含發布、付費生成或部署"
+  }
+}

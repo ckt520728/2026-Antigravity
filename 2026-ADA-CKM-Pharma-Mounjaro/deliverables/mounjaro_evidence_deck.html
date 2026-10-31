@@ -1,0 +1,652 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mounjaro／Semaglutide 證據對齊教材</title><style>
+:root{--bg:#0a0f1e;--card:#111d3c;--ink:#e8f4f8;--muted:#aac3d9;--teal:#4dd9cf;--purple:#a78bfa;--gold:#f4a261}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','Microsoft JhengHei','Inter',sans-serif;line-height:1.55}button,select{font:inherit;color:inherit;background:var(--card);border:1px solid #395976;border-radius:6px;padding:7px 14px;cursor:pointer}button:hover,button:focus-visible,summary:focus-visible{outline:2px solid var(--teal)}a{color:var(--teal)}#progress{position:fixed;left:0;top:0;height:4px;background:var(--teal);z-index:10}header{height:62px;padding:18px 5vw;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--muted)}header span:first-child{color:var(--teal)}main{min-height:calc(100vh - 126px)}.slide{display:none;padding:22px 6vw 30px;max-width:1600px;margin:auto;animation:appear .25s}.slide.active{display:block}.kicker{font-family:monospace;color:var(--teal);letter-spacing:.09em;font-size:15px}h1,h2{font-weight:700;margin:7px 0 14px;line-height:1.25;font-size:clamp(28px,3vw,44px)}h1{font-size:clamp(38px,5vw,64px);max-width:1000px}.sub{font-size:clamp(18px,1.7vw,24px);color:var(--muted);margin:0 0 22px}.population{font-size:17px;border-left:3px solid var(--purple);padding:5px 13px;margin-bottom:12px}.boundary{border-left:4px solid var(--gold);padding:9px 16px;margin:20px 0 12px;background:#251d2b;font-size:17px}.ordinal{font-family:monospace;color:var(--teal);font-size:20px}.statements article{display:flex;gap:20px;align-items:baseline;border-bottom:1px solid #263653;padding:9px 0}.statements p{margin:5px 0;font-size:22px}.cover .statements{max-width:860px}.cover .statements p{font-size:19px}.contexts{display:grid;grid-template-columns:1fr 1fr;gap:18px}.contexts article{background:var(--card);border-radius:12px;padding:22px}.contexts p,.steps p,.comparison p{font-size:22px;margin:12px 0}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.steps article{border-top:3px solid var(--teal);padding:16px 10px}.comparison{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}.comparison article{border-top:3px solid var(--teal);padding:20px 0}.comparison article:nth-child(2){border-color:var(--purple)}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:32px}.metrics article{padding:20px 8px;border-top:3px solid var(--teal)}.metrics article:nth-child(2){border-color:var(--purple)}.metrics strong{font:700 56px 'Inter',sans-serif;color:var(--teal)}.metrics p{font-size:28px}.gold{color:var(--gold)!important}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:20px}th{text-align:left;color:var(--teal);font-size:17px}td,th{padding:13px 17px;border-bottom:1px solid #31415d;vertical-align:top}td:first-child{font-weight:600}tr:nth-child(even){background:#0d1533}.references table{font-size:14px}.references td,.references th{padding:6px 12px}.quiz{display:grid;gap:16px}.quiz details{background:var(--card);border:1px solid #286c70;border-radius:12px;padding:17px 22px;font-size:21px}.quiz summary{cursor:pointer}.quiz p{color:var(--teal);margin:14px 0 0}.jump{font-size:16px;margin-left:12px}.unit{color:var(--muted);font-size:16px}.bar-row{display:grid;grid-template-columns:260px 1fr;gap:7px;align-items:center;margin:20px 0}.bar-label{font-size:20px}.bar-track{height:36px;border-left:1px solid var(--muted)}.bar{height:100%;min-width:75px;position:relative}.bar strong{position:absolute;right:8px;color:#0a0f1e;font:700 24px 'Inter',sans-serif}.bar-row small{grid-column:2;color:var(--muted);font-size:15px}.forest{width:min(100%,1000px);max-height:260px;display:block;margin:0 auto}.forest text{font-family:'Microsoft JhengHei',sans-serif;font-size:18px}.compact{display:flex;gap:25px;flex-wrap:wrap}.compact p{font-size:18px;margin:8px 0;flex:1;min-width:200px}.source-notes{font-size:13px;color:var(--muted)}.source-notes summary{cursor:pointer}.source-notes pre{white-space:pre-wrap;font:14px/1.6 'Microsoft JhengHei',sans-serif;padding:12px;background:#0d1533;overflow-wrap:anywhere}nav{position:sticky;bottom:0;display:flex;justify-content:center;align-items:center;gap:12px;background:#0a0f1ef5;border-top:1px solid #263653;min-height:64px;padding:9px;z-index:8}#counter{min-width:85px;text-align:center;font:16px monospace}#hint{font-size:12px;color:var(--muted)}@keyframes appear{from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:none}}@media(max-width:760px){header{padding:14px 5vw;font-size:12px}.slide{padding:15px 5vw 25px}.contexts,.steps,.comparison,.metrics{grid-template-columns:1fr;gap:10px}.contexts article,.steps article,.comparison article,.metrics article{padding:12px}.contexts p,.steps p,.comparison p,.metrics p,.statements p{font-size:19px}.boundary{font-size:15px}.bar-row{grid-template-columns:1fr;margin:14px 0}.bar-row small{grid-column:1}.bar-track{height:32px}.bar{max-width:90%}.forest{max-height:none;min-height:190px}table{min-width:600px;font-size:16px}.references table{min-width:650px}.quiz details{font-size:18px}#hint{display:none}.sub{margin-bottom:16px}nav{gap:6px}nav button{padding:7px 10px}select{max-width:140px;font-size:13px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media print{header,nav,#progress{display:none}.slide,.slide.active{display:block;break-after:page;padding:20px;min-height:95vh}.source-notes{display:none}}
+</style></head><body><div id="progress"></div><header><span id="chapter"></span><span>證據截止 2026-10-29 · 專業教育</span></header><main><section class="slide cover active" id="p01" data-page="1" aria-label="第 1 頁"><div class="kicker">P01 / 開場</div><h1>先對齊，再選擇</h1><p class="sub">Tirzepatide 與 Semaglutide 的證據邊界</p><div class="statements"><article><span class="ordinal">01</span><p>給醫療專業人員的證據對齊教材</p></article><article><span class="ordinal">02</span><p>證據截止 2026-10-29 · v0.2-review</p></article><article><span class="ordinal">03</span><p>作者／機構／COI [TO CONFIRM]</p></article><article><span class="ordinal">04</span><p>台灣完整仿單與給付 [TO CONFIRM]</p></article></div><p class="boundary">教育用途；個別處方須核對當地核准資訊</p><details class="source-notes"><summary>來源註記：教材框架／來源</summary><pre>這是一份給醫療專業人員的證據對齊教材；不是處方建議；台灣完整仿單與給付 [TO CONFIRM]。副標註明證據截止 2026-10-29、作者／機構／COI [TO CONFIRM]。
+
+</pre></details></section><section class="slide contexts" id="p02" data-page="2" aria-label="第 2 頁"><div class="kicker">P02 / 開場</div><h2>同一個藥名，四個問題</h2><p class="sub">「猛健樂能不能用？」先釐清要回答什麼</p><div class="contexts"><article><span class="ordinal">01</span><p>T2D：metformin 治療仍控制不足</p></article><article><span class="ordinal">02</span><p>肥胖：沒有糖尿病，關切體重</p></article><article><span class="ordinal">03</span><p>HFpEF：肥胖伴心衰竭，關切症狀與事件</p></article><article><span class="ordinal">04</span><p>CKD：T2D 合併慢性腎臟病，關切腎臟 outcome</p></article></div><p class="boundary">通用臨床情境，並非真實個案或處方建議</p><details class="source-notes"><summary>來源註記：教材框架／來源</summary><pre>四位病人都問「猛健樂能不能用」——(a) metformin 控制不足的 T2D、(b) 無糖尿病的肥胖、(c) 肥胖伴 HFpEF、(d) T2D 合併 CKD。藥名相同 ≠ 問題相同；答案分別藏在不同分子、不同試驗、不同終點裡。
+
+</pre></details></section><section class="slide steps" id="p03" data-page="3" aria-label="第 3 頁"><div class="kicker">P03 / 分子與身份</div><h2>藥物、族群與終點</h2><p class="sub">三個座標共同決定結論的適用範圍</p><div class="steps"><article><span class="ordinal">01</span><p>分子 molecule：tirzepatide 或 semaglutide</p></article><article><span class="ordinal">02</span><p>族群 population：T2D、肥胖、HFpEF 或 CKD</p></article><article><span class="ordinal">03</span><p>終點 endpoint：HbA1c、體重、CV-HF 或腎複合</p></article></div><p class="boundary">品牌、劑量、comparator 與 jurisdiction 也須同步核對</p><details class="source-notes"><summary>來源註記：教材框架／來源</summary><pre>任何一句「這藥有沒有效」都必須先通過三個對齊：哪個分子（tirzepatide 還是 semaglutide）、哪個族群（T2D／肥胖／HFpEF／CKD，各有定義）、哪個終點（HbA1c／體重／複合 CV-HF／腎複合）。三軸缺一，結論不成立。
+
+</pre></details></section><section class="slide comparison" id="p04" data-page="4" aria-label="第 4 頁"><div class="kicker">P04 / 分子與身份</div><h2>兩個分子，兩種受體分類</h2><p class="sub">Tirzepatide 是單一分子的 GIP／GLP-1 dual agonist</p><div class="comparison"><article><span class="ordinal">01</span><p>Tirzepatide：GIP 與 GLP-1 雙受體促效劑</p></article><article><span class="ordinal">02</span><p>Semaglutide：GLP-1 receptor agonist</p></article></div><p class="boundary">機制示意不能推導療效兩倍、所有器官受益或 class effect 互套</p><details class="source-notes"><summary>來源註記：C001</summary><pre>tirzepatide 是單一分子的 GIP／GLP-1 dual agonist；semaglutide 是 GLP-1 RA。機制差異存在，但不能由此推導「療效兩倍」或「所有器官均受益」；class effect 不可互套。
+
+C001｜Tirzepatide 是單一分子的 GIP/GLP-1 雙受體促效劑；semaglutide 是 GLP-1 受體促效劑
+N：不適用
+機制；不推導療效為兩倍
+族群：藥物機制
+邊界：機制示意；不能證明所有器官均受益
+限制：不採用萬能鑰匙或保證抗炎的比喻
+層級：verified
+來源 S07;S02：§12.1；S02 Introduction p.27
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://pubmed.ncbi.nlm.nih.gov/40353578/</pre><a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　</details></section><section class="slide table" id="p05" data-page="5" aria-label="第 5 頁"><div class="kicker">P05 / 分子與身份</div><h2>品牌與 jurisdiction</h2><p class="sub">美國標示與台灣核准內容分開閱讀</p><div class="table-wrap"><table><thead><tr><th>品牌／地區</th><th>已核對範圍</th><th>適用邊界</th></tr></thead><tbody><tr><td>Mounjaro · USA</td><td>≥10 歲 T2D 控糖；成人高 MACE 風險 T2D 風險降低</td><td>USPI 08/2026</td></tr><tr><td>Zepbound · USA</td><td>成人體重控制；肥胖伴中重度 OSA</td><td>不同品牌標示</td></tr><tr><td>猛健樂 · 台灣</td><td>TFDA 公告：血糖控制與肥胖／過重體重控制用途</td><td>僅 scope-only</td></tr><tr><td>台灣詳細條件</td><td>年齡、BMI、OSA、完整仿單與給付</td><td>[TO CONFIRM]</td></tr></tbody></table></div><p class="boundary">不得由美國標示推導台灣 MACE、兒科或 HFpEF 適應症</p><details class="source-notes"><summary>來源註記：P001 · C002 · C003</summary><pre>美國 USPI 下 Mounjaro 標示為 ≥10 歲 T2D 控糖及成人高 MACE 風險 T2D 的風險降低；Zepbound 標示為成人體重控制及肥胖伴中重度 OSA——兩品牌不可互換引用。台灣 TFDA 2025-11-10 公告確認猛健樂注射筆有血糖控制與肥胖過重體重控制用途，但詳細年齡／BMI／OSA 條件與完整仿單 [TO CONFIRM]（P001）；台灣健保給付 [TO CONFIRM]。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C002｜美國 Mounjaro 與 Zepbound 品牌適應症須分列
+N：不適用
+Mounjaro：≥10歲T2D控糖、成人高MACE風險T2D風險降低；Zepbound：成人體重控制及肥胖伴中重度OSA
+族群：依各品牌標示人群
+邊界：僅美國，不能套台灣；08/2026版本
+限制：Mounjaro非僅成人控糖；美國標示亦非台灣HFpEF適應症
+層級：verified_US_only
+來源 S07;S08：USPI §1；均PDF p.1
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://pi.lilly.com/us/zepbound-uspi.pdf
+
+C003｜台灣TFDA已確認猛健樂注射筆有血糖控制及肥胖過重體重控制用途
+N：不適用
+公告2025-11-10
+族群：台灣核准用途概述
+邊界：可說概括用途；詳細年齡/BMI/OSA須查現行仿單
+限制：公告不是完整仿單；勿由USA推導台灣MACE/兒科
+層級：verified_scope_only
+來源 S09：第一點 Tirzepatide成分注射筆
+https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://pi.lilly.com/us/zepbound-uspi.pdf" target="_blank" rel="noopener">S08 原始來源</a>　</details></section><section class="slide quiz" id="p06" data-page="6" aria-label="第 6 頁"><div class="kicker">P06 / 分子與身份</div><h2>Check-Point 1</h2><p class="sub">分子、品牌與 jurisdiction 是三個獨立軸</p><div class="quiz"><details><summary>Tirzepatide 的受體分類？</summary><p>GIP／GLP-1 dual agonist。C001 <button class="jump" data-page="4">回看 P04</button></p></details><details><summary>美國體重控制標示掛在哪個品牌？</summary><p>Zepbound。C002 <button class="jump" data-page="5">回看 P05</button></p></details><details><summary>TFDA 公告能代替完整台灣仿單？</summary><p>不能。詳細條件 [TO CONFIRM]。C003／P001 <button class="jump" data-page="5">回看 P05</button></p></details></div><p class="boundary">答錯可按回指頁碼，重新對齊來源</p><details class="source-notes"><summary>來源註記：C001 · C002 · C003</summary><pre>3 題快答自我檢核：① tirzepatide 的受體分類？（GIP／GLP-1 dual agonist）② 美國體重控制適應症掛在哪個品牌？（Zepbound）③ TFDA 公告能不能當台灣完整仿單用？（不能，詳細條件 [TO CONFIRM]）。答錯回指 P04／P05。
+
+C001｜Tirzepatide 是單一分子的 GIP/GLP-1 雙受體促效劑；semaglutide 是 GLP-1 受體促效劑
+N：不適用
+機制；不推導療效為兩倍
+族群：藥物機制
+邊界：機制示意；不能證明所有器官均受益
+限制：不採用萬能鑰匙或保證抗炎的比喻
+層級：verified
+來源 S07;S02：§12.1；S02 Introduction p.27
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://pubmed.ncbi.nlm.nih.gov/40353578/
+
+C002｜美國 Mounjaro 與 Zepbound 品牌適應症須分列
+N：不適用
+Mounjaro：≥10歲T2D控糖、成人高MACE風險T2D風險降低；Zepbound：成人體重控制及肥胖伴中重度OSA
+族群：依各品牌標示人群
+邊界：僅美國，不能套台灣；08/2026版本
+限制：Mounjaro非僅成人控糖；美國標示亦非台灣HFpEF適應症
+層級：verified_US_only
+來源 S07;S08：USPI §1；均PDF p.1
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://pi.lilly.com/us/zepbound-uspi.pdf
+
+C003｜台灣TFDA已確認猛健樂注射筆有血糖控制及肥胖過重體重控制用途
+N：不適用
+公告2025-11-10
+族群：台灣核准用途概述
+邊界：可說概括用途；詳細年齡/BMI/OSA須查現行仿單
+限制：公告不是完整仿單；勿由USA推導台灣MACE/兒科
+層級：verified_scope_only
+來源 S09：第一點 Tirzepatide成分注射筆
+https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895</pre><a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　<a href="https://pi.lilly.com/us/zepbound-uspi.pdf" target="_blank" rel="noopener">S08 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　</details></section><section class="slide bars" id="p07" data-page="7" aria-label="第 7 頁"><div class="kicker">P07 / 糖尿病</div><h2>SURPASS-2</h2><p class="sub">T2D 控糖 head-to-head；comparator 是 semaglutide 1 mg</p><p class="population">Metformin 控制不足的 T2D 成人 · N=1879 隨機 · 40 週</p><div class="chart"><p class="unit">HbA1c 變化（百分點）</p><div class="bar-row"><div class="bar-label">Tirzepatide 5 mg</div><div class="bar-track"><div class="bar" style="width:69.9%;background:#4dd9cf"><strong>-2.01</strong></div></div><small></small></div><div class="bar-row"><div class="bar-label">Tirzepatide 10 mg</div><div class="bar-track"><div class="bar" style="width:77.9%;background:#4dd9cf"><strong>-2.24</strong></div></div><small></small></div><div class="bar-row"><div class="bar-label">Tirzepatide 15 mg</div><div class="bar-track"><div class="bar" style="width:80.0%;background:#4dd9cf"><strong>-2.30</strong></div></div><small></small></div><div class="bar-row"><div class="bar-label">Semaglutide 1 mg</div><div class="bar-track"><div class="bar" style="width:64.7%;background:#a78bfa"><strong>-1.86</strong></div></div><small></small></div></div><p class="boundary">Open-label RCT；不能替代 semaglutide 2.4 mg 的減重比較</p><details class="source-notes"><summary>來源註記：C004</summary><pre>metformin 治療仍控制不足的 T2D 成人（1879 隨機），40 週 HbA1c 變化 tirzepatide 5／10／15 mg 為 -2.01／-2.24／-2.30 百分點，semaglutide 1 mg 為 -1.86 百分點。這是控糖試驗、對手是 1 mg，不能當作與 semaglutide 2.4 mg 的減重比較；HbA1c 是百分點，不是相對百分比。
+
+C004｜SURPASS-2比較的是semaglutide 1 mg
+N：1879隨機；1878至少一劑
+40週；tirzepatide 5/10/15mg；HbA1c -2.01/-2.24/-2.30百分點，sema1mg -1.86百分點
+族群：metformin治療仍控制不足T2D成人
+邊界：控糖比較不能替代sema2.4mg減重比較
+限制：HbA1c為百分點，不是相對百分比；不推定所有sema劑量
+層級：verified
+來源 S01：Methods/Results abstract；正文pp.503–505
+https://pubmed.ncbi.nlm.nih.gov/34170647/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/34170647/" target="_blank" rel="noopener">S01 原始來源</a>　</details></section><section class="slide forest" id="p08" data-page="8" aria-label="第 8 頁"><div class="kicker">P08 / 糖尿病</div><h2>SURPASS-CVOT</h2><p class="sub">MACE 非劣性成立，優越性未達顯著</p><p class="population">T2D＋已確立 ASCVD · mITT N=13165</p><svg class="forest" viewBox="0 0 920 270" role="img" aria-label="Hazard ratio 與信賴區間"><line x1="582.0" x2="582.0" y1="24" y2="220" stroke="#8ba8c4" stroke-dasharray="5 6"/><text x="582.0" y="248" fill="#e8f4f8" text-anchor="middle">HR 1.0</text><line x1="648.0000000000002" x2="648.0000000000002" y1="24" y2="220" stroke="#f4a261"/><text x="652.0000000000002" y="22" fill="#f4a261">NI 1.05</text><text x="30" y="50" fill="#e8f4f8">MACE</text><line x1="357.59999999999997" x2="595.2" y1="80" y2="80" stroke="#4dd9cf" stroke-width="5"/><circle cx="476.4000000000001" cy="80" r="8" fill="#4dd9cf"/><text x="30" y="112" fill="#e8f4f8">HR 0.92（95.3% CI 0.83–1.01）</text></svg><div class="compact"><p>Tirzepatide ≤15 mg vs dulaglutide 1.5 mg weekly</p><p>MACE：12.2% vs 13.1%</p><p>非劣性 P=.003；優越性 P=.09</p></div><p class="boundary">Active-comparator RCT；Lilly 資助。不能說勝過 dulaglutide 或 semaglutide</p><details class="source-notes"><summary>來源註記：C009 · C004</summary><pre>T2D＋已確立 ASCVD（mITT 13165），tirzepatide ≤15 mg vs dulaglutide 1.5 mg：MACE 12.2% vs 13.1%，HR 0.92（95.3% CI 0.83–1.01）；非劣性成立（界值 1.05，P=.003），優越性未達顯著（P=.09）。不能說勝過 dulaglutide，更不能說勝過 semaglutide；這是 active-comparator 試驗，不是 placebo 試驗。
+
+C009｜SURPASS-CVOT已正式發表；MACE非劣性成立，優越性未達顯著
+N：13299隨機；排除134；mITT13165（6586/6579）
+tirzepatide≤15mg vs dulaglutide1.5mg weekly；MACE801(12.2%) vs862(13.1%)；HR0.92,95.3%CI0.83–1.01；NI P=.003，superiority P=.09
+族群：T2D+已確立ASCVD
+邊界：不能說勝過dulaglutide或勝過semaglutide；非placebo比較
+限制：非劣界值1.05；95.3%不可改95%；Lilly資助
+層級：verified
+來源 S06：Abstract Methods/Results；NEJM393:2409–2420
+https://pubmed.ncbi.nlm.nih.gov/41406444/
+
+C004｜SURPASS-2比較的是semaglutide 1 mg
+N：1879隨機；1878至少一劑
+40週；tirzepatide 5/10/15mg；HbA1c -2.01/-2.24/-2.30百分點，sema1mg -1.86百分點
+族群：metformin治療仍控制不足T2D成人
+邊界：控糖比較不能替代sema2.4mg減重比較
+限制：HbA1c為百分點，不是相對百分比；不推定所有sema劑量
+層級：verified
+來源 S01：Methods/Results abstract；正文pp.503–505
+https://pubmed.ncbi.nlm.nih.gov/34170647/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/41406444/" target="_blank" rel="noopener">S06 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/34170647/" target="_blank" rel="noopener">S01 原始來源</a>　</details></section><section class="slide bars" id="p09" data-page="9" aria-label="第 9 頁"><div class="kicker">P09 / 肥胖</div><h2>SURMOUNT-5</h2><p class="sub">這次的 semaglutide 是 1.7／2.4 mg</p><p class="population">無 T2D 的肥胖／過重成人 · N=751 隨機 · 72 週</p><div class="chart"><p class="unit">體重變化（%）· P&lt;.001</p><div class="bar-row"><div class="bar-label">Tirzepatide 10／15 mg</div><div class="bar-track"><div class="bar" style="width:80.0%;background:#4dd9cf"><strong>-20.20</strong></div></div><small>95% CI −21.4 至 −19.1</small></div><div class="bar-row"><div class="bar-label">Semaglutide 1.7／2.4 mg</div><div class="bar-track"><div class="bar" style="width:54.3%;background:#a78bfa"><strong>-13.70</strong></div></div><small>95% CI −14.9 至 −12.6</small></div></div><p class="boundary">Open-label；modified treatment-regimen estimand；Lilly 資助。群體平均，非心腎 outcome 比較</p><details class="source-notes"><summary>來源註記：C005</summary><pre>無 T2D 的肥胖／過重成人（751 隨機），72 週體重變化 tirzepatide 10／15 mg -20.2%（95% CI -21.4 至 -19.1）vs semaglutide 1.7／2.4 mg -13.7%（-14.9 至 -12.6），P&lt;.001。這是無糖尿病人群的群體平均，不能保證 T2D／HFpEF 個案同幅減重；本試驗不是心腎 outcome 比較。與 P07 並排提醒：SURPASS-2 用 sema 1 mg、SURMOUNT-5 用 sema 1.7／2.4 mg，兩個 comparator 不可混用。
+
+C005｜SURMOUNT-5主要結果限無T2D肥胖/過重成人
+N：751隨機；750用藥分析（374/376）
+72週；tirzepatide最大耐受10/15mg：-20.2%（95%CI -21.4至-19.1）；sema1.7/2.4mg：-13.7%（-14.9至-12.6）；P&lt;.001
+族群：無T2D；BMI≥30或≥27伴相關共病
+邊界：群體平均，不能保證T2D/HFpEF個案同幅減重
+限制：modified treatment-regimen estimand；廠商Lilly資助；非心腎outcome比較
+層級：verified
+來源 S02：Abstract；Table2/Fig1 pp.30–31；Methods p.28
+https://pubmed.ncbi.nlm.nih.gov/40353578/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　</details></section><section class="slide withdrawal" id="p10" data-page="10" aria-label="第 10 頁"><div class="kicker">P10 / 肥胖</div><h2>停藥與維持：SURMOUNT-4</h2><p class="sub">Randomized withdrawal：開始治療前規劃追蹤</p><p class="population">無糖尿病肥胖／過重 · 36 週 lead-in 後 N=670 隨機</p><div class="metrics"><article><h3>繼續 tirzepatide</h3><strong>−5.5%</strong><p>週 36–88 體重變化</p></article><article><h3>改 placebo</h3><strong class="gold">+14.0%</strong><p>週 36–88 體重變化</p></article></div><p class="unit">36 週 lead-in → 隨機 → 88 週；數字以隨機時體重為基準</p><p class="boundary">Abstract 核讀；耐受 lead-in 的選擇人群。非所有人停藥必回升 14%；急性警訊見 P20</p><details class="source-notes"><summary>來源註記：C019 · C005</summary><pre>無糖尿病肥胖／過重者在 36 週 tirzepatide lead-in 後隨機（670 人）：繼續 tirzepatide 組週 36–88 再減 -5.5%，改安慰劑組回升 +14.0%。訊息不是「停藥必回升 14%」（這是耐受 lead-in 的選擇人群），而是開始治療前就要規劃維持與追蹤策略；也不可用此阻礙急性警訊時的停藥判斷（見 P20）。
+
+C019｜停藥後體重可能回升，應預先規劃追蹤
+N：783進入lead-in；670隨機（335/335）
+先用36週，再52週隨機維持；週36至88：持續tirzepatide -5.5%，改placebo +14.0%
+族群：無糖尿病肥胖/過重、可進入隨機期者
+邊界：不等於所有人停藥必回升14%；不可當急性警訊停藥的阻礙
+限制：耐受lead-in的選擇人群；本輪未完整SAP審核
+層級：verified_abstract
+來源 S13：Abstract/Results，SURMOUNT-4
+https://pmc.ncbi.nlm.nih.gov/articles/PMC10714284/
+
+C005｜SURMOUNT-5主要結果限無T2D肥胖/過重成人
+N：751隨機；750用藥分析（374/376）
+72週；tirzepatide最大耐受10/15mg：-20.2%（95%CI -21.4至-19.1）；sema1.7/2.4mg：-13.7%（-14.9至-12.6）；P&lt;.001
+族群：無T2D；BMI≥30或≥27伴相關共病
+邊界：群體平均，不能保證T2D/HFpEF個案同幅減重
+限制：modified treatment-regimen estimand；廠商Lilly資助；非心腎outcome比較
+層級：verified
+來源 S02：Abstract；Table2/Fig1 pp.30–31；Methods p.28
+https://pubmed.ncbi.nlm.nih.gov/40353578/</pre><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10714284/" target="_blank" rel="noopener">S13 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　</details></section><section class="slide forest" id="p11" data-page="11" aria-label="第 11 頁"><div class="kicker">P11 / 肥胖相關 HFpEF</div><h2>SUMMIT：複合終點與死亡</h2><p class="sub">「CV death 或 HF 惡化」獲益，不能改成 CV death 獲益</p><p class="population">BMI≥30、HF、LVEF≥50% · 有／無 T2D · N=731</p><svg class="forest" viewBox="0 0 920 270" role="img" aria-label="Hazard ratio 與信賴區間"><line x1="230.0" x2="230.0" y1="24" y2="220" stroke="#8ba8c4" stroke-dasharray="5 6"/><text x="230.0" y="248" fill="#e8f4f8" text-anchor="middle">HR 1.0</text><text x="30" y="50" fill="#e8f4f8">CV death 或 HF 惡化</text><line x1="148.875" x2="223.125" y1="80" y2="80" stroke="#4dd9cf" stroke-width="5"/><circle cx="177.75" cy="80" r="8" fill="#4dd9cf"/><text x="30" y="112" fill="#e8f4f8">HR 0.62（95% CI 0.41–0.95）</text><text x="30" y="150" fill="#e8f4f8">CV death 單獨</text><line x1="164.0" x2="756.625" y1="180" y2="180" stroke="#4dd9cf" stroke-width="5"/><circle cx="309.75" cy="180" r="8" fill="#4dd9cf"/><text x="30" y="212" fill="#e8f4f8">HR 1.58（95% CI 0.52–4.83）</text></svg><div class="compact"><p>Tirzepatide ≤15 mg vs placebo；中位 104 週</p><p>複合終點 9.9% vs 15.3%；CV death 8 vs 5 件</p><p>52 週 KCCQ 是另一共同主要終點</p></div><p class="boundary">CV death CI 寬且跨 1；複合終點不換成住院率；不得與 STEP 跨試驗排名</p><details class="source-notes"><summary>來源註記：C006</summary><pre>BMI≥30、HF、LVEF≥50%（731 人，包含有／無 T2D），中位 104 週：複合終點 9.9% vs 15.3%，HR 0.62（95% CI 0.41–0.95）。但 CV death 單獨為 8 vs 5 件，HR 1.58（95% CI 0.52–4.83）——只能說複合終點獲益，不能說已證實降低 CV 死亡；52 週 KCCQ 是另一共同主要終點。
+
+C006｜SUMMIT降低CV death或HF惡化複合終點，不能說已證實單獨降低CV死亡
+N：731（364/367）
+中位104週；36/364(9.9%) vs56/367(15.3%)；HR0.62,95%CI0.41–0.95；CV death8 vs5，HR1.58,CI0.52–4.83
+族群：BMI≥30、HF、LVEF≥50%；包含有/無T2D
+邊界：肥胖HFpEF；無法與STEP跨試驗排名
+限制：不同終點不可當住院率；CV死亡CI寬；52週KCCQ是另一共同主要終點
+層級：verified
+來源 S03：Abstract；正文p.427及Table2
+https://pubmed.ncbi.nlm.nih.gov/39555826/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　</details></section><section class="slide metrics" id="p12" data-page="12" aria-label="第 12 頁"><div class="kicker">P12 / 肥胖相關 HFpEF</div><h2>STEP-HFpEF DM</h2><p class="sub">Semaglutide 的症狀、功能與體重證據</p><p class="population">T2D、BMI≥30、LVEF≥45%、有症狀 HF · N=616 · 52 週</p><div class="metrics"><article><span class="ordinal">01</span><p>KCCQ 差 7.3 分<br>95% CI 4.1–10.4</p></article><article><span class="ordinal">02</span><p>體重差 −6.4 百分點<br>−9.8% vs −3.4%</p></article></div><p class="boundary">Semaglutide 2.4 mg vs placebo；treatment-policy estimand；Novo Nordisk 資助。不能宣稱 CV 死亡降低</p><details class="source-notes"><summary>來源註記：C007</summary><pre>T2D＋BMI≥30＋LVEF≥45% 有症狀 HF（616 人），52 週 semaglutide 2.4 mg vs placebo：KCCQ 差 7.3 分（95% CI 4.1–10.4）、體重差 -6.4 百分點（-9.8% vs -3.4%）。證據重點是症狀／功能／體重；不能以此單一試驗宣稱降低 CV 死亡，也不能與 SUMMIT 跨試驗排名。
+
+C007｜STEP-HFpEF DM證據重點是症狀/功能與體重
+N：616隨機
+52週；sema2.4mg vs placebo；KCCQ差7.3分(95%CI4.1–10.4)；體重-9.8% vs-3.4%，差-6.4百分點
+族群：T2D、BMI≥30、LVEF≥45%、有症狀HF
+邊界：不能以此單一試驗宣稱降低CV死亡或與SUMMIT優劣
+限制：primary treatment-policy estimand；Novo Nordisk資助
+層級：verified
+來源 S04：Abstract；Methods p.1395；Table2
+https://pubmed.ncbi.nlm.nih.gov/38587233/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/38587233/" target="_blank" rel="noopener">S04 原始來源</a>　</details></section><section class="slide table" id="p13" data-page="13" aria-label="第 13 頁"><div class="kicker">P13 / 肥胖相關 HFpEF</div><h2>HFpEF 證據對讀</h2><p class="sub">兩個試驗各有自己的藥物、族群與終點</p><div class="table-wrap"><table><thead><tr><th>座標</th><th>SUMMIT</th><th>STEP-HFpEF DM</th></tr></thead><tbody><tr><td>藥物</td><td>Tirzepatide ≤15 mg</td><td>Semaglutide 2.4 mg</td></tr><tr><td>族群</td><td>肥胖 HFpEF；可有／無 T2D；LVEF≥50%</td><td>T2D＋肥胖 HF；LVEF≥45%</td></tr><tr><td>主要重點</td><td>CV-HF 複合＋KCCQ</td><td>症狀、功能、體重</td></tr></tbody></table></div><p class="boundary">對齊表用於辨識證據歸屬，不是跨試驗療效排名</p><details class="source-notes"><summary>來源註記：C006 · C007</summary><pre>SUMMIT＝tirzepatide／肥胖 HFpEF（可有或無 T2D）／CV-HF 複合＋KCCQ；STEP-HFpEF DM＝semaglutide 2.4 mg／T2D＋HFpEF／症狀功能體重。兩者並存而非互斥，對齊後才知道各自能回答什麼；跨試驗排名在此沒有證據基礎。
+
+C006｜SUMMIT降低CV death或HF惡化複合終點，不能說已證實單獨降低CV死亡
+N：731（364/367）
+中位104週；36/364(9.9%) vs56/367(15.3%)；HR0.62,95%CI0.41–0.95；CV death8 vs5，HR1.58,CI0.52–4.83
+族群：BMI≥30、HF、LVEF≥50%；包含有/無T2D
+邊界：肥胖HFpEF；無法與STEP跨試驗排名
+限制：不同終點不可當住院率；CV死亡CI寬；52週KCCQ是另一共同主要終點
+層級：verified
+來源 S03：Abstract；正文p.427及Table2
+https://pubmed.ncbi.nlm.nih.gov/39555826/
+
+C007｜STEP-HFpEF DM證據重點是症狀/功能與體重
+N：616隨機
+52週；sema2.4mg vs placebo；KCCQ差7.3分(95%CI4.1–10.4)；體重-9.8% vs-3.4%，差-6.4百分點
+族群：T2D、BMI≥30、LVEF≥45%、有症狀HF
+邊界：不能以此單一試驗宣稱降低CV死亡或與SUMMIT優劣
+限制：primary treatment-policy estimand；Novo Nordisk資助
+層級：verified
+來源 S04：Abstract；Methods p.1395；Table2
+https://pubmed.ncbi.nlm.nih.gov/38587233/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38587233/" target="_blank" rel="noopener">S04 原始來源</a>　</details></section><section class="slide quiz" id="p14" data-page="14" aria-label="第 14 頁"><div class="kicker">P14 / 肥胖相關 HFpEF</div><h2>Check-Point 2</h2><p class="sub">每一句回答，都有 claim 與試驗座標</p><div class="quiz"><details><summary>SUMMIT 已證實降低 CV death？</summary><p>不能。複合終點獲益，CV death CI 跨 1。C006 <button class="jump" data-page="11">回看 P11</button></p></details><details><summary>FLOW 是哪個藥的腎臟試驗？</summary><p>Semaglutide 1 mg。C008 <button class="jump" data-page="15">回看 P15</button></p></details><details><summary>SURPASS-2／SURMOUNT-5 的 semaglutide 劑量？</summary><p>1 mg／1.7 或 2.4 mg。C004／C005（亦見 P09） <button class="jump" data-page="7">回看 P07</button></p></details></div><p class="boundary">第三題回看 P07／P09；comparator 劑量不可混用</p><details class="source-notes"><summary>來源註記：C006 · C008 · C004 · C005 · C007</summary><pre>3 題快答：① SUMMIT 能不能說「已證實降低 CV 死亡」？（不能，複合終點獲益，CV death CI 跨 1——回指 P11）② FLOW 是哪個藥的腎臟試驗？（semaglutide——回指 P15）③ SURPASS-2 與 SURMOUNT-5 的 semaglutide 劑量各是多少？（1 mg vs 1.7／2.4 mg，不可混用——回指 P07／P09）。
+
+C006｜SUMMIT降低CV death或HF惡化複合終點，不能說已證實單獨降低CV死亡
+N：731（364/367）
+中位104週；36/364(9.9%) vs56/367(15.3%)；HR0.62,95%CI0.41–0.95；CV death8 vs5，HR1.58,CI0.52–4.83
+族群：BMI≥30、HF、LVEF≥50%；包含有/無T2D
+邊界：肥胖HFpEF；無法與STEP跨試驗排名
+限制：不同終點不可當住院率；CV死亡CI寬；52週KCCQ是另一共同主要終點
+層級：verified
+來源 S03：Abstract；正文p.427及Table2
+https://pubmed.ncbi.nlm.nih.gov/39555826/
+
+C008｜FLOW為semaglutide而非tirzepatide的腎臟outcome試驗
+N：3533（1767/1766）
+中位3.4年；sema1mg vs placebo；主要複合331 vs410事件；HR0.76,95%CI0.66–0.88,P=.0003
+族群：T2D+CKD：eGFR50–75/UACR&gt;300至&lt;5000，或eGFR25至&lt;50/UACR&gt;100至&lt;5000
+邊界：腎主要複合含CV death；不能轉成tirzepatide class effect
+限制：不能稱所有CKD或透析患者的證據；Novo Nordisk資助
+層級：verified
+來源 S05：Abstract Methods/Results；NEJM pp.109–121
+https://pubmed.ncbi.nlm.nih.gov/38785209/
+
+C004｜SURPASS-2比較的是semaglutide 1 mg
+N：1879隨機；1878至少一劑
+40週；tirzepatide 5/10/15mg；HbA1c -2.01/-2.24/-2.30百分點，sema1mg -1.86百分點
+族群：metformin治療仍控制不足T2D成人
+邊界：控糖比較不能替代sema2.4mg減重比較
+限制：HbA1c為百分點，不是相對百分比；不推定所有sema劑量
+層級：verified
+來源 S01：Methods/Results abstract；正文pp.503–505
+https://pubmed.ncbi.nlm.nih.gov/34170647/
+
+C005｜SURMOUNT-5主要結果限無T2D肥胖/過重成人
+N：751隨機；750用藥分析（374/376）
+72週；tirzepatide最大耐受10/15mg：-20.2%（95%CI -21.4至-19.1）；sema1.7/2.4mg：-13.7%（-14.9至-12.6）；P&lt;.001
+族群：無T2D；BMI≥30或≥27伴相關共病
+邊界：群體平均，不能保證T2D/HFpEF個案同幅減重
+限制：modified treatment-regimen estimand；廠商Lilly資助；非心腎outcome比較
+層級：verified
+來源 S02：Abstract；Table2/Fig1 pp.30–31；Methods p.28
+https://pubmed.ncbi.nlm.nih.gov/40353578/
+
+C007｜STEP-HFpEF DM證據重點是症狀/功能與體重
+N：616隨機
+52週；sema2.4mg vs placebo；KCCQ差7.3分(95%CI4.1–10.4)；體重-9.8% vs-3.4%，差-6.4百分點
+族群：T2D、BMI≥30、LVEF≥45%、有症狀HF
+邊界：不能以此單一試驗宣稱降低CV死亡或與SUMMIT優劣
+限制：primary treatment-policy estimand；Novo Nordisk資助
+層級：verified
+來源 S04：Abstract；Methods p.1395；Table2
+https://pubmed.ncbi.nlm.nih.gov/38587233/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38785209/" target="_blank" rel="noopener">S05 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/34170647/" target="_blank" rel="noopener">S01 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38587233/" target="_blank" rel="noopener">S04 原始來源</a>　</details></section><section class="slide forest" id="p15" data-page="15" aria-label="第 15 頁"><div class="kicker">P15 / 腎臟</div><h2>FLOW：腎臟證據歸屬</h2><p class="sub">腎臟 outcome 試驗屬於 semaglutide 1 mg</p><p class="population">T2D＋CKD · N=3533 · 中位 3.4 年</p><svg class="forest" viewBox="0 0 920 270" role="img" aria-label="Hazard ratio 與信賴區間"><line x1="670.0" x2="670.0" y1="24" y2="220" stroke="#8ba8c4" stroke-dasharray="5 6"/><text x="670.0" y="248" fill="#e8f4f8" text-anchor="middle">HR 1.0</text><text x="30" y="50" fill="#e8f4f8">腎主要複合（含 CV death）</text><line x1="296.0" x2="537.9999999999999" y1="80" y2="80" stroke="#4dd9cf" stroke-width="5"/><circle cx="406.0" cy="80" r="8" fill="#4dd9cf"/><text x="30" y="112" fill="#e8f4f8">HR 0.76（95% CI 0.66–0.88）</text></svg><div class="compact"><p>Semaglutide 1 mg vs placebo</p><p>主要複合 331 vs 410 事件；P=.0003</p><p>eGFR／UACR 雙軌收案，完整條件見來源註記</p></div><p class="boundary">中期分析建議早停；Novo Nordisk 資助。不能轉成 tirzepatide class effect 或所有 CKD／透析的證據</p><details class="source-notes"><summary>來源註記：C008</summary><pre>T2D＋CKD（3533 人，eGFR／UACR 雙軌收案），中位 3.4 年：腎主要複合（含 CV death）HR 0.76（95% CI 0.66–0.88，P=.0003）。這個結果不能轉成 tirzepatide 的 class effect；也不代表所有 CKD 或透析患者的證據。
+
+C008｜FLOW為semaglutide而非tirzepatide的腎臟outcome試驗
+N：3533（1767/1766）
+中位3.4年；sema1mg vs placebo；主要複合331 vs410事件；HR0.76,95%CI0.66–0.88,P=.0003
+族群：T2D+CKD：eGFR50–75/UACR&gt;300至&lt;5000，或eGFR25至&lt;50/UACR&gt;100至&lt;5000
+邊界：腎主要複合含CV death；不能轉成tirzepatide class effect
+限制：不能稱所有CKD或透析患者的證據；Novo Nordisk資助
+層級：verified
+來源 S05：Abstract Methods/Results；NEJM pp.109–121
+https://pubmed.ncbi.nlm.nih.gov/38785209/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/38785209/" target="_blank" rel="noopener">S05 原始來源</a>　</details></section><section class="slide forest" id="p16" data-page="16" aria-label="第 16 頁"><div class="kicker">P16 / 腎臟</div><h2>Tirzepatide 腎臟探索性訊號</h2><p class="sub">SURPASS-CVOT 預定探索性分析 · 2026 更新</p><p class="population">T2D＋ASCVD · mITT N=13165 · 中位 4.0 年</p><svg class="forest" viewBox="0 0 920 270" role="img" aria-label="Hazard ratio 與信賴區間"><line x1="670.0" x2="670.0" y1="24" y2="220" stroke="#8ba8c4" stroke-dasharray="5 6"/><text x="670.0" y="248" fill="#e8f4f8" text-anchor="middle">HR 1.0</text><text x="30" y="50" fill="#e8f4f8">腎複合（探索性）</text><line x1="318.0" x2="537.9999999999999" y1="80" y2="80" stroke="#4dd9cf" stroke-width="5"/><circle cx="416.99999999999994" cy="80" r="8" fill="#4dd9cf"/><text x="30" y="112" fill="#e8f4f8">HR 0.77（95% CI 0.68–0.88）</text></svg><div class="compact"><p>腎複合：6.0% vs 7.6%；P=.0002</p><p>含新發持續 macroalbuminuria，與 FLOW 定義不同</p><p>不是新獨立 RCT；腎指標可用 N 各有不同</p></div><p class="boundary">EXPLORATORY／abstract-only：未完成全文、SAP 與 multiplicity 審核，不升格 confirmatory</p><details class="source-notes"><summary>來源註記：C010</summary><pre>2026 出刊的 SURPASS-CVOT 預定探索性腎臟分析（mITT 13165，中位 4.0 年）：腎複合 6.0% vs 7.6%，HR 0.77（95% CI 0.68–0.88，P=.0002）。但它是探索性分析、腎複合定義與 FLOW 不同（含新發持續 macroalbuminuria）、不是新的獨立 RCT——可以報告訊號，不能升格 confirmatory。
+
+C010｜2026 SURPASS-CVOT腎臟分析已出刊，但屬探索性
+N：13299隨機、mITT13165；腎指標可用N各有不同
+中位4.0年；腎複合396(6.0%) vs498(7.6%)；HR0.77,95%CI0.68–0.88；p=.0002
+族群：T2D+ASCVD；腎複合含新發持續macroalbuminuria
+邊界：不能與FLOW的複合終點等同，也不是新獨立RCT
+限制：未完成全文/SAP multiplicity審核；主簡報僅標探索性更新，不升格confirmatory
+層級：verified_abstract
+來源 S12：PubMed abstract Methods/Findings
+https://pubmed.ncbi.nlm.nih.gov/42114520/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/42114520/" target="_blank" rel="noopener">S12 原始來源</a>　</details></section><section class="slide steps" id="p17" data-page="17" aria-label="第 17 頁"><div class="kicker">P17 / 腎臟</div><h2>GI 反應、體液流失與 AKI</h2><p class="sub">Mounjaro USPI · USA；台灣版本 [TO CONFIRM]</p><div class="steps"><article><span class="ordinal">01</span><p>持續嘔吐／腹瀉或攝水不足</p></article><article><span class="ordinal">02</span><p>體液流失，尤其已有腎病或易脫水者</p></article><article><span class="ordinal">03</span><p>評估體液狀態與腎功能</p></article></div><p class="boundary">嚴重 gastroparesis 不建議使用；renal PK 不調量不代表腎臟完全安全</p><details class="source-notes"><summary>來源註記：P001 · C013 · C008 · C010</summary><pre>美國 USPI 警示：嚴重 GI 反應（持續嘔吐／腹瀉）或攝水不足可致體液流失與急性腎損傷（AKI），已有腎病或易脫水者需評估體液與腎功能；嚴重 gastroparesis 不建議使用。「renal PK 不調量」不等於「腎臟完全安全」；台灣版本文句 [TO CONFIRM]（P001）。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C013｜嚴重GI反應可致體液流失與AKI
+N：不適用
+持續嘔吐/腹瀉或攝水不足需評估體液與腎功能；嚴重gastroparesis不建議
+族群：尤其已有腎病或易脫水者
+邊界：一般安全溝通；台灣版本待核
+限制：不能因為renal PK不需調量就聲稱腎臟完全安全
+層級：verified_US_only
+來源 S07：§5.5–5.6 PDF pp.4–5
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C008｜FLOW為semaglutide而非tirzepatide的腎臟outcome試驗
+N：3533（1767/1766）
+中位3.4年；sema1mg vs placebo；主要複合331 vs410事件；HR0.76,95%CI0.66–0.88,P=.0003
+族群：T2D+CKD：eGFR50–75/UACR&gt;300至&lt;5000，或eGFR25至&lt;50/UACR&gt;100至&lt;5000
+邊界：腎主要複合含CV death；不能轉成tirzepatide class effect
+限制：不能稱所有CKD或透析患者的證據；Novo Nordisk資助
+層級：verified
+來源 S05：Abstract Methods/Results；NEJM pp.109–121
+https://pubmed.ncbi.nlm.nih.gov/38785209/
+
+C010｜2026 SURPASS-CVOT腎臟分析已出刊，但屬探索性
+N：13299隨機、mITT13165；腎指標可用N各有不同
+中位4.0年；腎複合396(6.0%) vs498(7.6%)；HR0.77,95%CI0.68–0.88；p=.0002
+族群：T2D+ASCVD；腎複合含新發持續macroalbuminuria
+邊界：不能與FLOW的複合終點等同，也不是新獨立RCT
+限制：未完成全文/SAP multiplicity審核；主簡報僅標探索性更新，不升格confirmatory
+層級：verified_abstract
+來源 S12：PubMed abstract Methods/Findings
+https://pubmed.ncbi.nlm.nih.gov/42114520/</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38785209/" target="_blank" rel="noopener">S05 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/42114520/" target="_blank" rel="noopener">S12 原始來源</a>　</details></section><section class="slide steps" id="p18" data-page="18" aria-label="第 18 頁"><div class="kicker">P18 / 用藥邊界與安全</div><h2>美國成人劑量原則</h2><p class="sub">Mounjaro USPI · USA；台灣劑量與器型 IFU [TO CONFIRM]</p><div class="steps"><article><span class="ordinal">01</span><p>2.5 mg weekly 起始</p></article><article><span class="ordinal">02</span><p>需要時每次增 2.5 mg，當前劑量至少維持 4 週</p></article><article><span class="ordinal">03</span><p>成人最大 15 mg weekly，並非人人需要達到</p></article></div><p class="boundary">KwikPen 每筆 4 個固定 weekly doses，單一病人使用。排除拆筆格數、跳級、同週拼筆及採購省錢教學</p><details class="source-notes"><summary>來源註記：P001 · C011 · C018</summary><pre>美國 USPI 成人劑量 2.5 mg weekly 起始，需要時每次增 2.5 mg、當前劑量至少維持 4 週，最大 15 mg weekly；KwikPen 為固定劑量設計（每筆 4 個固定 weekly doses），格數算術不等於核准可拆劑方法。明確排除：原研讀素材中的拆筆格數換算、跳級（如 5→10 mg 跳過 7.5 mg）、同週拼筆、採購省錢方案，均不進入本教材。台灣劑量圖與器型 IFU [TO CONFIRM]（P001）；不是人人需達 15 mg。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C011｜美國成人劑量由2.5mg起、按耐受與目標逐步調整
+N：不適用
+2.5mg weekly；需要時每次增2.5mg，當前劑量至少4週；成人最大15mg weekly
+族群：美國成人T2D
+邊界：台灣完整仿單核實前不作個別處方或臺灣劑量圖
+限制：不採原ZIP 5→10mg跳級或同週拼筆；不是人人需達15mg
+層級：verified_US_only
+來源 S07：§2.1 PDF p.3
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C018｜KwikPen為固定劑量；格數算術不等於核准可拆劑方法
+N：不適用
+每支KwikPen含4個標示劑量；單一病人使用且不得共享
+族群：USA對應KwikPen
+邊界：反駁筆記教學；台灣操作需拿到同器型核准IFU
+限制：不轉載格數換算、抽殘藥、延長一筆8週之教學；UK IFU本次未取得
+層級：verified_US_only
+來源 S07：USPI §2.2/3 PDF pp.3–4；§5.10 PDF p.6
+https://pi.lilly.com/us/mounjaro-uspi.pdf</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　</details></section><section class="slide contexts" id="p19" data-page="19" aria-label="第 19 頁"><div class="kicker">P19 / 用藥邊界與安全</div><h2>美國標示禁忌</h2><p class="sub">Mounjaro USPI · USA；台灣禁忌文句 [TO CONFIRM]</p><div class="contexts"><article><span class="ordinal">01</span><p>MTC：medullary thyroid carcinoma 個人／家族史</p></article><article><span class="ordinal">02</span><p>MEN2：multiple endocrine neoplasia syndrome type 2</p></article><article><span class="ordinal">03</span><p>Tirzepatide 或賦形劑的嚴重過敏</p></article></div><p class="boundary">Rodent 甲狀腺 C-cell 腫瘤訊號；人類 MTC 風險尚未確立。禁忌與不建議使用分開</p><details class="source-notes"><summary>來源註記：P001 · C012</summary><pre>美國 USPI 禁忌為 MTC（medullary thyroid carcinoma）個人／家族史、MEN2 與嚴重過敏；人類 MTC 風險尚未確立（rodent 訊號，不得寫成人類已證實）。「禁忌」與「不建議使用」（如嚴重 gastroparesis）不能混同；台灣禁忌文句以核准仿單為準 [TO CONFIRM]（P001）。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C012｜MTC個人/家族史、MEN2與嚴重過敏是美國標示禁忌
+N：不適用
+人類MTC風險尚未確立；rodent訊號
+族群：依美國標示
+邊界：衛教需先核對台灣仿單；勿把rodent致癌寫成人類已證實
+限制：禁忌與不建議使用不能混同
+層級：verified_US_only
+來源 S07：§4/5.1 PDF p.4
+https://pi.lilly.com/us/mounjaro-uspi.pdf</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　</details></section><section class="slide warning" id="p20" data-page="20" aria-label="第 20 頁"><div class="kicker">P20 / 用藥邊界與安全</div><h2>急性警訊與處置</h2><p class="sub">疑似胰臟炎、嚴重過敏：停藥並立即就醫</p><div class="statements"><article><span class="ordinal">01</span><p>持續嚴重腹痛：立即評估疑似胰臟炎</p></article><article><span class="ordinal">02</span><p>呼吸困難／顏面腫脹：立即評估嚴重過敏</p></article><article><span class="ordinal">03</span><p>急性膽囊疾病、視網膜病變併發亦需說明</p></article></div><p class="boundary">USA USPI；台灣文句 [TO CONFIRM]。病人版需醫師審核，不提供自行重啟建議。P10 回升考量不阻礙急性停藥</p><details class="source-notes"><summary>來源註記：P001 · C017</summary><pre>持續嚴重腹痛（疑胰臟炎）或呼吸／顏面腫脹（嚴重過敏）應停藥並立即接受評估；急性膽囊疾病與視網膜病變併發亦需說明。警訊語句用於專業溝通，病人版措辭需醫師審核；不提供自我診斷或自行重啟建議；台灣文句 [TO CONFIRM]（P001）。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C017｜疑胰臟炎或嚴重過敏應停藥並立即求醫
+N：不適用
+持續嚴重腹痛、呼吸/顏面腫脹等需緊急評估
+族群：用藥者
+邊界：病人警訊語句需醫師審核；非自我診斷工具
+限制：急性膽囊、視網膜病變亦須說明；不可擅用重啟建議
+層級：verified_US_only
+來源 S07：§5.2/5.4 PDF p.4
+https://pi.lilly.com/us/mounjaro-uspi.pdf</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　</details></section><section class="slide warning" id="p21" data-page="21" aria-label="第 21 頁"><div class="kicker">P21 / 用藥邊界與安全</div><h2>併用 insulin 或 sulfonylurea</h2><p class="sub">併用 secretagogue 會增加低血糖風險</p><div class="statements"><article><span class="ordinal">01</span><p>醫療團隊評估是否減少併藥劑量</p></article><article><span class="ordinal">02</span><p>不提供通用減量百分比</p></article><article><span class="ordinal">03</span><p>病人不要自行減藥，也不能說單藥零低血糖</p></article></div><p class="boundary">Mounjaro USPI · USA；台灣文句 [TO CONFIRM]</p><details class="source-notes"><summary>來源註記：P001 · C014</summary><pre>合併 insulin 或 sulfonylurea 等 secretagogue 會增加低血糖風險，可能需要減少併藥劑量，且調整應由醫療團隊決定；不能說單藥零低血糖，也不提供通用減量百分比，病人勿自行減藥；台灣文句 [TO CONFIRM]（P001）。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C014｜合併insulin或sulfonylurea等secretagogue增加低血糖風險
+N：不適用
+可能需減少併藥，由醫療團隊調整
+族群：合併治療者
+邊界：不能說單藥零低血糖；病人勿自行減藥
+限制：不提供通用減量百分比
+層級：verified_US_only
+來源 S07：§5.3 PDF p.4
+https://pi.lilly.com/us/mounjaro-uspi.pdf</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　</details></section><section class="slide comparison" id="p22" data-page="22" aria-label="第 22 頁"><div class="kicker">P22 / 用藥邊界與安全</div><h2>胃排空延遲的兩個臨床場景</h2><p class="sub">口服荷爾蒙避孕藥與麻醉／深鎮靜</p><div class="comparison"><article><span class="ordinal">01</span><p>口服荷爾蒙避孕藥：開始及每次升量後 4 週，改非口服方法或加屏障法</p></article><article><span class="ordinal">02</span><p>麻醉／深鎮靜：有 aspiration 風險，預先告知程序團隊</p></article><article><span class="ordinal">03</span><p>USPI 資料不足以判定暫停用藥能否降低胃殘留風險</p></article></div><p class="boundary">USA 標示；無通用仿單停藥天數。妊娠計畫間隔與台灣麻醉流程 [TO CONFIRM]</p><details class="source-notes"><summary>來源註記：P003 · C015 · C016 · C011 · C018 · C012 · C017 · C014 · P001</summary><pre>胃排空延遲有兩個具體後果——(a) 口服荷爾蒙避孕藥效力可能降低：開始用藥及每次升量後 4 週應改非口服方法或加屏障法；(b) 麻醉／深鎮靜有吸入（aspiration）風險，應預先告知手術／麻醉團隊，且沒有通用仿單停藥天數（USPI 稱資料不足以判定暫停藥能否降低風險），不得自行套用固定停藥規則。妊娠計畫停藥間隔與台灣麻醉流程 [TO CONFIRM]（P003）。
+
+P003｜妊娠計畫停藥間隔與臺灣現行麻醉流程
+N：不適用
+不提供統一停藥天數；由處方/麻醉團隊制定
+族群：妊娠或程序規劃者
+邊界：未通過前只保留諮詢提醒
+限制：不從半衰期自行計算臨床停藥方案
+層級：pending
+來源 S07;S14：§8.1/5.9及台灣指引待補
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html
+
+C015｜口服荷爾蒙避孕藥可能因胃排空延遲降低效力
+N：不適用
+開始及每次升量後4週：改非口服方法或加屏障法
+族群：使用口服荷爾蒙避孕藥者
+邊界：USA標示；不得外推全部避孕方式失效
+限制：台灣正式文句及生育計畫停藥期未核完
+層級：verified_US_only
+來源 S07：§7.2/8.3 PDF pp.10–11
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C016｜麻醉/深鎮靜有吸入風險，沒有通用仿單停藥天數
+N：不適用
+應預先告知手術/麻醉團隊；USPI稱資料不足判定暫停藥能否降低胃殘留風險
+族群：預定麻醉/深鎮靜者
+邊界：依當地程序與個別症狀風險；非一律停7天
+限制：本輪未審核台灣麻醉指引；不得自行套2023固定停藥規則
+層級：verified_US_only
+來源 S07：§5.9 PDF p.6
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C011｜美國成人劑量由2.5mg起、按耐受與目標逐步調整
+N：不適用
+2.5mg weekly；需要時每次增2.5mg，當前劑量至少4週；成人最大15mg weekly
+族群：美國成人T2D
+邊界：台灣完整仿單核實前不作個別處方或臺灣劑量圖
+限制：不採原ZIP 5→10mg跳級或同週拼筆；不是人人需達15mg
+層級：verified_US_only
+來源 S07：§2.1 PDF p.3
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C018｜KwikPen為固定劑量；格數算術不等於核准可拆劑方法
+N：不適用
+每支KwikPen含4個標示劑量；單一病人使用且不得共享
+族群：USA對應KwikPen
+邊界：反駁筆記教學；台灣操作需拿到同器型核准IFU
+限制：不轉載格數換算、抽殘藥、延長一筆8週之教學；UK IFU本次未取得
+層級：verified_US_only
+來源 S07：USPI §2.2/3 PDF pp.3–4；§5.10 PDF p.6
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C012｜MTC個人/家族史、MEN2與嚴重過敏是美國標示禁忌
+N：不適用
+人類MTC風險尚未確立；rodent訊號
+族群：依美國標示
+邊界：衛教需先核對台灣仿單；勿把rodent致癌寫成人類已證實
+限制：禁忌與不建議使用不能混同
+層級：verified_US_only
+來源 S07：§4/5.1 PDF p.4
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C017｜疑胰臟炎或嚴重過敏應停藥並立即求醫
+N：不適用
+持續嚴重腹痛、呼吸/顏面腫脹等需緊急評估
+族群：用藥者
+邊界：病人警訊語句需醫師審核；非自我診斷工具
+限制：急性膽囊、視網膜病變亦須說明；不可擅用重啟建議
+層級：verified_US_only
+來源 S07：§5.2/5.4 PDF p.4
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+C014｜合併insulin或sulfonylurea等secretagogue增加低血糖風險
+N：不適用
+可能需減少併藥，由醫療團隊調整
+族群：合併治療者
+邊界：不能說單藥零低血糖；病人勿自行減藥
+限制：不提供通用減量百分比
+層級：verified_US_only
+來源 S07：§5.3 PDF p.4
+https://pi.lilly.com/us/mounjaro-uspi.pdf
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895</pre><a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　</details></section><section class="slide table" id="p23" data-page="23" aria-label="第 23 頁"><div class="kicker">P23 / 證據邊界與收尾</div><h2>證據邊界總表</h2><p class="sub">每個結論保留它的藥物、族群與終點</p><div class="table-wrap"><table><thead><tr><th>易誤用語句</th><th>正確對齊</th></tr></thead><tbody><tr><td>直接抗炎／心腎全面受益</td><td>機制、biomarker 與 clinical outcome 分層</td></tr><tr><td>手術般療效</td><td>報告試驗結果與適用限制，避免比喻</td></tr><tr><td>FLOW 外推 tirzepatide</td><td>FLOW 證據歸 semaglutide</td></tr><tr><td>SUMMIT 等於 CV death 獲益</td><td>只報複合終點獲益</td></tr><tr><td>混用 semaglutide 劑量</td><td>SURPASS-2：1 mg；SURMOUNT-5：1.7／2.4 mg</td></tr></tbody></table></div><p class="boundary">動物或其他 GLP-1 RA 結果不能當 tirzepatide 人體證據</p><details class="source-notes"><summary>來源註記：C020 · C008 · C006 · C004 · C005</summary><pre>① 直接抗炎／心腎全面受益等機制推論不升格為臨床結論（biomarker 與 clinical outcome 分層；動物或其他 GLP-1 RA 結果不當 tirzepatide 人體證據）；② 「手術般療效」比喻不用；③ FLOW 結果不外推 tirzepatide；④ SUMMIT 複合終點不寫成 CV death 獲益；⑤ SURPASS-2（sema 1 mg）與 SURMOUNT-5（sema 1.7／2.4 mg）的 comparator 不混用。
+
+C020｜原研讀素材的直接抗炎/心腎全面受益語句不可升格為臨床結論
+N：不適用
+機制/biomarker/clinical outcome需分層
+族群：依各藥物/適應人群
+邊界：不得把不同GLP-1 RA或動物結果當tirzepatide人體證據
+限制：本輪未逐篇核完發炎機制引用；預設不進主要教材
+層級：verified_boundary
+來源 S01;S02;S03;S04;S05：各trial主要終點；ZIP Notes03結論、Report §3
+https://pubmed.ncbi.nlm.nih.gov/34170647/ | https://pubmed.ncbi.nlm.nih.gov/40353578/ | https://pubmed.ncbi.nlm.nih.gov/39555826/ | https://pubmed.ncbi.nlm.nih.gov/38587233/ | https://pubmed.ncbi.nlm.nih.gov/38785209/
+
+C008｜FLOW為semaglutide而非tirzepatide的腎臟outcome試驗
+N：3533（1767/1766）
+中位3.4年；sema1mg vs placebo；主要複合331 vs410事件；HR0.76,95%CI0.66–0.88,P=.0003
+族群：T2D+CKD：eGFR50–75/UACR&gt;300至&lt;5000，或eGFR25至&lt;50/UACR&gt;100至&lt;5000
+邊界：腎主要複合含CV death；不能轉成tirzepatide class effect
+限制：不能稱所有CKD或透析患者的證據；Novo Nordisk資助
+層級：verified
+來源 S05：Abstract Methods/Results；NEJM pp.109–121
+https://pubmed.ncbi.nlm.nih.gov/38785209/
+
+C006｜SUMMIT降低CV death或HF惡化複合終點，不能說已證實單獨降低CV死亡
+N：731（364/367）
+中位104週；36/364(9.9%) vs56/367(15.3%)；HR0.62,95%CI0.41–0.95；CV death8 vs5，HR1.58,CI0.52–4.83
+族群：BMI≥30、HF、LVEF≥50%；包含有/無T2D
+邊界：肥胖HFpEF；無法與STEP跨試驗排名
+限制：不同終點不可當住院率；CV死亡CI寬；52週KCCQ是另一共同主要終點
+層級：verified
+來源 S03：Abstract；正文p.427及Table2
+https://pubmed.ncbi.nlm.nih.gov/39555826/
+
+C004｜SURPASS-2比較的是semaglutide 1 mg
+N：1879隨機；1878至少一劑
+40週；tirzepatide 5/10/15mg；HbA1c -2.01/-2.24/-2.30百分點，sema1mg -1.86百分點
+族群：metformin治療仍控制不足T2D成人
+邊界：控糖比較不能替代sema2.4mg減重比較
+限制：HbA1c為百分點，不是相對百分比；不推定所有sema劑量
+層級：verified
+來源 S01：Methods/Results abstract；正文pp.503–505
+https://pubmed.ncbi.nlm.nih.gov/34170647/
+
+C005｜SURMOUNT-5主要結果限無T2D肥胖/過重成人
+N：751隨機；750用藥分析（374/376）
+72週；tirzepatide最大耐受10/15mg：-20.2%（95%CI -21.4至-19.1）；sema1.7/2.4mg：-13.7%（-14.9至-12.6）；P&lt;.001
+族群：無T2D；BMI≥30或≥27伴相關共病
+邊界：群體平均，不能保證T2D/HFpEF個案同幅減重
+限制：modified treatment-regimen estimand；廠商Lilly資助；非心腎outcome比較
+層級：verified
+來源 S02：Abstract；Table2/Fig1 pp.30–31；Methods p.28
+https://pubmed.ncbi.nlm.nih.gov/40353578/</pre><a href="https://pubmed.ncbi.nlm.nih.gov/34170647/" target="_blank" rel="noopener">S01 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38587233/" target="_blank" rel="noopener">S04 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38785209/" target="_blank" rel="noopener">S05 原始來源</a>　</details></section><section class="slide pending" id="p24" data-page="24" aria-label="第 24 頁"><div class="kicker">P24 / 證據邊界與收尾</div><h2>上線前待核事項</h2><p class="sub">[TO CONFIRM] 保持可見</p><div class="statements"><article><span class="ordinal">01</span><p>P001：台灣完整仿單、強度／器型 IFU 與給付</p></article><article><span class="ordinal">02</span><p>P002：補充資料、SAP、critical correspondence 與 multiplicity</p></article><article><span class="ordinal">03</span><p>P003：妊娠停藥間隔、台灣麻醉流程</p></article><article><span class="ordinal">04</span><p>作者／機構／COI：[TO CONFIRM]</p></article></div><p class="boundary">未過 gate 前不做台灣個別處方／劑量圖，也不發布相對應未核內容</p><details class="source-notes"><summary>來源註記：P001 · P002 · P003</summary><pre>P001 台灣目前各強度／器型完整仿單與核准版本（年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存／漏打）及健保給付——未過 gate 前不做個別處方或台灣劑量圖；P002 原始補充資料／SAP／critical correspondence 核讀（涉及安全性優劣、心腎途徑、探索性 multiplicity）；P003 妊娠計畫停藥間隔與台灣現行麻醉流程。作者／機構／COI 亦 [TO CONFIRM]。
+
+P001｜取得台灣目前各強度/器型完整仿單與核准版本
+N：不適用
+年齡、BMI、OSA、劑量、禁忌、交互作用、妊娠、麻醉警示、保存/漏打
+族群：台灣使用者
+邊界：patient dose/IFU及適應症細節上線前必過gate
+限制：不能用2023評估報告或美國2026 label填空
+層級：pending
+來源 S14;S09：TFDA許可證/仿單附件；尚缺本次驗證
+https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html | https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+P002｜正式發布前完成原始補充資料與critical correspondence核讀
+N：不適用
+涉及安全性優劣、心腎作用途徑、探索性multiplicity
+族群：依trial
+邊界：已核對abstract主要數字；不是所有clinical查核完成
+限制：現規劃不宣稱GIP止吐因果或其他全面優勢
+層級：pending
+來源 S02;S03;S06;S12：supplement/SAP/correspondence
+https://pubmed.ncbi.nlm.nih.gov/40353578/ | https://pubmed.ncbi.nlm.nih.gov/39555826/ | https://pubmed.ncbi.nlm.nih.gov/41406444/ | https://pubmed.ncbi.nlm.nih.gov/42114520/
+
+P003｜妊娠計畫停藥間隔與臺灣現行麻醉流程
+N：不適用
+不提供統一停藥天數；由處方/麻醉團隊制定
+族群：妊娠或程序規劃者
+邊界：未通過前只保留諮詢提醒
+限制：不從半衰期自行計算臨床停藥方案
+層級：pending
+來源 S07;S14：§8.1/5.9及台灣指引待補
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html</pre><a href="https://www.hosp.nycu.edu.tw/departments/dep-support/pharmacy/drog-use-search/10388-%E7%8C%9B%E5%81%A5%E6%A8%82%E7%AD%8610%E6%AF%AB%E5%85%8B-0-6%E6%AF%AB%E5%8D%87.html" target="_blank" rel="noopener">S14 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/41406444/" target="_blank" rel="noopener">S06 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/42114520/" target="_blank" rel="noopener">S12 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　</details></section><section class="slide steps" id="p25" data-page="25" aria-label="第 25 頁"><div class="kicker">P25 / 證據邊界與收尾</div><h2>先對齊，再選擇</h2><p class="sub">三行帶走</p><div class="steps"><article><span class="ordinal">01</span><p>分子、品牌與 jurisdiction，各自有座標</p></article><article><span class="ordinal">02</span><p>療效數字綁定試驗族群與 comparator 劑量</p></article><article><span class="ordinal">03</span><p>探索性、複合終點、US-only 與 pending，都是結論的一部分</p></article></div><p class="boundary">回到臨床問題，再核對分子、族群、終點與當地核准資訊</p><details class="source-notes"><summary>來源註記：C001 · C002 · C003 · C004 · C005 · C006 · C007 · C008 · C009</summary><pre>① 分子、品牌、jurisdiction 是三個獨立軸（C001／C002／C003）；② 每個療效數字綁定試驗族群與 comparator 劑量（C004／C005／C006／C007／C008／C009）；③ 邊界（探索性、複合終點、US-only、[TO CONFIRM]）本身就是要傳達的內容。
+
+C001｜Tirzepatide 是單一分子的 GIP/GLP-1 雙受體促效劑；semaglutide 是 GLP-1 受體促效劑
+N：不適用
+機制；不推導療效為兩倍
+族群：藥物機制
+邊界：機制示意；不能證明所有器官均受益
+限制：不採用萬能鑰匙或保證抗炎的比喻
+層級：verified
+來源 S07;S02：§12.1；S02 Introduction p.27
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://pubmed.ncbi.nlm.nih.gov/40353578/
+
+C002｜美國 Mounjaro 與 Zepbound 品牌適應症須分列
+N：不適用
+Mounjaro：≥10歲T2D控糖、成人高MACE風險T2D風險降低；Zepbound：成人體重控制及肥胖伴中重度OSA
+族群：依各品牌標示人群
+邊界：僅美國，不能套台灣；08/2026版本
+限制：Mounjaro非僅成人控糖；美國標示亦非台灣HFpEF適應症
+層級：verified_US_only
+來源 S07;S08：USPI §1；均PDF p.1
+https://pi.lilly.com/us/mounjaro-uspi.pdf | https://pi.lilly.com/us/zepbound-uspi.pdf
+
+C003｜台灣TFDA已確認猛健樂注射筆有血糖控制及肥胖過重體重控制用途
+N：不適用
+公告2025-11-10
+族群：台灣核准用途概述
+邊界：可說概括用途；詳細年齡/BMI/OSA須查現行仿單
+限制：公告不是完整仿單；勿由USA推導台灣MACE/兒科
+層級：verified_scope_only
+來源 S09：第一點 Tirzepatide成分注射筆
+https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895
+
+C004｜SURPASS-2比較的是semaglutide 1 mg
+N：1879隨機；1878至少一劑
+40週；tirzepatide 5/10/15mg；HbA1c -2.01/-2.24/-2.30百分點，sema1mg -1.86百分點
+族群：metformin治療仍控制不足T2D成人
+邊界：控糖比較不能替代sema2.4mg減重比較
+限制：HbA1c為百分點，不是相對百分比；不推定所有sema劑量
+層級：verified
+來源 S01：Methods/Results abstract；正文pp.503–505
+https://pubmed.ncbi.nlm.nih.gov/34170647/
+
+C005｜SURMOUNT-5主要結果限無T2D肥胖/過重成人
+N：751隨機；750用藥分析（374/376）
+72週；tirzepatide最大耐受10/15mg：-20.2%（95%CI -21.4至-19.1）；sema1.7/2.4mg：-13.7%（-14.9至-12.6）；P&lt;.001
+族群：無T2D；BMI≥30或≥27伴相關共病
+邊界：群體平均，不能保證T2D/HFpEF個案同幅減重
+限制：modified treatment-regimen estimand；廠商Lilly資助；非心腎outcome比較
+層級：verified
+來源 S02：Abstract；Table2/Fig1 pp.30–31；Methods p.28
+https://pubmed.ncbi.nlm.nih.gov/40353578/
+
+C006｜SUMMIT降低CV death或HF惡化複合終點，不能說已證實單獨降低CV死亡
+N：731（364/367）
+中位104週；36/364(9.9%) vs56/367(15.3%)；HR0.62,95%CI0.41–0.95；CV death8 vs5，HR1.58,CI0.52–4.83
+族群：BMI≥30、HF、LVEF≥50%；包含有/無T2D
+邊界：肥胖HFpEF；無法與STEP跨試驗排名
+限制：不同終點不可當住院率；CV死亡CI寬；52週KCCQ是另一共同主要終點
+層級：verified
+來源 S03：Abstract；正文p.427及Table2
+https://pubmed.ncbi.nlm.nih.gov/39555826/
+
+C007｜STEP-HFpEF DM證據重點是症狀/功能與體重
+N：616隨機
+52週；sema2.4mg vs placebo；KCCQ差7.3分(95%CI4.1–10.4)；體重-9.8% vs-3.4%，差-6.4百分點
+族群：T2D、BMI≥30、LVEF≥45%、有症狀HF
+邊界：不能以此單一試驗宣稱降低CV死亡或與SUMMIT優劣
+限制：primary treatment-policy estimand；Novo Nordisk資助
+層級：verified
+來源 S04：Abstract；Methods p.1395；Table2
+https://pubmed.ncbi.nlm.nih.gov/38587233/
+
+C008｜FLOW為semaglutide而非tirzepatide的腎臟outcome試驗
+N：3533（1767/1766）
+中位3.4年；sema1mg vs placebo；主要複合331 vs410事件；HR0.76,95%CI0.66–0.88,P=.0003
+族群：T2D+CKD：eGFR50–75/UACR&gt;300至&lt;5000，或eGFR25至&lt;50/UACR&gt;100至&lt;5000
+邊界：腎主要複合含CV death；不能轉成tirzepatide class effect
+限制：不能稱所有CKD或透析患者的證據；Novo Nordisk資助
+層級：verified
+來源 S05：Abstract Methods/Results；NEJM pp.109–121
+https://pubmed.ncbi.nlm.nih.gov/38785209/
+
+C009｜SURPASS-CVOT已正式發表；MACE非劣性成立，優越性未達顯著
+N：13299隨機；排除134；mITT13165（6586/6579）
+tirzepatide≤15mg vs dulaglutide1.5mg weekly；MACE801(12.2%) vs862(13.1%)；HR0.92,95.3%CI0.83–1.01；NI P=.003，superiority P=.09
+族群：T2D+已確立ASCVD
+邊界：不能說勝過dulaglutide或勝過semaglutide；非placebo比較
+限制：非劣界值1.05；95.3%不可改95%；Lilly資助
+層級：verified
+來源 S06：Abstract Methods/Results；NEJM393:2409–2420
+https://pubmed.ncbi.nlm.nih.gov/41406444/</pre><a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　<a href="https://pi.lilly.com/us/zepbound-uspi.pdf" target="_blank" rel="noopener">S08 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/34170647/" target="_blank" rel="noopener">S01 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38587233/" target="_blank" rel="noopener">S04 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38785209/" target="_blank" rel="noopener">S05 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/41406444/" target="_blank" rel="noopener">S06 原始來源</a>　</details></section><section class="slide references" id="p26" data-page="26" aria-label="第 26 頁"><div class="kicker">P26 / 證據邊界與收尾</div><h2>證據來源與版本</h2><p class="sub">證據截止 2026-10-29 · v0.2-review · house style S16</p><div class="table-wrap"><table><thead><tr><th>ID／文件</th><th>版本或 DOI</th><th>範圍</th></tr></thead><tbody><tr><td>S01 SURPASS-2</td><td>10.1056/NEJMoa2107519</td><td>原始試驗</td></tr><tr><td>S02 SURMOUNT-5</td><td>10.1056/NEJMoa2416394</td><td>原始試驗</td></tr><tr><td>S03 SUMMIT</td><td>10.1056/NEJMoa2410027</td><td>原始試驗</td></tr><tr><td>S04 STEP-HFpEF DM</td><td>10.1056/NEJMoa2313917</td><td>原始試驗</td></tr><tr><td>S05 FLOW</td><td>10.1056/NEJMoa2403347</td><td>原始試驗</td></tr><tr><td>S06 SURPASS-CVOT</td><td>10.1056/NEJMoa2505928</td><td>原始試驗</td></tr><tr><td>S07 Mounjaro 美國 USPI</td><td>2026-08</td><td>USA</td></tr><tr><td>S08 Zepbound 美國 USPI</td><td>2026-08</td><td>USA</td></tr><tr><td>S09 TFDA：我國減重及降血脂藥品供應穩定</td><td>2025-11-10</td><td>台灣 scope-only</td></tr><tr><td>S12 SURPASS-CVOT 預定探索性腎臟分析</td><td>10.1016/S2213-8587(26)00032-X</td><td>探索性／摘要</td></tr><tr><td>S13 SURMOUNT-4</td><td>10.1001/jama.2023.24945</td><td>摘要核讀</td></tr></tbody></table></div><p class="boundary">S10／S11／S14 不作主要依據。逐頁來源註記對應 claim ledger；正式發布另需授權</p><details class="source-notes"><summary>來源註記：教材框架／來源</summary><pre>列出本教材使用的來源與 jurisdiction 標籤：S01 SURPASS-2、S02 SURMOUNT-5、S03 SUMMIT、S04 STEP-HFpEF DM、S05 FLOW、S06 SURPASS-CVOT、S07 Mounjaro USPI（USA）、S08 Zepbound USPI（USA）、S09 TFDA 公告（台灣，scope-only）、S12 SURPASS-CVOT 腎臟探索性分析、S13 SURMOUNT-4；證據截止 2026-10-29；各頁 claim ID 與正式 claim ledger 對應。
+
+
+S01｜SURPASS-2｜https://pubmed.ncbi.nlm.nih.gov/34170647/｜PubMed abstract；NotebookLM 原文 pp.503–515
+S02｜SURMOUNT-5｜https://pubmed.ncbi.nlm.nih.gov/40353578/｜PubMed abstract；NotebookLM 原文 pp.26–36
+S03｜SUMMIT｜https://pubmed.ncbi.nlm.nih.gov/39555826/｜PubMed abstract；NotebookLM 原文 pp.427–437；期刊卷期2025
+S04｜STEP-HFpEF DM｜https://pubmed.ncbi.nlm.nih.gov/38587233/｜PubMed abstract；NotebookLM 原文 pp.1394–1407
+S05｜FLOW｜https://pubmed.ncbi.nlm.nih.gov/38785209/｜PubMed abstract；NEJM 391:109–121；全文更新2025-08-14
+S06｜SURPASS-CVOT｜https://pubmed.ncbi.nlm.nih.gov/41406444/｜PubMed abstract；NEJM 393(24):2409–2420
+S07｜Mounjaro 美國 USPI｜https://pi.lilly.com/us/mounjaro-uspi.pdf｜§1、2.1、4、5、7.2、8.1、8.3、8.6、12.1、17；PDF頁碼見ledger
+S08｜Zepbound 美國 USPI｜https://pi.lilly.com/us/zepbound-uspi.pdf｜§1、2.1、2.2、5、7、8
+S09｜TFDA：我國減重及降血脂藥品供應穩定｜https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895｜第一點 Tirzepatide 成分注射筆；非完整仿單
+S12｜SURPASS-CVOT 預定探索性腎臟分析｜https://pubmed.ncbi.nlm.nih.gov/42114520/｜PubMed abstract Methods/Findings；Lancet Diabetes Endocrinol 2026;14(7):544-557；非FLOW相同定義
+S13｜SURMOUNT-4｜https://pmc.ncbi.nlm.nih.gov/articles/PMC10714284/｜Abstract/Results；週36至88，783進入lead-in、670隨機</pre><a href="https://pubmed.ncbi.nlm.nih.gov/34170647/" target="_blank" rel="noopener">S01 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/" target="_blank" rel="noopener">S02 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/39555826/" target="_blank" rel="noopener">S03 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38587233/" target="_blank" rel="noopener">S04 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/38785209/" target="_blank" rel="noopener">S05 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/41406444/" target="_blank" rel="noopener">S06 原始來源</a>　<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf" target="_blank" rel="noopener">S07 原始來源</a>　<a href="https://pi.lilly.com/us/zepbound-uspi.pdf" target="_blank" rel="noopener">S08 原始來源</a>　<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;id=t623895" target="_blank" rel="noopener">S09 原始來源</a>　<a href="https://pubmed.ncbi.nlm.nih.gov/42114520/" target="_blank" rel="noopener">S12 原始來源</a>　<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10714284/" target="_blank" rel="noopener">S13 原始來源</a>　</details></section></main><nav aria-label="簡報導航"><button id="prev" aria-label="上一頁">← 上一頁</button><span id="counter" aria-live="polite"></span><button id="next" aria-label="下一頁">下一頁 →</button><select id="pageSelect" aria-label="跳到頁碼"><option value="1">P01 先對齊，再選擇</option><option value="2">P02 同一個藥名，四個問題</option><option value="3">P03 藥物、族群與終點</option><option value="4">P04 兩個分子，兩種受體分類</option><option value="5">P05 品牌與 jurisdiction</option><option value="6">P06 Check-Point 1</option><option value="7">P07 SURPASS-2</option><option value="8">P08 SURPASS-CVOT</option><option value="9">P09 SURMOUNT-5</option><option value="10">P10 停藥與維持：SURMOUNT-4</option><option value="11">P11 SUMMIT：複合終點與死亡</option><option value="12">P12 STEP-HFpEF DM</option><option value="13">P13 HFpEF 證據對讀</option><option value="14">P14 Check-Point 2</option><option value="15">P15 FLOW：腎臟證據歸屬</option><option value="16">P16 Tirzepatide 腎臟探索性訊號</option><option value="17">P17 GI 反應、體液流失與 AKI</option><option value="18">P18 美國成人劑量原則</option><option value="19">P19 美國標示禁忌</option><option value="20">P20 急性警訊與處置</option><option value="21">P21 併用 insulin 或 sulfonylurea</option><option value="22">P22 胃排空延遲的兩個臨床場景</option><option value="23">P23 證據邊界總表</option><option value="24">P24 上線前待核事項</option><option value="25">P25 先對齊，再選擇</option><option value="26">P26 證據來源與版本</option></select><span id="hint">← →／空白鍵切頁 · F 全螢幕</span></nav><script>let current=1;const slides=[...document.querySelectorAll('.slide')],sel=document.querySelector('#pageSelect');function go(n){current=Math.max(1,Math.min(slides.length,Number(n)||1));slides.forEach((s,i)=>{s.classList.toggle('active',i===current-1);s.inert=i!==current-1;});document.querySelector('#counter').textContent=String(current).padStart(2,'0')+' / 26';document.querySelector('#chapter').textContent=slides[current-1].querySelector('.kicker').textContent;document.querySelector('#progress').style.width=(current/26*100)+'%';sel.value=current;document.querySelector('#prev').disabled=current===1;document.querySelector('#next').disabled=current===26;history.replaceState(null,'','#p'+String(current).padStart(2,'0'));window.scrollTo(0,0);}window.go=go;document.querySelector('#prev').onclick=()=>go(current-1);document.querySelector('#next').onclick=()=>go(current+1);sel.onchange=()=>go(sel.value);document.querySelectorAll('[data-page].jump').forEach(b=>b.onclick=()=>go(b.dataset.page));document.addEventListener('keydown',e=>{if(e.target.closest('select,input,textarea,summary,button,a'))return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(current+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(current-1)}if(e.key==='Home')go(1);if(e.key==='End')go(26);if(e.key.toLowerCase()==='f'){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>{});}});document.addEventListener('click',e=>{if(e.target.closest('button,a,details,select,nav,table'))return;if(e.clientX>innerWidth*.9)go(current+1);else if(e.clientX<innerWidth*.05)go(current-1)});go(parseInt(location.hash.replace('#p',''))||1);</script></body></html>

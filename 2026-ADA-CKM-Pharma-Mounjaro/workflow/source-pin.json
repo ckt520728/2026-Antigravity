@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-29",
+  "local_source": "D:\\2026 JEV Engineering\\skills\\jev-engineering",
+  "github_url": "https://raw.githubusercontent.com/ckt520728/2026-Antigravity/main/.agents/skills/jev-engineering/SKILL.md",
+  "pin_kind": "原始 bytes 的 SHA-256；main 可變，未宣稱 Git commit pin",
+  "local_remote_identical": true,
+  "files": [
+    {
+      "path": "monjaro/workflow/vendor/jev/bulk.py",
+      "sha256": "b9a529636714ce6a3ddfee2a5ebe3cc2d30ad14b9b93503af3686761447a9f80"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/calibration.py",
+      "sha256": "99d66cf531f225d97c3fc483ca37c89eb12844df06c2c7dd07cba483ef67db5c"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/client.py",
+      "sha256": "c3f849425f605b1114bfe4757027b655176ec845183e7dea2e68f44d1ae51838"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/compose.py",
+      "sha256": "32e1d071a95dacaffb63a5404128b3dac2b1f4be20c992ba9d5723053040ac7f"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/control.py",
+      "sha256": "9655065f91496736e4c7f3905c94d4a825b25fafc3ddebfe58a2bd04d4b06087"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/economics.py",
+      "sha256": "cdfcbbd807d08901438771b669c35c4ced9f7e47a8d7f59917340caf7d342cae"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/gate.py",
+      "sha256": "2b5d87c9ebc7e28c04fd1cfd5be9dce575eb8ceeaff55747b7fe5d32be7ffbea"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/models.json",
+      "sha256": "03f6dbd18bd33604df7603f915c8714734162df2ba72252463bdf9539e9ae05c"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/routing.py",
+      "sha256": "094d0685f73d281667b86cade6271244e5f0cff9cbc39110e09176001cc8c2f3"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/swarm.py",
+      "sha256": "044760b016c620b106b358d412ef6fa89b8e0832f34b6b59e8ec1e620b2e1118"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/toolgate.py",
+      "sha256": "d94deaf54c7e25124b52e5fe234569cd436da4a0d1df1a53302c56e324079e30"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/types.py",
+      "sha256": "4b939341abab4fe2de04bf4d05ed85c50d56f599105bf7da30d8a7b1992b8347"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/workflow.py",
+      "sha256": "74807c45c7ac754e642f0be8a1da10040a133b214d125a149e644c62ae0802c4"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/__init__.py",
+      "sha256": "0f9a748e17876dce79da302c2fa3a51ed27cd91459369bbe8ea722d463517757"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/providers/jev_api.py",
+      "sha256": "64b15b1b2687cd06e5ae44e88b8abee703b70084e3ca44949d89c9a1d7f01aad"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/providers/llm.py",
+      "sha256": "5a27b86a1b345ae33a12a5421f811a3dc30ca35b904bba8b6a44b442351bb70d"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/providers/local.py",
+      "sha256": "9e8ee7bd4788f5912f965b597074d29d102ac30d382bf9d14f17a59c03f484bb"
+    },
+    {
+      "path": "monjaro/workflow/vendor/jev/providers/__init__.py",
+      "sha256": "52db07f98ed5c486abff8d7d53b0b0be2402081228cbe744c9da6645c1858fa3"
+    },
+    {
+      "path": "monjaro/workflow/vendor/local/SKILL.md",
+      "sha256": "6eebade87be731e0733091f5b01395d5ea41edc3822960e5d4f4087ea99b63d2"
+    },
+    {
+      "path": "monjaro/workflow/vendor/local/references/18-two-phase-workflow.md",
+      "sha256": "9c747a6588f19639dcc438325686b9c8dc0046a49d318024bd459c19f9f077f6"
+    },
+    {
+      "path": "monjaro/workflow/vendor/github-SKILL.md",
+      "sha256": "6eebade87be731e0733091f5b01395d5ea41edc3822960e5d4f4087ea99b63d2"
+    }
+  ],
+  "warning": "vendor registry 的 API ID、價格與 swarm 宣稱是上游資料，未驗證、未用於本次派工或費用報告。"
+}

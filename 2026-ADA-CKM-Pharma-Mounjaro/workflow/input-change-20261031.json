@@ -1,0 +1,10 @@
+{
+  "path": "2026 GLP-1 RA Monjaro.txt",
+  "baseline_differences": [
+    "2026 GLP-1 RA Monjaro.txt"
+  ],
+  "baseline_sha256": "03d50c3acc4c56df503a1f8b6fb6e99adb8e84fae37417bc74d15a3f27050b14",
+  "current_sha256": "6925385e5418d3d456127acd48ece205c35699c919d532983b52941c629dbb74",
+  "meaning": "本輪讀取前即與歷史 baseline 不同；不推定變更人與時間、不修改原 baseline；舊成果與 ZIP 另驗 35 檔",
+  "baseline_modified": false
+}

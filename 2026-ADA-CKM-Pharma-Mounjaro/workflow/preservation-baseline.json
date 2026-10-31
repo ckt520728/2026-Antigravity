@@ -1,0 +1,182 @@
+[
+  {
+    "path": "Analyzed_Medicine_GLP-1-RA& SGLT2_糖尿病微血管病變與心血管風險評估_notes.zip",
+    "sha256": "4ac9724d048100ddaa808cec017d4115ca6679217ac3e8da0f1465825fb8ae06",
+    "size": 160541
+  },
+  {
+    "path": "Analyzed_Medicine_GLP-1-RA& SGLT2_糖尿病微血管病變與心血管風險評估_sources.zip",
+    "sha256": "8bb1403d81f12c4b25df32d4934004462e7fbf2a34899c89953513e3e3fd6aaa",
+    "size": 8289609
+  },
+  {
+    "path": "Medicine_GLP-1 RA_Mounjaro& Semaglutide_治療肥胖相關心衰伴2型糖尿病-studio-2026-10-29_08-34.zip",
+    "sha256": "1f653e85a8099388fc69a7498d17e06563f4920765bbdae027a47a1c35ad8f56",
+    "size": 40173
+  },
+  {
+    "path": "Primary_Medicine_GLP-1-RA& SGLT2_糖尿病微血管病變與心血管風險評估_Part1.zip",
+    "sha256": "ee903bc4b4a13ca0b6235ea16b6e16a6af3cdf7203f008fd1cdc3de1b11bf104",
+    "size": 2147429
+  },
+  {
+    "path": "CLAUDE.md",
+    "sha256": "a59d889dbb79ce03e7c721916c6505c719b364469556e5ee48d48da245eb3ed8",
+    "size": 6588
+  },
+  {
+    "path": "handoff.md",
+    "sha256": "d62d9385f8f65b6c66a32f544abc263f8593cfefd7f011be00ca22d2d6bf6295",
+    "size": 4836
+  },
+  {
+    "path": "RESEARCH_STATE.md",
+    "sha256": "b883ea6ac8b94022e2b49b2ff9ec90015ec2513a8cb7fcff4ef9f72b25dc2bb1",
+    "size": 4267
+  },
+  {
+    "path": "2026 GLP-1 RA Monjaro.txt",
+    "sha256": "03d50c3acc4c56df503a1f8b6fb6e99adb8e84fae37417bc74d15a3f27050b14",
+    "size": 1678
+  },
+  {
+    "path": "analysis/GATE-2-DOSSIER.md",
+    "sha256": "0b65752bcc35ca9efcb1792ce92c51ff72b9b547b08fc0074cf7b5c766b743be",
+    "size": 3094
+  },
+  {
+    "path": "analysis/GATE-3-DOSSIER.md",
+    "sha256": "3f1c7b9758ef400f31e5583cbc1f28d74474d707d31bd7729497dc0fc0bf02ce",
+    "size": 1198
+  },
+  {
+    "path": "analysis/phase-1/sources/P004-huang-2025.md",
+    "sha256": "0af3bd0ee69e4a4b3c1ebf56c82532e0a90b37d19ed8bd629957474f24a34f96",
+    "size": 1801
+  },
+  {
+    "path": "analysis/phase-1/sources/P005-wang-2025.md",
+    "sha256": "8ef4834eb9c980af81d0b1a1ac927108445965be16560031b1f91f351ea1b13f",
+    "size": 1241
+  },
+  {
+    "path": "analysis/phase-1/sources/P007-yang-2024.md",
+    "sha256": "0c9bb255a45468a83e0c5b1f858a178a8d9a5e04254f7571bc31821b0fdc6a5d",
+    "size": 1468
+  },
+  {
+    "path": "analysis/phase-1/sources/P013-P020-drug-outcomes-mechanisms.md",
+    "sha256": "b7e34055a0f5df7576e3bdd86da864e8667c75fd95fe5433ad4e6d4b58e5e7e1",
+    "size": 1119
+  },
+  {
+    "path": "analysis/phase-2/contradictions.md",
+    "sha256": "97b1392220da6456768e33b339d4fd391a5528fe96ad520ef6185ba7b8695f56",
+    "size": 2644
+  },
+  {
+    "path": "analysis/phase-2/synthesis.md",
+    "sha256": "d44ff4e155a8e4da404dc6d0fffd1dfacaf520e661b2eab8e1b85872850973f6",
+    "size": 4821
+  },
+  {
+    "path": "blog/microvascular-burden-cardiovascular-risk-taiwan.md",
+    "sha256": "275bf4e9e18495be9f33630eb97cfc05de50d20e61fe2de1132fc05d320ba577",
+    "size": 16879
+  },
+  {
+    "path": "blog/outline.md",
+    "sha256": "08e26be83bfcc6d99a648ed1f292fc8071a5622d9cf5014899cf03597837c270",
+    "size": 4171
+  },
+  {
+    "path": "blog/paper-blog-cross-check.md",
+    "sha256": "cb37f40e16793b98a3cd7341e84d5bd25e243ce06501400ea17353ae619a99e8",
+    "size": 1413
+  },
+  {
+    "path": "evidence/mechanism-evidence-map.md",
+    "sha256": "2f9d86a5183fa136bec2cd8e12de4c5352fdde26024cf14a365ec4401cba6bea",
+    "size": 2617
+  },
+  {
+    "path": "evidence/model_comparison.csv",
+    "sha256": "19f55f623f1d16664b19b6cce14f4753601fec603dcd8d260252ecf53db92228",
+    "size": 3708
+  },
+  {
+    "path": "evidence/search_log.md",
+    "sha256": "4de6b51a44564c2c47f6e75f3662e97cd39b6f6ac7fac2e00e3fc5969e66ade7",
+    "size": 2730
+  },
+  {
+    "path": "paper/claim-to-citation-audit.md",
+    "sha256": "9fe62ff7f20e02fec59046e26b113e9206acadd93149d6fefd8aacefa98cc07c",
+    "size": 1930
+  },
+  {
+    "path": "paper/manuscript.md",
+    "sha256": "520235f4ee1d679e6a01eaf240ba8a0915101b85cc070da67d95d62f620edf52",
+    "size": 24459
+  },
+  {
+    "path": "paper/submission-metadata.md",
+    "sha256": "ae1e0faaac4d15ee81a4d07e03e40e970dedc0661146b82c89d3de85c5a29310",
+    "size": 1561
+  },
+  {
+    "path": "publication/GATE-3-APPROVAL.md",
+    "sha256": "fd6366efbaf049c5ef729f1800df07416e93aa95367d38751884551311fbb0de",
+    "size": 1076
+  },
+  {
+    "path": "publication/GATE-4-VERIFICATION.md",
+    "sha256": "b1f90e232a3ca1ec69cd437c9355988db29be4887cfe5273bf38dab00d7029c3",
+    "size": 2461
+  },
+  {
+    "path": "publication/LANGUAGE-REVISION-2026-07-13.md",
+    "sha256": "321e3ade2e47cae9fe285bd89f71a57338f2087215f366dbe20ec187114a3b44",
+    "size": 3477
+  },
+  {
+    "path": "publication/PLUGIN-BLOG-WRITING-UPDATE.md",
+    "sha256": "35af54564ec3a5dcff7b1574ae5d70b040f4d0c55fef3be5c25f560f935f4bad",
+    "size": 4041
+  },
+  {
+    "path": "publication/PUBLICATION_READINESS.md",
+    "sha256": "ad829d033379104a8ade19931432909d7209a2c20269533c5b3c255f300e03fa",
+    "size": 1695
+  },
+  {
+    "path": "scripts/build_archive_inventory.py",
+    "sha256": "f734d9ae815f9a9e43edd681345a531dd31eb1d4b9d410850d52a297dded9fa6",
+    "size": 2019
+  },
+  {
+    "path": "scripts/validate_corpus.py",
+    "sha256": "e5fc2b8efebf4c031920dacc3853a1ad2bd07cd5ff9c4ebe41e65d4f89f77c1d",
+    "size": 3310
+  },
+  {
+    "path": "sources/metadata/archive-entry-inventory.csv",
+    "sha256": "5b6e0b11afd2f6f2975813185a806ffcf39a1b0d36ea387236e8e8ba2ac76e79",
+    "size": 53693
+  },
+  {
+    "path": "sources/metadata/claim-ledger.csv",
+    "sha256": "6c7c76c083136fa7d71e4336e20657e4ac43c3e61129cb5baee170a1b6c1dc2a",
+    "size": 7340
+  },
+  {
+    "path": "sources/metadata/source-registry.csv",
+    "sha256": "cddf8201861596f581cd4f683096842eba3c4b10761481dce065ec9b73fde0ff",
+    "size": 4974
+  },
+  {
+    "path": "sources/metadata/synthesis-registry.csv",
+    "sha256": "2267c63de17b4eba9fd121fd46c9e246e8a476b72a5ccc4817e1370f59ac745b",
+    "size": 533
+  }
+]

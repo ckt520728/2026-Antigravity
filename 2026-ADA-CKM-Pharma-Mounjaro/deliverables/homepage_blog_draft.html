@@ -1,0 +1,258 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="釐清 tirzepatide 與 semaglutide 在控糖、肥胖、HFpEF 與 CKD 的證據邊界。"><title>Tirzepatide 與 semaglutide 的臨床證據解讀</title><style>
+:root {
+  --bg-primary:#0a0f1e;
+  --bg-card:#111d3c;
+  --bg-card2:#162248;
+  --teal:#4dd9cf;
+  --teal-light:#7ee8e2;
+  --purple:#8b5cf6;
+  --purple-light:#a78bfa;
+  --gold:#f4a261;
+  --text:#e8f4f8;
+  --text-sec:#8ba8c4;
+  --text-dim:#4a6580;
+  --border:rgba(77,217,207,0.15);
+  --shadow:0 8px 32px rgba(0,0,0,0.45);
+  --radius:12px;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Noto Sans TC','Inter',sans-serif;
+  background:var(--bg-primary);
+  color:var(--text);
+  line-height:1.9;
+}
+a { color:var(--teal); text-decoration:none; }
+a:hover { color:var(--teal-light); }
+.top-bar {
+  position:sticky; top:0; z-index:100;
+  background:rgba(10,15,30,0.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:14px 0;
+}
+.top-bar-inner {
+  max-width:980px; margin:0 auto; padding:0 24px;
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+}
+.back-link { color:var(--text-sec); font-size:0.9rem; display:inline-flex; gap:8px; align-items:center; }
+.top-bar-title { font-size:0.82rem; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+.article { max-width:860px; margin:0 auto; padding:58px 24px 82px; }
+.article-header {
+  margin-bottom:44px; padding-bottom:34px;
+  border-bottom:1px solid var(--border);
+}
+.article-meta {
+  color:var(--teal); font-size:0.85rem;
+  font-family:'JetBrains Mono',monospace; margin-bottom:14px;
+}
+.article-title {
+  font-size:2.25rem; line-height:1.35; margin-bottom:18px;
+  background:linear-gradient(135deg,var(--text),var(--teal-light));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.article-subtitle { color:var(--text-sec); font-size:1.04rem; }
+.article-author {
+  margin-top:24px; padding-top:20px; border-top:1px solid var(--border);
+  display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+}
+.author-avatar {
+  width:48px; height:48px; border-radius:50%;
+  background:linear-gradient(135deg,#2a9d8f,var(--purple));
+  display:flex; align-items:center; justify-content:center; font-weight:700;
+  font-size:1.1rem;
+}
+.author-info { color:var(--text-sec); font-size:0.88rem; line-height:1.65; }
+.author-info strong { color:var(--text); }
+.article-tags { margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; }
+.tag {
+  font-size:0.72rem; padding:3px 12px; border-radius:20px;
+  background:rgba(77,217,207,0.08); color:var(--teal);
+  border:1px solid rgba(77,217,207,0.2);
+}
+figure { margin:34px 0; }
+.hero-figure { margin:34px 0 42px; }
+figure img { width:100%; display:block; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-card); box-shadow:var(--shadow); }
+figcaption { margin-top:12px; color:var(--text-sec); font-size:0.85rem; text-align:center; line-height:1.7; }
+h2 {
+  font-size:1.55rem; margin:54px 0 20px; padding-bottom:10px;
+  border-bottom:2px solid var(--teal); display:inline-block;
+}
+h3 { font-size:1.18rem; color:var(--teal-light); margin:34px 0 14px; }
+p { color:var(--text-sec); margin:0 0 20px; }
+p strong, li strong { color:var(--text); }
+em { color:var(--teal-light); }
+ul,ol { color:var(--text-sec); padding-left:24px; margin:0 0 24px; }
+li { margin-bottom:10px; }
+li::marker { color:var(--teal); }
+.callout {
+  margin:28px 0; padding:20px 24px; background:var(--bg-card);
+  border-left:4px solid var(--teal); border-radius:8px; color:var(--text-sec);
+}
+.callout.purple { border-left-color:var(--purple); }
+.callout.gold { border-left-color:var(--gold); }
+.formula {
+  margin:24px 0; padding:18px 24px; background:rgba(77,217,207,0.06);
+  border-left:3px solid var(--teal); border-radius:8px;
+  font-family:'JetBrains Mono',monospace; color:var(--teal-light); font-size:1.05rem;
+}
+.formula small { display:block; margin-top:8px; font-size:0.78rem; color:var(--text-dim); font-family:'Noto Sans TC',sans-serif; }
+.tbl-wrap { overflow-x:auto; margin:24px 0; }
+table {
+  width:100%; border-collapse:collapse; background:var(--bg-card);
+  border-radius:var(--radius); overflow:hidden; font-size:0.92rem;
+}
+th {
+  text-align:left; color:var(--teal); background:rgba(77,217,207,0.1);
+  padding:12px 14px; border-bottom:1px solid var(--border);
+}
+td { padding:12px 14px; color:var(--text-sec); border-bottom:1px solid rgba(77,217,207,0.08); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+blockquote {
+  margin:34px 0; padding:24px 28px;
+  background:linear-gradient(135deg,rgba(77,217,207,0.06),rgba(139,92,246,0.06));
+  border-left:4px solid var(--teal); border-radius:8px;
+  color:var(--text); font-size:1.05rem;
+}
+.references { margin-top:60px; padding-top:34px; border-top:2px solid var(--teal); }
+.references h2 { border:none; margin-top:0; padding:0; }
+.references ol { list-style:none; counter-reset:ref; padding-left:0; }
+.references li {
+  counter-increment:ref; position:relative; padding-left:42px;
+  font-size:0.88rem; color:var(--text-sec); margin-bottom:14px;
+}
+.references li::before {
+  content:counter(ref); position:absolute; left:0; top:2px;
+  width:26px; height:26px; border-radius:50%;
+  background:rgba(77,217,207,0.12); color:var(--teal);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.75rem;
+}
+.article-footer {
+  margin-top:54px; padding-top:28px; border-top:1px solid var(--border);
+  color:var(--text-dim); font-size:0.88rem; text-align:center;
+}
+/* ---- dashboard ---- */
+.article-wide { max-width:1180px; margin:0 auto; padding:0 24px; }
+.dashboard { background:#0c1429; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.dashboard-grid { display:grid; grid-template-columns:260px minmax(0,1fr) 330px; gap:14px; padding:16px; }
+.dashboard-panel { background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:14px; }
+.dashboard-panel h3 { color:var(--teal-light); margin:0 0 12px; font-size:1.02rem; }
+.dashboard-panel h3 + canvas { margin-bottom:14px; }
+.dashboard canvas { width:100%; display:block; border-radius:8px; background:#08101f; }
+.control-row { margin-bottom:14px; }
+.control-row label { display:flex; justify-content:space-between; color:var(--text-sec); font-size:.82rem; }
+.control-row output { color:var(--teal-light); font-family:'JetBrains Mono',monospace; }
+.control-row input[type="range"] { width:100%; accent-color:var(--teal); margin-top:4px; }
+.preset-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.preset-button,.sim-button { border:1px solid var(--border); color:var(--text); background:var(--bg-card2); border-radius:8px; padding:9px; cursor:pointer; font-family:inherit; font-size:.82rem; }
+.preset-button:hover,.sim-button:hover { border-color:var(--teal); }
+.preset-button.active { border-color:var(--teal); color:var(--teal); }
+.simulation-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:14px 0; }
+#preset-explanation { color:var(--text-sec); font-size:.82rem; margin:8px 0 4px; }
+#preset-limit { color:var(--gold); font-size:.8rem; margin:0; }
+.metric-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+.metric-card { background:#0a1326; border-radius:8px; padding:10px; }
+.metric-card span { color:var(--text-sec); font-size:.74rem; }
+.metric-value { color:var(--teal-light); font:600 1.2rem 'JetBrains Mono',monospace; margin-top:4px; }
+#model-status { color:var(--text-dim); font-size:.76rem; font-family:'JetBrains Mono',monospace; margin-top:12px; }
+.model-warning { border-left:4px solid var(--gold); background:rgba(244,162,97,.08); padding:14px 16px; color:var(--text-sec); border-radius:8px; margin-bottom:14px; font-size:.9rem; }
+.model-warning strong { color:var(--gold); }
+@media (max-width:980px) {
+  .dashboard-grid { grid-template-columns:1fr; }
+  .dashboard-panel.controls { order:2; }
+  .dashboard-panel.metrics { order:3; }
+}
+@media(max-width:640px) {
+  .article { padding:42px 18px 64px; }
+  .article-title { font-size:1.65rem; }
+  .top-bar-title { display:none; }
+  table { font-size:0.84rem; }
+}
+
+body{font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif}svg{display:block;width:100%;height:auto}button{min-height:44px}button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.dashboard{padding:20px}.dashboard h2{margin-top:0}.dashboard canvas{width:100%}#context-text{color:var(--text);margin:15px 0}td,th{min-width:150px}p,a{overflow-wrap:anywhere}@media(max-width:640px){.dashboard{padding:14px}.article-title{font-size:1.7rem}.preset-grid{grid-template-columns:1fr 1fr}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}</style></head><body><nav class="top-bar"><div class="top-bar-inner"><a href="#article" class="back-link">閱讀全文</a><span class="top-bar-title">醫療專業教育 · 本機草稿</span></div></nav><main class="article" id="article"><header class="article-header"><div class="article-meta">2026-10-31 · 糖尿病 肥胖 心腎證據</div><h1 class="article-title">Tirzepatide 與 semaglutide<br>先對齊研究問題 再比較藥物</h1><p class="article-subtitle">從控糖、減重、肥胖相關心衰竭到腎臟風險，學會把數字放回正確的族群、劑量與終點。</p><div class="article-author"><div class="author-info">作者：[TO CONFIRM]　機構：[TO CONFIRM]　COI：[TO CONFIRM]</div></div></header><figure class="hero-figure"><svg viewBox="0 0 800 200" role="img" aria-label="從臨床問題對齊族群介入與終點"><rect width="800" height="200" rx="20" fill="#111d3c"/><g fill="#e8f4f8" font-family="Microsoft JhengHei,sans-serif" text-anchor="middle"><text x="400" y="45" font-size="23">先對齊研究問題 再比較藥物</text><text x="130" y="112" font-size="22" fill="#4dd9cf">誰接受治療</text><text x="400" y="112" font-size="22" fill="#a78bfa">用什麼跟誰比</text><text x="670" y="112" font-size="22" fill="#f4a261">量到什麼結果</text><text x="400" y="163" font-size="18">分子 · 品牌 · 劑量 · 族群 · 追蹤 · 終點 · 地區</text></g></svg><figcaption>機制、體重、症狀與臨床事件分開閱讀。</figcaption></figure><section class="dashboard" aria-labelledby="compare-title"><h2 id="compare-title">把比較放回研究裡</h2><p>切換臨床問題，查看該研究真正量到的結果。圖中數字不代表跨試驗排名，也不是個別病人的效果預測。</p><div class="preset-grid" role="group" aria-label="臨床脈絡"><button class="preset-button active" data-context="glycemia" aria-pressed="true">糖尿病</button><button class="preset-button" data-context="weight" aria-pressed="false">肥胖</button><button class="preset-button" data-context="hf" aria-pressed="false">肥胖相關 HFpEF</button><button class="preset-button" data-context="kidney" aria-pressed="false">腎臟風險</button></div><canvas id="evidence-canvas" aria-label="目前研究結果圖" role="img"></canvas><div id="context-text" aria-live="polite"></div><p class="model-warning">每次只顯示同一研究內可對照的結果；不同研究的效應量不能直接比較。</p></section>
+<figure><svg viewBox="0 0 800 160" role="img" aria-label="不同證據層次不能自動等同"><rect width="800" height="160" rx="16" fill="#111d3c"/><g font-family="Microsoft JhengHei,sans-serif" font-size="22" text-anchor="middle"><text x="140" y="65" fill="#4dd9cf">藥理機制</text><text x="400" y="65" fill="#a78bfa">臨床量測</text><text x="660" y="65" fill="#f4a261">病人重要事件</text><text x="400" y="120" fill="#e8f4f8" font-size="18">每一層都需要對應的人體證據與正確終點</text></g></svg><figcaption>受體作用不能替代腎臟或心血管結果試驗。[C020]</figcaption></figure>
+<p>資料整理：2026-10-31。作者：[TO CONFIRM]；機構：[TO CONFIRM]；利益衝突聲明：[TO CONFIRM]。本文供醫療專業教育；台灣現行完整仿單、給付與器型操作須另行核實，不作個別病人處方。</p>
+<h2>從分子出發 先釐清比較的單位</h2>
+<p>Tirzepatide 是單一分子的葡萄糖依賴性胰島素刺激多胜肽（glucose-dependent insulinotropic polypeptide, GIP）與類升糖素胜肽一（glucagon-like peptide-1, GLP-1）雙受體促效劑。Semaglutide 則是 GLP-1 受體促效劑。這項分類有助理解藥理，但「雙受體」不等於療效兩倍，更不能推出所有器官都能獲益。[C001；S07 §12.1；S02 Introduction]</p>
+<p>Mounjaro 與 Zepbound 的品牌標示須分開；品牌與分子亦不能互換。美國仿單的適應症與劑量只適用其標示條件，不能直接成為台灣的適應症或給付依據。台灣 TFDA 公告已支持猛健樂注射筆有血糖控制及肥胖／過重體重控制用途的概括敘述，但完整年齡、BMI、器型與其他細節仍須查當前核准仿單。[C002–C003；S07/S08 §1；S09 第一點；P001]</p>
+<p>讀一個結果時，可以先問：「這是誰、用了什麼、跟誰比、追蹤多久、量到什麼？」答案不完整，就先不要把數字放入臨床排序。下表將四種常被混用的脈絡放回各自研究問題。</p>
+<div class="tbl-wrap"><table>
+<thead>
+<tr>
+<th>臨床脈絡</th>
+<th>對齊的研究與介入</th>
+<th>可以帶走的訊息</th>
+<th>解讀邊界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>糖尿病控糖</td>
+<td>SURPASS-2；T2D；tirzepatide 5/10/15 mg 對 semaglutide 1 mg；40 週</td>
+<td>HbA1c 與體重的直接比較</td>
+<td>不代表 semaglutide 所有劑量，也不是心腎事件比較</td>
+</tr>
+<tr>
+<td>肥胖體重管理</td>
+<td>SURMOUNT-5；無 T2D；最大耐受 tirzepatide 10/15 mg 對 semaglutide 1.7/2.4 mg；72 週</td>
+<td>該族群的平均體重變化</td>
+<td>不保證糖尿病或 HFpEF 個案有相同幅度</td>
+</tr>
+<tr>
+<td>肥胖相關 HFpEF</td>
+<td>SUMMIT 與 STEP-HFpEF DM；各自對 placebo</td>
+<td>分別閱讀事件複合終點與症狀功能</td>
+<td>不同族群、LVEF 門檻與終點，不能跨試驗排名</td>
+</tr>
+<tr>
+<td>糖尿病合併 CKD</td>
+<td>FLOW；semaglutide 1 mg 對 placebo</td>
+<td>特定 T2D 與 CKD 族群的主要複合終點</td>
+<td>不能移植成 tirzepatide 的確認性腎保護證據</td>
+</tr>
+</tbody>
+</table></div>
+<h2>控糖與減重 直接比較也有劑量及族群邊界</h2>
+<p>SURPASS-2 納入使用 metformin 後仍控制不足的成人第二型糖尿病（type 2 diabetes, T2D）患者，隨機分派 N=1,879；其中 1,878 人至少接受一劑。40 週時，tirzepatide 5、10、15 mg 的 HbA1c 變化分別為 −2.01、−2.24、−2.30 個百分點，semaglutide 1 mg 為 −1.86 個百分點。這些是 HbA1c 的「百分點」變化，不是相對百分比。研究為 open-label；其結論限定於這組劑量與族群。[C004；S01 Abstract Methods/Results，正文 pp.503–505]</p>
+<p>SURMOUNT-5 回答另一個問題：沒有 T2D 的肥胖或過重成人，兩種最大耐受劑量方案的體重變化如何？研究隨機 N=751，用藥分析 N=750。72 週時，tirzepatide 10/15 mg 組平均變化 −20.2%（95% CI −21.4 至 −19.1），semaglutide 1.7/2.4 mg 組 −13.7%（−14.9 至 −12.6）。這是 open-label phase 3b、modified treatment-regimen estimand 的群體結果，研究由 Lilly 資助；沒有直接測試兩藥心腎事件的優劣。[C005；S02 Abstract、Table 2/Figure 1，pp.30–31]</p>
+<p>因此，介紹減重差異時應保留「無 T2D」「72 週」「最大耐受方案」這些限定。若把同一數字用於一位有糖尿病、腎病或心衰竭的人，已經跨出研究直接支持的範圍。個別治療目標與耐受性仍須由醫療團隊評估。</p>
+<h2>肥胖相關心衰竭 事件與症狀分開閱讀</h2>
+<p>SUMMIT 納入肥胖且有保留射出分率心衰竭（heart failure with preserved ejection fraction, HFpEF）的人，BMI ≥30、LVEF ≥50%，包括有與沒有 T2D 者；隨機 N=731（364/367）。中位追蹤 104 週，心血管死亡或心衰竭惡化複合終點為 36/364（9.9%）對 56/367（15.3%），HR 0.62（95% CI 0.41–0.95）。此研究由 Lilly 資助。[C006；S03 Abstract、Table 2，p.427]</p>
+<p>複合終點降低不等於單獨證實心血管死亡降低。SUMMIT 的心血管死亡為 8 對 5 例，HR 1.58，95% CI 0.52–4.83，區間很寬；不能用複合終點標題遮掉這個差別。52 週的 Kansas City Cardiomyopathy Questionnaire（KCCQ）結果又是另一個共同主要終點，亦應分開陳述。[C006；S03 Table 2]</p>
+<p>STEP-HFpEF DM 則納入 T2D、BMI ≥30、LVEF ≥45% 且有症狀的 HF 患者，隨機 N=616。Semaglutide 2.4 mg 與 placebo 比較 52 週，KCCQ 差 7.3 分（95% CI 4.1–10.4），體重變化 −9.8% 對 −3.4%，組間差 −6.4 個百分點。這是症狀、功能與體重的證據，使用 treatment-policy estimand，Novo Nordisk 資助；不能據此單一試驗宣稱心血管死亡降低。[C007；S04 Abstract、Table 2]</p>
+<p>臨床上關心同一器官，並不表示研究問的是同一問題。把 SUMMIT 與 STEP-HFpEF DM 的百分比並排當藥物排行榜，會同時忽略糖尿病狀態、射出分率門檻、追蹤與終點差異。</p>
+<h2>腎臟與心血管 先辨識確認性與探索性結果</h2>
+<p>FLOW 是 semaglutide 的腎臟 outcome 試驗。隨機 N=3,533（1,767/1,766），介入為 semaglutide 1 mg 對 placebo，中位追蹤 3.4 年。主要複合終點為 331 對 410 件，HR 0.76（95% CI 0.66–0.88）。研究納入特定 T2D 合併慢性腎臟病（chronic kidney disease, CKD）族群：eGFR 50–75 且 UACR &gt;300 至 &lt;5,000，或 eGFR 25 至 &lt;50 且 UACR &gt;100 至 &lt;5,000。主要複合終點包含心血管死亡；試驗依中期分析建議提早停止，由 Novo Nordisk 資助。[C008；S05 Abstract Methods/Results]</p>
+<p>這項證據不能直接外推至所有 CKD 或透析患者，也不能改寫成 tirzepatide 的 class effect。描述腎臟結果時，分子名稱與終點組成都應跟數字一起出現。</p>
+<p>SURPASS-CVOT 已正式發表。它在 T2D 合併已確立動脈粥樣硬化性心血管疾病（atherosclerotic cardiovascular disease, ASCVD）族群，比較 tirzepatide 與 dulaglutide 1.5 mg；隨機 N=13,299，排除 134 人後 mITT N=13,165。主要心血管事件（major adverse cardiovascular events, MACE）為 801（12.2%）對 862（13.1%），HR 0.92，95.3% CI 0.83–1.01；非劣性 P=.003，優越性 P=.09。研究由 Lilly 資助。正確表述是非劣性成立，優越性未達顯著，不是勝過 dulaglutide，也不是勝過 semaglutide。[C009；S06 Abstract]</p>
+<p>2026 年 SURPASS-CVOT 腎臟分析屬預定探索性分析，並非另一個獨立隨機試驗。其腎複合終點含新發持續 macroalbuminuria，不能與 FLOW 的終點直接等同。本教材將它保留為探索性更新；全文、SAP 與 multiplicity 的深入核讀仍待完成。[C010；S12 Abstract；P002]</p>
+<h2>安全溝通 讓證據能轉成正確的下一步</h2>
+<p>美國 Mounjaro 仿單列有甲狀腺髓質癌（medullary thyroid carcinoma, MTC）個人／家族史、第二型多發性內分泌腫瘤症候群（MEN2）與嚴重過敏等禁忌。齧齒動物 C-cell 腫瘤訊號不能寫成人類已證實致癌。台灣使用仍須核對本地仿單。[C012；S07 §4/5.1]</p>
+<p>噁心、嘔吐或腹瀉如果造成體液流失，可能導致急性腎損傷（acute kidney injury, AKI）；持續嘔吐、腹瀉或攝水不足者須評估體液與腎功能。嚴重 gastroparesis 不建議使用的敘述來自美國標示。合併 insulin 或 sulfonylurea 等 secretagogue 會增加低血糖風險，併藥調整由醫療團隊處理，不提供通用減量百分比。[C013–C014；S07 §5.3/5.5–5.6]</p>
+<p>美國標示提醒，口服荷爾蒙避孕藥使用者在開始 tirzepatide 及每次升量後 4 週，須改非口服方法或加屏障法；不能外推成所有避孕方式均失效。預定麻醉或深鎮靜者應預先告知團隊；仿單沒有足以支持一律停藥特定天數的資料。妊娠規劃與台灣麻醉流程仍須依當地正式規範核實。[C015–C016；S07 §7.2/8.3/5.9；P003]</p>
+<p>持續嚴重腹痛或呼吸困難、顏面腫脹等疑似胰臟炎／嚴重過敏警訊，應停止用藥並立即求醫。急性膽囊問題與視網膜病變也需納入醫療評估。上述警訊不應因擔心停藥後體重回升而被延誤。[C017；S07 §5.2/5.4]</p>
+<p>本教材不提供拆筆格數、抽殘藥、跳級、同週拼筆或採購省錢方案。固定劑量器型的算術換算不代表核准操作；實際器型須對應本地核准的使用說明。劑量、保存與漏打等問題，應回到對應品牌、器型與當地版本。[C018/C021；S07 §2.2/3/5.10；P001]</p>
+<h2>把結果帶回病人 先問治療要解決什麼</h2>
+<p>面對同時有糖尿病、肥胖、HFpEF 與 CKD 的人，先明確寫出治療目標：是 HbA1c、體重、心衰竭症狀，還是某個臨床事件？接著用相符族群與介入的研究回答。若需要的答案只有探索性分析或機制推論，應將不確定性保留在溝通中，而不是把不同試驗接成一個全面優勢的故事。[C004–C010/C020]</p>
+<p>療效以外，還要核對禁忌、GI 耐受性、體液狀態、低血糖併藥、生育與程序安排，最後確認台灣適應症、器型與給付。這些步驟與長期追蹤一起構成用藥討論；沒有一個減重百分比能獨自完成選藥。</p>
+<h2>來源與證據定位</h2>
+<p>S01 SURPASS-2，DOI 10.1056/NEJMoa2107519。Abstract Methods/Results；正文 pp.503–505。<a href="https://pubmed.ncbi.nlm.nih.gov/34170647/">https://pubmed.ncbi.nlm.nih.gov/34170647/</a></p>
+<p>S02 SURMOUNT-5，DOI 10.1056/NEJMoa2416394。Abstract；Table 2/Figure 1，pp.30–31。<a href="https://pubmed.ncbi.nlm.nih.gov/40353578/">https://pubmed.ncbi.nlm.nih.gov/40353578/</a></p>
+<p>S03 SUMMIT，DOI 10.1056/NEJMoa2410027。Abstract、Table 2，p.427。<a href="https://pubmed.ncbi.nlm.nih.gov/39555826/">https://pubmed.ncbi.nlm.nih.gov/39555826/</a></p>
+<p>S04 STEP-HFpEF DM，DOI 10.1056/NEJMoa2313917。Abstract、Table 2。<a href="https://pubmed.ncbi.nlm.nih.gov/38587233/">https://pubmed.ncbi.nlm.nih.gov/38587233/</a></p>
+<p>S05 FLOW，DOI 10.1056/NEJMoa2403347。Abstract Methods/Results。<a href="https://pubmed.ncbi.nlm.nih.gov/38785209/">https://pubmed.ncbi.nlm.nih.gov/38785209/</a></p>
+<p>S06 SURPASS-CVOT，DOI 10.1056/NEJMoa2505928。Abstract Methods/Results。<a href="https://pubmed.ncbi.nlm.nih.gov/41406444/">https://pubmed.ncbi.nlm.nih.gov/41406444/</a></p>
+<p>S07 Mounjaro 美國仿單，08/2026 版。引用段落見各節。<a href="https://pi.lilly.com/us/mounjaro-uspi.pdf">https://pi.lilly.com/us/mounjaro-uspi.pdf</a></p>
+<p>S08 Zepbound 美國仿單，§1。<a href="https://pi.lilly.com/us/zepbound-uspi.pdf">https://pi.lilly.com/us/zepbound-uspi.pdf</a></p>
+<p>S09 TFDA 公告，2025-11-10，第一點 tirzepatide 成分注射筆。<a href="https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;amp;id=t623895">https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&amp;amp;id=t623895</a></p>
+<p>S12 SURPASS-CVOT 腎臟探索性分析，僅完成 abstract 層級核對，全文/SAP 待查。<a href="https://pubmed.ncbi.nlm.nih.gov/42114520/">https://pubmed.ncbi.nlm.nih.gov/42114520/</a></p>
+<p>Claim IDs C001–C021 與待辦 P001–P003 對應專案 claim ledger。本文未將未核實的台灣完整仿單、給付、妊娠停藥間隔或麻醉固定停藥天數補寫成結論。</p><footer class="article-footer">供醫療專業教育，不作個別病人診療或處方。台灣完整仿單、給付與器型需另核實。此為本機草稿；尚未發布。</footer></main><script>const contexts={
+glycemia:{title:'SURPASS-2｜40 週 HbA1c 下降百分點',labels:['Tirzepatide 5 mg','Tirzepatide 10 mg','Tirzepatide 15 mg','Semaglutide 1 mg'],values:[2.01,2.24,2.30,1.86],max:2.7,unit:' 個百分點',text:'T2D；隨機 N=1,879。比較組為 semaglutide 1 mg；不能推定所有 semaglutide 劑量。Open-label。[C004；S01 Abstract]'},
+weight:{title:'SURMOUNT-5｜72 週平均體重下降',labels:['Tirzepatide 10/15 mg','Semaglutide 1.7/2.4 mg'],values:[20.2,13.7],max:25,unit:'%',text:'無 T2D；隨機 N=751，用藥分析 N=750；最大耐受方案。Modified treatment-regimen estimand；open-label；Lilly 資助。不是心腎事件比較。[C005；S02 Table 2]'},
+hf:{title:'SUMMIT｜CV death 或 HF 惡化事件比例',labels:['Tirzepatide','Placebo'],values:[9.9,15.3],max:20,unit:'%',text:'肥胖 HFpEF；N=731；中位104週；HR 0.62（95% CI 0.41–0.95）。複合終點不能改寫成單獨 CV 死亡降低，也不與 STEP-HFpEF DM 排名。[C006；S03 Table 2]'},
+kidney:{title:'FLOW｜主要複合事件件數',labels:['Semaglutide 1 mg','Placebo'],values:[331,410],max:500,unit:' 件',text:'T2D+特定CKD；N=3,533；中位3.4年；HR 0.76（95% CI 0.66–0.88）。主要複合含 CV death；這是 semaglutide 的研究，不是 tirzepatide class effect。[C008；S05 Abstract]'}};
+let current='glycemia';const canvas=document.getElementById('evidence-canvas');
+function draw(){const d=contexts[current],w=canvas.getBoundingClientRect().width,h=280,ratio=window.devicePixelRatio||1;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.height=h+'px';const c=canvas.getContext('2d');c.scale(ratio,ratio);c.fillStyle='#08101f';c.fillRect(0,0,w,h);c.font='bold 13px Microsoft JhengHei, sans-serif';c.fillStyle='#e8f4f8';c.fillText(d.title,12,25);d.labels.forEach((label,i)=>{let y=55+i*51;c.fillStyle='#8ba8c4';c.font='12px Microsoft JhengHei,sans-serif';c.fillText(label,12,y);c.fillStyle=i%2?'#a78bfa':'#4dd9cf';const bar=(w-130)*d.values[i]/Math.max(d.max,1);c.fillRect(12,y+9,Math.max(0,bar),12);c.fillStyle='#e8f4f8';c.fillText(d.values[i]+d.unit,bar+18,y+20);});document.getElementById('context-text').textContent=d.text;}
+document.querySelectorAll('[data-context]').forEach(b=>b.addEventListener('click',()=>{current=b.dataset.context;document.querySelectorAll('[data-context]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b));});draw();}));window.addEventListener('resize',draw);draw();
+</script></body></html>

@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "check": "agent YAML 必要欄位",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tools 僅合法 builtin 與 inventory MCP",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "agent 權限與模型為 Claude Code 正規欄位",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "agent 含八類 ToolGate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "根規則含八類 ToolGate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "TaskSpec 欄位、依賴、唯一輸出與預算",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "outline 核准狀態與 hash 一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "production TaskSpec 八欄、依賴、唯一輸出與預算",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "新控制字串不得有連續問號損毀",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "production 只在核准 hash 相符後啟動；無發布與花費授權",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "未知能力必須拒絕",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "未出現依賴必須拒絕",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "重複成品必須拒絕",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "原 ZIP／舊成果 hash 不變",
+      "passed": true,
+      "detail": "35 個受保護檔；差異：[]"
+    },
+    {
+      "check": "原 baseline 差異誠實保留且當前 prompt 有記錄",
+      "passed": true,
+      "detail": "['2026 GLP-1 RA Monjaro.txt']"
+    },
+    {
+      "check": "JEV vendor 原始 bytes pin 不變",
+      "passed": true,
+      "detail": "21 檔；差異：[]"
+    },
+    {
+      "check": "自撰初始化文件的本地 Markdown links",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "T1 宣告的成品存在",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "T2 宣告的成品存在",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "真實 JEV checks：保持 ask 與 executor 零呼叫",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "JEV 自動 production 未派發；host 手動派發另記",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "scope": "初始化結構、來源完整性與執行邊界；clinical claims 及 T3 獨立主控驗收另計"
+}

@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-31",
+  "workflow": "JEV two-phase；host 受限派發與自動 Jev ready 分開記錄",
+  "budget_enforcement": "not_exposed；max_output_tokens 為主控宣告交接預算，未取得 API 硬限制證據",
+  "outline_approval": {
+    "status": "approved",
+    "approved_at": "2026-10-30",
+    "approved_by": "user",
+    "outline": "monjaro/specs/slide_outline.md",
+    "version": "v0.2-review",
+    "sha256": "2d499d07f1deb4ac92d48c074618e5152b19c322ee44c5c45158957713953b11",
+    "scope": "本機 HTML、可編輯 PowerPoint、paper explainer DOCX、homepage blog 草稿與免費本機 motion 影片製作；不含發布、上傳、付費生成或部署。",
+    "scope_original_corrupted": "???????????? HTML???? PowerPoint?paper explainer ???motion explainer ???? homepage ?? blog ?????????",
+    "approval_evidence": {
+      "user_text": "accept the outline",
+      "timestamp_utc": "2026-10-29T17:05:07.114Z",
+      "session_line": 465,
+      "verified_by": "主控於 2026-10-31 讀回原 session"
+    },
+    "scope_restatement": "本輪使用者 finish goal 授權由主控重述；不將毀損問號猜回歷史原文",
+    "publication_authorized": false,
+    "spend_authorized": false
+  },
+  "tasks": [
+    {
+      "task_id": "T1",
+      "objective": "初始化獨立 Mounjaro 教材專案、Claude Code agent 與可稽核 JEV 控制層；保護舊研究。",
+      "inputs": [
+        "2026 GLP-1 RA Monjaro.txt",
+        "CLAUDE.md",
+        "handoff.md",
+        "monjaro/workflow/vendor/local/SKILL.md",
+        "monjaro/workflow/vendor/local/references/18-two-phase-workflow.md"
+      ],
+      "outputs": [
+        "AGENTS.md",
+        "handoffs.md",
+        ".claude/agents/mounjaro-research.md",
+        "monjaro/README.md",
+        "monjaro/workflow/WORKFLOW.md",
+        "monjaro/workflow/TOOL_CONTRACT.md",
+        "monjaro/workflow/EXECUTION.md",
+        "monjaro/workflow/jev-checks.json"
+      ],
+      "acceptance": [
+        "agent YAML 可解析且 tools 合法",
+        "八類能力完整、實際參數與授權界線明確",
+        "JEV local 決策與 fail-closed 邊界有真實輸出",
+        "舊成果及所有 ZIP SHA-256 不變"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "network_egress"
+      ],
+      "depends_on": [],
+      "max_output_tokens": 14000
+    },
+    {
+      "task_id": "T2",
+      "objective": "盤點 ZIP 與指定 NotebookLM，核對 primary sources 並產 SOIL outline 及各教材 production brief。",
+      "inputs": [
+        "2026 GLP-1 RA Monjaro.txt",
+        "Medicine_GLP-1 RA_Mounjaro& Semaglutide_治療肥胖相關心衰伴2型糖尿病-studio-2026-10-29_08-34.zip",
+        "notebooklm://e9c8966b-c3e8-4968-bce1-e6c39aa402b1"
+      ],
+      "outputs": [
+        "monjaro/sources/zip_manifest.json",
+        "monjaro/sources/notebooklm_summary.md",
+        "monjaro/evidence/source_registry.json",
+        "monjaro/evidence/source_registry.csv",
+        "monjaro/evidence/claim_ledger.csv",
+        "monjaro/evidence/search_log.md",
+        "monjaro/evidence/evidence_summary.md",
+        "monjaro/specs/slide_outline.md",
+        "monjaro/specs/production_brief.md"
+      ],
+      "acceptance": [
+        "ZIP entry mapping 與 hash 可回溯",
+        "tirzepatide 及 semaglutide 藥物分類由 primary sources 支持",
+        "療效與安全區分族群、劑型及 jurisdiction",
+        "SOIL 逐頁 outline 含標題、訊息、視覺與來源",
+        "無最終 HTML/PPTX/影片或公開發布"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "network_egress"
+      ],
+      "depends_on": [],
+      "max_output_tokens": 18000
+    },
+    {
+      "task_id": "T3",
+      "objective": "主控獨立讀回 T1/T2 產物與驗證證據，判定初始化是否可供使用者審閱；不可把 executor 自報當驗收。",
+      "inputs": [
+        "AGENTS.md",
+        ".claude/agents/mounjaro-research.md",
+        "monjaro/workflow/jev-checks.json",
+        "monjaro/workflow/preservation-baseline.json",
+        "monjaro/specs/slide_outline.md",
+        "monjaro/evidence/claim_ledger.csv"
+      ],
+      "outputs": [
+        "monjaro/workflow/independent_review.md"
+      ],
+      "acceptance": [
+        "validator 通過且 readback 與 clinical claims 抽核完成",
+        "所有本地連結有效",
+        "舊檔 hash 與來源 pin 維持不變",
+        "歷史 T3 通過；後續使用者 outline 核准由 approval.json 另記"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "network_egress"
+      ],
+      "depends_on": [
+        "T1",
+        "T2"
+      ],
+      "max_output_tokens": 6000
+    },
+    {
+      "task_id": "T4",
+      "objective": "已核准 outline 的本機製作與獨立驗收；細項見 production-tasks.json",
+      "inputs": [
+        "monjaro/specs/slide_outline.md",
+        "monjaro/specs/production_brief.md",
+        "monjaro/workflow/approval.json"
+      ],
+      "outputs": [
+        "monjaro/deliverables/mounjaro_evidence_deck.html",
+        "monjaro/deliverables/mounjaro_evidence_deck.pptx",
+        "monjaro/deliverables/mounjaro_paper_explainer.docx",
+        "monjaro/deliverables/motion_storyboard.md",
+        "monjaro/deliverables/homepage_blog_draft.html"
+      ],
+      "acceptance": [
+        "HTML 26 頁與可編輯 PPTX 對齊 outline 與 claim ledger",
+        "DOCX 與 blog 自然繁中、四脈絡、安全邊界及來源可回溯",
+        "motion 實際渲染、字幕與來源卡驗收",
+        "各產物主控獨立讀回；不發布、不花費"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "network_egress",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "max_output_tokens": 2000
+    }
+  ],
+  "stage": "T4 本機製作與獨立驗收"
+}

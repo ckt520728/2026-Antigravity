@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-31",
+  "production_dispatched": true,
+  "dispatch_mode": "host 手動明確配置 gpt-6.1-sol medium；非 JEV 自動 routing",
+  "routing_ready": false,
+  "publication_authorized": false,
+  "spend_authorized": false,
+  "tasks": [
+    {
+      "task_id": "T4_STATE",
+      "objective": "同步核准狀態並修復驗證器",
+      "inputs": [
+        "AGENTS.md",
+        "handoffs.md",
+        "monjaro/workflow/approval.json"
+      ],
+      "outputs": [
+        "monjaro/workflow/input-change-20261031.json",
+        "monjaro/workflow/validation-results.json"
+      ],
+      "acceptance": [
+        "來源與 claim 可回溯",
+        "實際渲染或讀回符合工作包規格",
+        "無發布與花費"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [],
+      "max_output_tokens": 7000,
+      "status": "已完成驗收"
+    },
+    {
+      "task_id": "T4_DOC_BLOG",
+      "objective": "製作專業閱讀文件與首頁文章草稿",
+      "inputs": [
+        "monjaro/specs/slide_outline.md",
+        "monjaro/evidence/claim_ledger.csv"
+      ],
+      "outputs": [
+        "monjaro/deliverables/mounjaro_paper_explainer.docx",
+        "monjaro/deliverables/mounjaro_paper_explainer.md",
+        "monjaro/deliverables/homepage_blog_draft.html"
+      ],
+      "acceptance": [
+        "來源與 claim 可回溯",
+        "實際渲染或讀回符合工作包規格",
+        "無發布與花費"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "T4_STATE"
+      ],
+      "max_output_tokens": 15000,
+      "status": "已完成驗收"
+    },
+    {
+      "task_id": "T4_DECK",
+      "objective": "製作 HTML 與可編輯 PowerPoint",
+      "inputs": [
+        "monjaro/specs/slide_outline.md",
+        "monjaro/evidence/claim_ledger.csv"
+      ],
+      "outputs": [
+        "monjaro/deliverables/mounjaro_evidence_deck.html",
+        "monjaro/deliverables/mounjaro_evidence_deck.pptx"
+      ],
+      "acceptance": [
+        "來源與 claim 可回溯",
+        "實際渲染或讀回符合工作包規格",
+        "無發布與花費"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "T4_STATE"
+      ],
+      "max_output_tokens": 15000,
+      "status": "已完成驗收"
+    },
+    {
+      "task_id": "T4_MOTION",
+      "objective": "製作免費本機 motion 影片",
+      "inputs": [
+        "monjaro/specs/slide_outline.md",
+        "monjaro/evidence/claim_ledger.csv"
+      ],
+      "outputs": [
+        "monjaro/deliverables/motion_storyboard.md",
+        "monjaro/deliverables/mounjaro_motion_explainer.mp4"
+      ],
+      "acceptance": [
+        "來源與 claim 可回溯",
+        "實際渲染或讀回符合工作包規格",
+        "無發布與花費"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "T4_STATE"
+      ],
+      "max_output_tokens": 15000,
+      "status": "已完成驗收"
+    },
+    {
+      "task_id": "T4_ACCEPT",
+      "objective": "主控獨立逐成品驗收",
+      "inputs": [
+        "monjaro/workflow/production-tasks.json"
+      ],
+      "outputs": [
+        "monjaro/qa/production_acceptance.md"
+      ],
+      "acceptance": [
+        "來源與 claim 可回溯",
+        "實際渲染或讀回符合工作包規格",
+        "無發布與花費"
+      ],
+      "capabilities": [
+        "read",
+        "local_write",
+        "process_spawn"
+      ],
+      "depends_on": [
+        "T4_DOC_BLOG",
+        "T4_DECK",
+        "T4_MOTION"
+      ],
+      "max_output_tokens": 7000,
+      "status": "已完成驗收"
+    }
+  ],
+  "budget_enforcement": "交接預算；API 硬限制與 usage 未暴露"
+}
